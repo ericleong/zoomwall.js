@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+
+<title>zoomwall.js</title>
+
+<link rel="stylesheet" type="text/css" href="zoomwall.css" />
+
+<style>
+
+	html, body {
+		margin: 0;
+		padding: 0;
+	}
+
+	body {
+		background-color: black;
+	}
+
+	header {
+		padding: 1em;
+		background-color: #333;
+		text-align: center;
+	}
+
+	a:link, a:visited {
+		text-decoration: none;
+		font-family: sans-serif;
+		color: white;
+	}
+
+	a:hover {
+		color: #ddd;
+	}
+
+	#author {
+		float: left;
+	}
+
+	#repo {
+		float: right;
+	}
+
+	#title {
+		display: inline-block;
+		font-weight: bold;
+	}
+
+</style>
+
+<script type="text/javascript" src="zoomwall.js"></script>
+
+<script>
+	window.onload = function() {
+		zoomwall.create(document.getElementById('zoomwall'));
+	};
+</script>
+
+</head>
+
+<body>
+
+<header>
+	<a id="author" href="http://ericleong.me">photos by eric leong</a><a id="repo" href="https://github.com/ericleong/zoomwall.js">github</a><a id="title" href="https://github.com/ericleong/zoomwall.js">zoomwall.js</a>
+</header>
+
+<div id="zoomwall" class="zoomwall">
+	<img src="./images/01_250.jpg" data-highres="./images/01_1280.jpg" />
+	<img src="./images/02_250.jpg" data-highres="./images/02_1280.jpg" />
+	<img src="./images/03_250.jpg" data-highres="./images/03_1280.jpg" />
+	<img src="./images/04_250.jpg" data-highres="./images/04_1280.jpg" />
+	<img src="./images/05_250.jpg" data-highres="./images/05_1280.jpg" />
+	<img src="./images/06_250.jpg" data-highres="./images/06_1280.jpg" />
+	<img src="./images/07_250.jpg" data-highres="./images/07_1280.jpg" />
+	<img src="./images/08_250.jpg" data-highres="./images/08_1280.jpg" />
+	<img src="./images/09_250.jpg" data-highres="./images/09_1280.jpg" />
+	<img src="./images/10_250.jpg" data-highres="./images/10_1280.jpg" />
+	<img src="./images/11_250.jpg" data-highres="./images/11_1280.jpg" />
+	<img src="./images/12_250.jpg" data-highres="./images/12_1280.jpg" />
+	<img src="./images/13_250.jpg" data-highres="./images/13_1280.jpg" />
+	<img src="./images/14_250.jpg" data-highres="./images/14_1280.jpg" />
+	<img src="./images/15_250.jpg" data-highres="./images/15_1280.jpg" />
+	<img src="./images/16_250.jpg" data-highres="./images/16_1280.jpg" />
+	<img src="./images/17_250.jpg" data-highres="./images/17_1280.jpg" />
+	<img src="./images/18_250.jpg" data-highres="./images/18_1280.jpg" />
+	<img src="./images/19_250.jpg" data-highres="./images/19_1280.jpg" />
+	<img src="./images/20_250.jpg" data-highres="./images/20_1280.jpg" />
+	<img src="./images/21_250.jpg" data-highres="./images/21_1280.jpg" />
+</div>
+
+</body>
+</html>
