@@ -216,8 +216,8 @@ var zoomwall = {
 
 			row[i].style.transformOrigin = '0% 0%';
 			row[i].style.webkitTransformOrigin = '0% 0%';
-			row[i].style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY + '%) scale(' + scale.toFixed(8) + ')';
-			row[i].style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY + '%) scale(' + scale.toFixed(8) + ')';
+			row[i].style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+			row[i].style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
 		}
 
 		// transform items after
