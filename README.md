@@ -6,11 +6,12 @@ Visit [ericleong.github.io/zoomwall.js](http://ericleong.github.io/zoomwall.js) 
 
 usage
 -----
-Simply run `zoomwall.create()` on the element that contains your images.
+Simply add the `zoomwall` class and run `zoomwall.create()` on the element that contains your images.
 
+For example, if the element has the id `gallery`:
 ```JavaScript
 window.onload = function() {
-	zoomwall.create(document.getElementById('zoomwall'));
+	zoomwall.create(document.getElementById('gallery'));
 };
 ```
 
