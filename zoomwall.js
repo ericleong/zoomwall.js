@@ -187,8 +187,6 @@ var zoomwall = {
 
 		leftOffsetX = parentWidth / 2 - blockRect.width * scale / 2 - leftOffsetX;
 
-		// var rightOffsetX = leftOffsetX + blockRect.width * scale;
-
 		var rightOffsetX = 0;  // shift in current row
 		prevWidth = 0;
 
