@@ -115,8 +115,6 @@ var zoomwall = {
 		if (block.dataset.lowres) {
 			block.src = block.dataset.lowres;
 		}
-
-		// block.parentNode.style.paddingBottom = '0';
 	},
 
 	expand: function(block) {
@@ -124,12 +122,12 @@ var zoomwall = {
 		block.classList.add('active');
 		block.parentNode.classList.add('lightbox');
 
-		var parentWidth = block.parentNode.getBoundingClientRect().width;
+		var parentRect = block.parentNode.getBoundingClientRect();
 		var blockRect = block.getBoundingClientRect();
 		var offsetY = blockRect.top;
 
-		if (block.parentNode.getBoundingClientRect().top > 0) {
-			offsetY -= block.parentNode.getBoundingClientRect().top;
+		if (parentRect.top > 0) {
+			offsetY -= parentRect.top;
 		}
 
 		// swap images
@@ -138,71 +136,52 @@ var zoomwall = {
 			block.src = block.dataset.highres;
 		}
 		
-		// determine what blocks are on this row and on the next row
+		// determine what blocks are on this row
 		var row = [];
 		row.push(block);
 
 		var next = block.nextElementSibling;
 
-		while (next) {
-			if (next.getBoundingClientRect().top == blockRect.top) {
-				row.push(next);
-			} else {
-				break;
-			}
+		while (next && next.getBoundingClientRect().top == blockRect.top) {
+			row.push(next);
 
 			next = next.nextElementSibling;
 		}
 
 		var prev = block.previousElementSibling;
 
-		while (prev) {
-			if (prev.getBoundingClientRect().top == blockRect.top) {
-				row.unshift(prev);
-			} else {
-				break;
-			}
+		while (prev && prev.getBoundingClientRect().top == blockRect.top) {
+			row.unshift(prev);
 
 			prev = prev.previousElementSibling;
 		}
 
 		// expand row and shift row below
-		var scale = window.innerHeight / blockRect.height;
+		var scale = Math.min(window.innerHeight, parentRect.height) / blockRect.height;
 
-		if (blockRect.width * scale > parentWidth) {
-			scale = parentWidth / blockRect.width;
+		if (blockRect.width * scale > parentRect.width) {
+			scale = parentRect.width / blockRect.width;
 		}
 
 		var leftOffsetX = 0;  // shift in current row
-		var prevWidth = 0;
-
-		for (var i = 0; i < row.length; i++) {
-			leftOffsetX += prevWidth * scale;
-			prevWidth = row[i].getBoundingClientRect().width;
-
-			if (row[i] == block) {
-				break;
-			}
+		
+		for (var i = 0; i < row.length && row[i] != block; i++) {
+			leftOffsetX += row[i].getBoundingClientRect().width * scale;
 		}
 
-		leftOffsetX = parentWidth / 2 - blockRect.width * scale / 2 - leftOffsetX;
+		leftOffsetX = parentRect.width / 2 - blockRect.width * scale / 2 - leftOffsetX;
 
 		var rightOffsetX = 0;  // shift in current row
-		prevWidth = 0;
 
-		for (var i = row.length - 1; i >= 0; i--) {
-			if (row[i] == block) {
-				break;
-			}
-
+		for (var i = row.length - 1; i >= 0 && row[i] != block; i--) {
 			rightOffsetX += row[i].getBoundingClientRect().width * scale;
 		}
 
-		rightOffsetX = parentWidth / 2 - blockRect.width * scale / 2 - rightOffsetX;
+		rightOffsetX = parentRect.width / 2 - blockRect.width * scale / 2 - rightOffsetX;
 
 		// determine Y offset
 		var itemOffset = 0; // offset due to scaling of previous items
-		prevWidth = 0;
+		var prevWidth = 0;
 
 		// transform current row
 		for (var i = 0; i < row.length; i++) {
