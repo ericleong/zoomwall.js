@@ -181,7 +181,7 @@ var zoomwall = {
 		// determine offset
 		var offsetY = block.getBoundingClientRect().top;
 
-		if (parentWidth < window.innerHeight) {
+		if (parentHeight < window.innerHeight) {
 			offsetY -= targetHeight / 2 - blockHeight * scale / 2;
 		}
 
