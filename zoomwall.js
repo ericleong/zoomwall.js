@@ -124,10 +124,14 @@ var zoomwall = {
 
 		var parentRect = block.parentNode.getBoundingClientRect();
 		var blockRect = block.getBoundingClientRect();
-		var offsetY = blockRect.top;
 
-		if (parentRect.top > 0) {
-			offsetY -= parentRect.top;
+		// determine maximum height
+		var targetHeight = window.innerHeight;
+
+		if (parentRect.height < window.innerHeight) {
+			targetHeight = parentRect.height;
+		} else if (parentRect.top > 0) {
+			targetHeight -= parentRect.top;
 		}
 
 		// swap images
@@ -156,11 +160,22 @@ var zoomwall = {
 			prev = prev.previousElementSibling;
 		}
 
-		// expand row and shift row below
-		var scale = Math.min(window.innerHeight, parentRect.height) / blockRect.height;
+		// calculate scale
+		var scale = targetHeight / blockRect.height;
 
 		if (blockRect.width * scale > parentRect.width) {
 			scale = parentRect.width / blockRect.width;
+		}
+
+		// determine offset
+		var offsetY = blockRect.top;
+
+		if (parentRect.height < window.innerHeight) {
+			offsetY -= targetHeight / 2 - blockRect.height * scale / 2 
+		}
+
+		if (parentRect.top > 0) {
+			offsetY -= parentRect.top;
 		}
 
 		var leftOffsetX = 0;  // shift in current row
