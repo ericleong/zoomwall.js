@@ -46,7 +46,7 @@ var zoomwall = {
 	resizeRow: function(row, width) {
 		if (row && row.length > 1) {
 			for (var i in row) {
-				row[i].style.width = (row[i].getBoundingClientRect().width / width * 100) + '%';
+				row[i].style.width = (parseInt(window.getComputedStyle(row[i]).width, 10) / width * 100) + '%';
 				row[i].style.height = 'auto';
 			}
 		}
@@ -56,7 +56,7 @@ var zoomwall = {
 		var width = 0;
 
 		for (var i in row) {
-			width += row[i].getBoundingClientRect().width;
+			width += parseInt(window.getComputedStyle(row[i]).width, 10);
 		}
 
 		return width;
@@ -71,13 +71,13 @@ var zoomwall = {
 
 			if (block) {
 				if (top == -1) {
-					top = block.getBoundingClientRect().top;
+					top = block.offsetTop;
 					
-				} else if (block.getBoundingClientRect().top != top) {
+				} else if (block.offsetTop != top) {
 					zoomwall.resizeRow(row, zoomwall.calcRowWidth(row));
 
 					row = [];
-					top = block.getBoundingClientRect().top;
+					top = block.offsetTop;
 				}
 
 				row.push(block);
@@ -122,16 +122,27 @@ var zoomwall = {
 		block.classList.add('active');
 		block.parentNode.classList.add('lightbox');
 
-		var parentRect = block.parentNode.getBoundingClientRect();
-		var blockRect = block.getBoundingClientRect();
+		// parent dimensions
+		var parentStyle = window.getComputedStyle(block.parentNode);
+
+		var parentWidth = parseInt(parentStyle.width, 10);
+		var parentHeight = parseInt(parentStyle.height, 10);
+
+		var parentTop = block.parentNode.getBoundingClientRect().top;
+
+		// block dimensions
+		var blockStyle = window.getComputedStyle(block);
+
+		var blockWidth = parseInt(blockStyle.width, 10);
+		var blockHeight = parseInt(blockStyle.height, 10);
 
 		// determine maximum height
 		var targetHeight = window.innerHeight;
 
-		if (parentRect.height < window.innerHeight) {
-			targetHeight = parentRect.height;
-		} else if (parentRect.top > 0) {
-			targetHeight -= parentRect.top;
+		if (parentHeight < window.innerHeight) {
+			targetHeight = parentHeight;
+		} else if (parentTop > 0) {
+			targetHeight -= parentTop;
 		}
 
 		// swap images
@@ -146,7 +157,7 @@ var zoomwall = {
 
 		var next = block.nextElementSibling;
 
-		while (next && next.getBoundingClientRect().top == blockRect.top) {
+		while (next && next.offsetTop == block.offsetTop) {
 			row.push(next);
 
 			next = next.nextElementSibling;
@@ -154,45 +165,45 @@ var zoomwall = {
 
 		var prev = block.previousElementSibling;
 
-		while (prev && prev.getBoundingClientRect().top == blockRect.top) {
+		while (prev && prev.offsetTop == block.offsetTop) {
 			row.unshift(prev);
 
 			prev = prev.previousElementSibling;
 		}
 
 		// calculate scale
-		var scale = targetHeight / blockRect.height;
+		var scale = targetHeight / blockHeight;
 
-		if (blockRect.width * scale > parentRect.width) {
-			scale = parentRect.width / blockRect.width;
+		if (blockWidth * scale > parentWidth) {
+			scale = parentWidth / blockWidth;
 		}
 
 		// determine offset
-		var offsetY = blockRect.top;
+		var offsetY = block.getBoundingClientRect().top;
 
-		if (parentRect.height < window.innerHeight) {
-			offsetY -= targetHeight / 2 - blockRect.height * scale / 2 
+		if (parentWidth < window.innerHeight) {
+			offsetY -= targetHeight / 2 - blockHeight * scale / 2;
 		}
 
-		if (parentRect.top > 0) {
-			offsetY -= parentRect.top;
+		if (parentTop > 0) {
+			offsetY -= parentTop;
 		}
 
 		var leftOffsetX = 0;  // shift in current row
 		
 		for (var i = 0; i < row.length && row[i] != block; i++) {
-			leftOffsetX += row[i].getBoundingClientRect().width * scale;
+			leftOffsetX += parseInt(window.getComputedStyle(row[i]).width, 10) * scale;
 		}
 
-		leftOffsetX = parentRect.width / 2 - blockRect.width * scale / 2 - leftOffsetX;
+		leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftOffsetX;
 
 		var rightOffsetX = 0;  // shift in current row
 
 		for (var i = row.length - 1; i >= 0 && row[i] != block; i--) {
-			rightOffsetX += row[i].getBoundingClientRect().width * scale;
+			rightOffsetX += parseInt(window.getComputedStyle(row[i]).width, 10) * scale;
 		}
 
-		rightOffsetX = parentRect.width / 2 - blockRect.width * scale / 2 - rightOffsetX;
+		rightOffsetX = parentWidth / 2 - blockWidth * scale / 2 - rightOffsetX;
 
 		// determine Y offset
 		var itemOffset = 0; // offset due to scaling of previous items
@@ -201,10 +212,10 @@ var zoomwall = {
 		// transform current row
 		for (var i = 0; i < row.length; i++) {
 			itemOffset += (prevWidth * scale - prevWidth);
-			prevWidth = row[i].getBoundingClientRect().width;
+			prevWidth = parseInt(window.getComputedStyle(row[i]).width, 10);
 
 			var percentageOffsetX = (itemOffset + leftOffsetX) / prevWidth * 100;
-			var percentageOffsetY = -offsetY / row[i].getBoundingClientRect().height * 100;
+			var percentageOffsetY = -offsetY / parseInt(window.getComputedStyle(row[i]).height, 10) * 100;
 
 			row[i].style.transformOrigin = '0% 0%';
 			row[i].style.webkitTransformOrigin = '0% 0%';
@@ -213,7 +224,7 @@ var zoomwall = {
 		}
 
 		// transform items after
-		var nextOffsetY = blockRect.height * (scale - 1) - offsetY;
+		var nextOffsetY = blockHeight * (scale - 1) - offsetY;
 		var prevHeight;
 		itemOffset = 0; // offset due to scaling of previous items
 		prevWidth = 0;
@@ -222,7 +233,7 @@ var zoomwall = {
 		var nextRowTop = -1;
 
 		while (next) {
-			var curTop = next.getBoundingClientRect().top;
+			var curTop = next.offsetTop;
 
 			if (curTop == nextRowTop) {
 				itemOffset += prevWidth * scale - prevWidth;
@@ -236,8 +247,8 @@ var zoomwall = {
 				nextRowTop = curTop;
 			}
 
-			prevWidth = next.getBoundingClientRect().width;
-			prevHeight = next.getBoundingClientRect().height;
+			prevWidth = parseInt(window.getComputedStyle(next).width, 10);
+			prevHeight = parseInt(window.getComputedStyle(next).height, 10);
 
 			var percentageOffsetX = (itemOffset + leftOffsetX) / prevWidth * 100;
 			var percentageOffsetY = nextOffsetY / prevHeight * 100;
@@ -259,20 +270,20 @@ var zoomwall = {
 		var prevRowTop = -1;
 
 		while (prev) {
-			var curTop = prev.getBoundingClientRect().top;
+			var curTop = prev.offsetTop;
 
 			if (curTop == prevRowTop) {
 				itemOffset -= prevWidth * scale - prevWidth;
 			} else {
 				itemOffset = 0;
-				prevOffsetY -= prev.getBoundingClientRect().height * (scale - 1);
+				prevOffsetY -= parseInt(window.getComputedStyle(prev).height, 10) * (scale - 1);
 				prevRowTop = curTop;
 			}
 
-			prevWidth = prev.getBoundingClientRect().width;
+			prevWidth = parseInt(window.getComputedStyle(prev).width, 10);
 
 			var percentageOffsetX = (itemOffset - rightOffsetX) / prevWidth * 100;
-			var percentageOffsetY = prevOffsetY / prev.getBoundingClientRect().height * 100;
+			var percentageOffsetY = prevOffsetY / parseInt(window.getComputedStyle(prev).height, 10) * 100;
 
 			prev.style.transformOrigin = '100% 0%';
 			prev.style.webkitTransformOrigin = '100% 0%';
