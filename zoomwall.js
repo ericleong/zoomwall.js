@@ -179,14 +179,16 @@ var zoomwall = {
 		}
 
 		// determine offset
-		var offsetY = block.getBoundingClientRect().top;
+		var offsetY = parentTop - block.parentNode.offsetTop + block.offsetTop;
 
-		if (parentHeight < window.innerHeight) {
-			offsetY -= targetHeight / 2 - blockHeight * scale / 2;
-		}
+		if (offsetY > 0) {
+			if (parentHeight < window.innerHeight) {
+				offsetY -= targetHeight / 2 - blockHeight * scale / 2;
+			}
 
-		if (parentTop > 0) {
-			offsetY -= parentTop;
+			if (parentTop > 0) {
+				offsetY -= parentTop;
+			}
 		}
 
 		var leftOffsetX = 0;  // shift in current row
@@ -205,11 +207,10 @@ var zoomwall = {
 
 		rightOffsetX = parentWidth / 2 - blockWidth * scale / 2 - rightOffsetX;
 
-		// determine Y offset
+		// transform current row
 		var itemOffset = 0; // offset due to scaling of previous items
 		var prevWidth = 0;
-
-		// transform current row
+		
 		for (var i = 0; i < row.length; i++) {
 			itemOffset += (prevWidth * scale - prevWidth);
 			prevWidth = parseInt(window.getComputedStyle(row[i]).width, 10);
@@ -295,9 +296,15 @@ var zoomwall = {
 	},
 
 	animate: function(e) {
-		if (this.parentNode.classList.contains('lightbox')) {
+		if (this.classList.contains('active')) {
 			zoomwall.shrink(this);
 		} else {
+			var actives = this.parentNode.getElementsByClassName('active');
+
+			for (var i = 0; i < actives.length; i++) {
+				actives[i].classList.remove('active');
+			}
+
 			zoomwall.expand(this);
 		}
 
