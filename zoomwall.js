@@ -26,7 +26,7 @@ SOFTWARE.
 
 var zoomwall = {
 
-	create: function(blocks) {
+	create: function(blocks, enableKeys) {
 		zoomwall.resize(blocks.children);
 
 		blocks.classList.remove('loading');
@@ -40,6 +40,31 @@ var zoomwall = {
 		// add click listeners to blocks
 		for (var i = 0; i < blocks.children.length; i++) {
 			blocks.children[i].addEventListener('click', zoomwall.animate);
+		}
+
+		// add key down listener
+		if (enableKeys) {
+			var keyPager = function(e) {
+				if (e.defaultPrevented) {
+					return;
+				}
+
+				switch (e.keyCode) {
+					case 37:
+						zoomwall.page(blocks, false);
+						e.preventDefault();
+
+						break;
+
+					case 39:
+						zoomwall.page(blocks, true);
+						e.preventDefault();
+
+						break;
+				}
+			}
+
+			document.addEventListener('keydown', keyPager);
 		}
 	},
 
@@ -307,5 +332,26 @@ var zoomwall = {
 		}
 
 		e.stopPropagation();
+	},
+
+	page: function(blocks, isNext) {
+		var actives = blocks.getElementsByClassName('active');
+
+		if (actives && actives.length > 0) {
+
+			var current = actives[0];
+			var next;
+
+			if (isNext) {
+				next = current.nextElementSibling;
+			} else {
+				next = current.previousElementSibling;
+			}
+
+			if (next) {
+				current.classList.remove('active');
+				zoomwall.expand(next);
+			}
+		}
 	}
 };
