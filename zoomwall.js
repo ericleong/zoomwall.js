@@ -172,7 +172,9 @@ var zoomwall = {
 
 		// swap images
 		if (block.dataset.highres) {
-			block.dataset.lowres = block.src;
+			if (block.src != block.dataset.highres && block.dataset.lowres === undefined) {
+				block.dataset.lowres = block.src;
+			}
 			block.src = block.dataset.highres;
 		}
 		
@@ -352,6 +354,11 @@ var zoomwall = {
 
 			if (next) {
 				current.classList.remove('active');
+				// swap images
+				if (current.dataset.lowres) {
+					current.src = current.dataset.lowres;
+				}
+
 				zoomwall.expand(next);
 			}
 		}
