@@ -50,6 +50,14 @@ var zoomwall = {
 				}
 
 				switch (e.keyCode) {
+					case 27:
+						if (blocks.children && blocks.children.length > 0) {
+							zoomwall.shrink(blocks.children[0]);
+						}
+						e.preventDefault();
+
+						break;
+
 					case 37:
 						zoomwall.page(blocks, false);
 						e.preventDefault();
