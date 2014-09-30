@@ -142,6 +142,26 @@ var zoomwall = {
 		}
 	},
 
+	_calculateYOffset: function(block, blockHeight, scale, parentTop, parentHeight, targetHeight) {
+		// determine offset
+		var offsetY = parentTop - block.parentNode.offsetTop + block.offsetTop;
+
+		if (parentHeight < window.innerHeight || blockHeight * scale < parentHeight) {
+			offsetY -= targetHeight / 2 - blockHeight * scale / 2;
+		}
+
+		if (parentTop > 0) {
+			offsetY -= parentTop;
+		}
+
+		return -offsetY;
+	},
+
+	_transform: function(block, offsetX, offsetY, scale) {
+		block.style.transform = 'translate(' + offsetX.toFixed(8) + '%, ' + offsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+		block.style.webkitTransform = 'translate(' + offsetX.toFixed(8) + '%, ' + offsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+	},
+
 	expand: function(block) {
 
 		block.classList.add('active');
@@ -177,26 +197,6 @@ var zoomwall = {
 			}
 			block.src = block.dataset.highres;
 		}
-		
-		// determine what blocks are on this row
-		var row = [];
-		row.push(block);
-
-		var next = block.nextElementSibling;
-
-		while (next && next.offsetTop == block.offsetTop) {
-			row.push(next);
-
-			next = next.nextElementSibling;
-		}
-
-		var prev = block.previousElementSibling;
-
-		while (prev && prev.offsetTop == block.offsetTop) {
-			row.unshift(prev);
-
-			prev = prev.previousElementSibling;
-		}
 
 		// calculate scale
 		var scale = targetHeight / blockHeight;
@@ -205,118 +205,62 @@ var zoomwall = {
 			scale = parentWidth / blockWidth;
 		}
 
-		// determine offset
-		var offsetY = parentTop - block.parentNode.offsetTop + block.offsetTop;
+		// shift in current item
+		var leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - block.offsetLeft;
 
-		if (offsetY > 0) {
-			if (parentHeight < window.innerHeight) {
-				offsetY -= targetHeight / 2 - blockHeight * scale / 2;
-			}
+		// transform item
+		var percentageOffsetX = leftOffsetX / blockWidth * 100;
+		var percentageOffsetY = zoomwall._calculateYOffset(block, blockHeight, scale, parentTop, parentHeight, targetHeight) / blockHeight * 100;
 
-			if (parentTop > 0) {
-				offsetY -= parentTop;
-			}
-		}
+		zoomwall._transform(block, percentageOffsetX, percentageOffsetY, scale);
 
-		var leftOffsetX = 0;  // shift in current row
-		
-		for (var i = 0; i < row.length && row[i] != block; i++) {
-			leftOffsetX += parseInt(window.getComputedStyle(row[i]).width, 10) * scale;
-		}
-
-		leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftOffsetX;
-
-		var rightOffsetX = 0;  // shift in current row
-
-		for (var i = row.length - 1; i >= 0 && row[i] != block; i--) {
-			rightOffsetX += parseInt(window.getComputedStyle(row[i]).width, 10) * scale;
-		}
-
-		rightOffsetX = parentWidth / 2 - blockWidth * scale / 2 - rightOffsetX;
-
-		// transform current row
-		var itemOffset = 0; // offset due to scaling of previous items
+		// tranform items afterwards
+		var next = block.nextElementSibling;
 		var prevWidth = 0;
-		
-		for (var i = 0; i < row.length; i++) {
-			itemOffset += (prevWidth * scale - prevWidth);
-			prevWidth = parseInt(window.getComputedStyle(row[i]).width, 10);
-
-			var percentageOffsetX = (itemOffset + leftOffsetX) / prevWidth * 100;
-			var percentageOffsetY = -offsetY / parseInt(window.getComputedStyle(row[i]).height, 10) * 100;
-
-			row[i].style.transformOrigin = '0% 0%';
-			row[i].style.webkitTransformOrigin = '0% 0%';
-			row[i].style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-			row[i].style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-		}
-
-		// transform items after
-		var nextOffsetY = blockHeight * (scale - 1) - offsetY;
-		var prevHeight;
-		itemOffset = 0; // offset due to scaling of previous items
-		prevWidth = 0;
-
-		var next = row[row.length - 1].nextElementSibling;
-		var nextRowTop = -1;
+		var prevTop = block.offsetTop;
+		var itemOffsetX = blockWidth * (scale - 1);
 
 		while (next) {
-			var curTop = next.offsetTop;
+			var height = parseInt(window.getComputedStyle(next).height, 10);
+			prevWidth = parseInt(window.getComputedStyle(next).width, 10);
 
-			if (curTop == nextRowTop) {
-				itemOffset += prevWidth * scale - prevWidth;
-			} else {
-
-				if (nextRowTop != -1) {
-					itemOffset = 0;
-					nextOffsetY += prevHeight * (scale - 1);
-				}
-
-				nextRowTop = curTop;
+			if (next.offsetTop != prevTop) {
+				itemOffsetX += parentWidth;
 			}
 
-			prevWidth = parseInt(window.getComputedStyle(next).width, 10);
-			prevHeight = parseInt(window.getComputedStyle(next).height, 10);
+			var percentageOffsetX = (leftOffsetX + itemOffsetX) / prevWidth * 100;
+			var percentageOffsetY = zoomwall._calculateYOffset(next, height, scale, parentTop, parentHeight, targetHeight) / height * 100;
 
-			var percentageOffsetX = (itemOffset + leftOffsetX) / prevWidth * 100;
-			var percentageOffsetY = nextOffsetY / prevHeight * 100;
+			zoomwall._transform(next, percentageOffsetX, percentageOffsetY, scale);
 
-			next.style.transformOrigin = '0% 0%';
-			next.style.webkitTransformOrigin = '0% 0%';
-			next.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-			next.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+			itemOffsetX += prevWidth * (scale - 1);
+			prevTop = next.offsetTop;
 
 			next = next.nextElementSibling;
 		}
 
 		// transform items before
-		var prevOffsetY = -offsetY;
-		itemOffset = 0; // offset due to scaling of previous items
+		var prev = block.previousElementSibling;
 		prevWidth = 0;
-
-		var prev = row[0].previousElementSibling;
-		var prevRowTop = -1;
+		prevTop = block.offsetTop;
+		itemOffsetX = 0;
 
 		while (prev) {
-			var curTop = prev.offsetTop;
-
-			if (curTop == prevRowTop) {
-				itemOffset -= prevWidth * scale - prevWidth;
-			} else {
-				itemOffset = 0;
-				prevOffsetY -= parseInt(window.getComputedStyle(prev).height, 10) * (scale - 1);
-				prevRowTop = curTop;
-			}
-
+			var height = parseInt(window.getComputedStyle(prev).height, 10);
 			prevWidth = parseInt(window.getComputedStyle(prev).width, 10);
 
-			var percentageOffsetX = (itemOffset - rightOffsetX) / prevWidth * 100;
-			var percentageOffsetY = prevOffsetY / parseInt(window.getComputedStyle(prev).height, 10) * 100;
+			if (prev.offsetTop != prevTop) {
+				itemOffsetX -= parentWidth;
+			}
 
-			prev.style.transformOrigin = '100% 0%';
-			prev.style.webkitTransformOrigin = '100% 0%';
-			prev.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-			prev.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+			itemOffsetX -= prevWidth * (scale - 1);
+
+			var percentageOffsetX = (leftOffsetX + itemOffsetX) / prevWidth * 100;
+			var percentageOffsetY = zoomwall._calculateYOffset(prev, height, scale, parentTop, parentHeight, targetHeight) / height * 100;
+
+			zoomwall._transform(prev, percentageOffsetX, percentageOffsetY, scale);
+			
+			prevTop = prev.offsetTop;
 
 			prev = prev.previousElementSibling;
 		}
