@@ -4,6 +4,13 @@ zoomwall.js is a content-focused photo gallery using a horizontal masonry layout
 
 Visit [ericleong.github.io/zoomwall.js](http://ericleong.github.io/zoomwall.js) for a demo.
 
+install
+-------
+For those using [bower](http://bower.io/)
+```bash
+$ bower install zoomwall
+```
+
 usage
 -----
 Simply add the `zoomwall` class and run `zoomwall.create()` on the element that contains your images, after they have loaded.
