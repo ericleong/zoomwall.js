@@ -15,7 +15,15 @@ usage
 -----
 Simply add the `zoomwall` class and run `zoomwall.create()` on the element that contains your images, after they have loaded.
 
-For example, if the element has the id `gallery`:
+For example, if this is the element that contains your images:
+```HTML
+<div id="gallery" class="zoomwall">
+	<img src="./images/01.jpg" data-highres="./images/01_1280.jpg" />
+	<img src="./images/02.jpg" data-highres="./images/02_1280.jpg" />
+	<img src="./images/03.jpg" data-highres="./images/03_1280.jpg" />
+</div>
+```
+add this code in a `<script>` tag:
 ```JavaScript
 window.onload = function() {
 	zoomwall.create(document.getElementById('gallery'));
