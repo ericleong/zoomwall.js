@@ -13,8 +13,9 @@ $ bower install zoomwall
 
 usage
 -----
-First, add a reference to `zoomwall.js` in your HTML file, like this:
+First, add a reference to `zoomwall.js` and `zoomwall.css` in your HTML file, like this:
 ```HTML
+<link rel="stylesheet" type="text/css" href="zoomwall.css" />
 <script type="text/javascript" src="zoomwall.js"></script>
 ```
 Then add the `zoomwall` class and run `zoomwall.create()` on the element that contains your images, after they have loaded.
