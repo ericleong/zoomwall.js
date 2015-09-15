@@ -44,36 +44,47 @@ var zoomwall = {
 
 		// add key down listener
 		if (enableKeys) {
-			var keyPager = function(e) {
-				if (e.defaultPrevented) {
-					return;
-				}
+			zoomwall.keys(blocks);
+		}
+	},
+	
+	keys: function(blocks) {
+		var keyPager = function(e) {
+			if (e.defaultPrevented) {
+				return;
+			}
 
+			// either use the provided blocks, or query for the first lightboxed zoomwall
+			var elem = blocks || document.getElementsByClassName('zoomwall lightbox')[0];
+
+			if (elem) {
 				switch (e.keyCode) {
-					case 27:
-						if (blocks.children && blocks.children.length > 0) {
-							zoomwall.shrink(blocks.children[0]);
+					case 27: // escape
+						if (elem.children && elem.children.length > 0) {
+							zoomwall.shrink(elem.children[0]);
 						}
 						e.preventDefault();
-
+	
 						break;
-
-					case 37:
-						zoomwall.page(blocks, false);
+	
+					case 37: // left
+						zoomwall.page(elem, false);
 						e.preventDefault();
-
+	
 						break;
-
-					case 39:
-						zoomwall.page(blocks, true);
+	
+					case 39: // right
+						zoomwall.page(elem, true);
 						e.preventDefault();
-
+	
 						break;
 				}
 			}
-
-			document.addEventListener('keydown', keyPager);
 		}
+
+		document.addEventListener('keydown', keyPager);
+		
+		return keyPager;
 	},
 
 	resizeRow: function(row, width) {

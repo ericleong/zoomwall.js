@@ -13,15 +13,34 @@ $ bower install zoomwall
 
 usage
 -----
-Simply add the `zoomwall` class and run `zoomwall.create()` on the element that contains your images, after they have loaded.
 
-For example, if the element has the id `gallery`:
-```JavaScript
+### html
+
+Add the `zoomwall` class to the container element. Include high resolution photos using the `data-highres` attribute of each `<img>` tag.
+
+```html
+<div id="zoomwall" class="zoomwall">
+    <img src="./images/01_lowres.jpg" data-highres="./images/01_highres.jpg" />
+    <img src="./images/02_lowres.jpg" data-highres="./images/02_highres.jpg" />
+</div>
+```
+
+### javascript
+
+Run `zoomwall.create()` on the container element (`#gallery` in this example), after they have loaded.
+
+```javascript
 window.onload = function() {
-	zoomwall.create(document.getElementById('gallery'));
+    zoomwall.create(document.getElementById('gallery'));
 };
 ```
 
-Enable support for paging through photos by setting the second argument to `true`, like this: `zoomwall.create(<element>, true)`.
+Enable support for paging through photos with the left and right arrow keys by setting the second argument to `true`, like this: `zoomwall.create(<element>, true)`.
 
-Include high resolution photos using the `data-highres` attribute of your `<img>` tags.
+If there are multiple galleries, call `zoomwall.keys()` after loading the last gallery.
+
+```javascript
+zoomwall.create(document.getElementById('first-gallery'));
+zoomwall.create(document.getElementById('second-gallery'));
+zommwall.keys();
+```
