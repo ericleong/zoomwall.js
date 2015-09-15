@@ -1,11 +1,13 @@
 {
   "name": "zoomwall",
-  "main": "zoomwall.js",
+  "main": [
+    "zoomwall.js",
+    "zoomwall.css"
+  ],
   "ignore": [
     "LICENSE",
     "README.md"
   ],
-  "version": "1.0.1",
   "homepage": "https://github.com/ericleong/zoomwall.js",
   "authors": [
     { "name": "Eric Leong", "email": "me@ericleong.me", "homepage": "http://ericleong.me" }
@@ -18,5 +20,9 @@
     "gallery",
     "image"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ericleong/zoomwall.js"
+  }
 }
