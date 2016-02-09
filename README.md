@@ -25,7 +25,7 @@ First, add a reference to `zoomwall.js` and `zoomwall.css` in your HTML file, li
 Add the `zoomwall` class to the container element. Include high resolution photos using the `data-highres` attribute of each `<img>` tag.
 
 ```html
-<div id="zoomwall" class="zoomwall">
+<div id="gallery" class="zoomwall">
     <img src="./images/01_lowres.jpg" data-highres="./images/01_highres.jpg" />
     <img src="./images/02_lowres.jpg" data-highres="./images/02_highres.jpg" />
 </div>
@@ -48,5 +48,5 @@ If there are multiple galleries, call `zoomwall.keys()` after loading the last g
 ```javascript
 zoomwall.create(document.getElementById('first-gallery'));
 zoomwall.create(document.getElementById('second-gallery'));
-zommwall.keys();
+zoomwall.keys();
 ```
