@@ -5,7 +5,6 @@
     "LICENSE",
     "README.md"
   ],
-  "version": "1.0.1",
   "homepage": "https://github.com/ericleong/zoomwall.js",
   "authors": [
     { "name": "Eric Leong", "email": "me@ericleong.me", "homepage": "http://ericleong.me" }
