@@ -11,6 +11,11 @@ For those using [bower](http://bower.io/)
 $ bower install zoomwall
 ```
 
+For those using [npm](https://www.npmjs.com/)
+```bash
+$ npm install zoomwall.js
+```
+
 usage
 -----
 
