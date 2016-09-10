@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/ericleong/zoomwall.js/issues"
   },
-  "homepage": "https://github.com/ericleong/zoomwall.js#readme"
+  "homepage": "https://github.com/ericleong/zoomwall.js#readme",
+  "devDependencies": {
+    "eslint": "^3.5.0"
+  }
 }

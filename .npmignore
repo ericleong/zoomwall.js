@@ -10,3 +10,5 @@ Thumbs.db
 
 # node
 node_modules
+
+bower.json
