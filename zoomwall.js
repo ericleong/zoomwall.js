@@ -24,14 +24,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-var zoomwall = {
+export var zoomwall = {
 
-  create: function(blocks, enableKeys) {
+  create: function (blocks, enableKeys) {
     zoomwall.resize(blocks.children);
 
     blocks.classList.remove('loading');
     // shrink blocks if an empty space is clicked
-    blocks.addEventListener('click', function() {
+    blocks.addEventListener('click', function () {
       if (this.children && this.children.length > 0) {
         zoomwall.shrink(this.children[0]);
       }
@@ -47,9 +47,9 @@ var zoomwall = {
       zoomwall.keys(blocks);
     }
   },
-  
-  keys: function(blocks) {
-    var keyPager = function(e) {
+
+  keys: function (blocks) {
+    var keyPager = function (e) {
       if (e.defaultPrevented) {
         return;
       }
@@ -59,35 +59,35 @@ var zoomwall = {
 
       if (elem) {
         switch (e.keyCode) {
-        case 27: // escape
-          if (elem.children && elem.children.length > 0) {
-            zoomwall.shrink(elem.children[0]);
-          }
-          e.preventDefault();
+          case 27: // escape
+            if (elem.children && elem.children.length > 0) {
+              zoomwall.shrink(elem.children[0]);
+            }
+            e.preventDefault();
 
-          break;
+            break;
 
-        case 37: // left
-          zoomwall.page(elem, false);
-          e.preventDefault();
+          case 37: // left
+            zoomwall.page(elem, false);
+            e.preventDefault();
 
-          break;
+            break;
 
-        case 39: // right
-          zoomwall.page(elem, true);
-          e.preventDefault();
+          case 39: // right
+            zoomwall.page(elem, true);
+            e.preventDefault();
 
-          break;
+            break;
         }
       }
     };
 
     document.addEventListener('keydown', keyPager);
-    
+
     return keyPager;
   },
 
-  resizeRow: function(row, width) {
+  resizeRow: function (row, width) {
     if (row && row.length > 1) {
       for (var i in row) {
         row[i].style.width = (parseInt(window.getComputedStyle(row[i]).width, 10) / width * 100) + '%';
@@ -96,7 +96,7 @@ var zoomwall = {
     }
   },
 
-  calcRowWidth: function(row) {
+  calcRowWidth: function (row) {
     var width = 0;
 
     for (var i in row) {
@@ -106,7 +106,7 @@ var zoomwall = {
     return width;
   },
 
-  resize: function(blocks) {
+  resize: function (blocks) {
     var row = [];
     var top = -1;
 
@@ -116,7 +116,7 @@ var zoomwall = {
       if (block) {
         if (top == -1) {
           top = block.offsetTop;
-          
+
         } else if (block.offsetTop != top) {
           zoomwall.resizeRow(row, zoomwall.calcRowWidth(row));
 
@@ -131,13 +131,13 @@ var zoomwall = {
     zoomwall.resizeRow(row, zoomwall.calcRowWidth(row));
   },
 
-  reset: function(block) {
+  reset: function (block) {
     block.style.transform = 'translate(0, 0) scale(1)';
     block.style.webkitTransform = 'translate(0, 0) scale(1)';
     block.classList.remove('active');
   },
 
-  shrink: function(block) {
+  shrink: function (block) {
     block.parentNode.classList.remove('lightbox');
 
     // reset all blocks
@@ -161,7 +161,7 @@ var zoomwall = {
     }
   },
 
-  expand: function(block) {
+  expand: function (block) {
 
     block.classList.add('active');
     block.parentNode.classList.add('lightbox');
@@ -196,7 +196,7 @@ var zoomwall = {
       }
       block.src = block.dataset.highres;
     }
-    
+
     // determine what blocks are on this row
     var row = [];
     row.push(block);
@@ -238,7 +238,7 @@ var zoomwall = {
     }
 
     var leftOffsetX = 0;  // shift in current row
-    
+
     for (var i = 0; i < row.length && row[i] != block; i++) {
       leftOffsetX += parseInt(window.getComputedStyle(row[i]).width, 10) * scale;
     }
@@ -259,7 +259,7 @@ var zoomwall = {
     // transform current row
     var itemOffset = 0; // offset due to scaling of previous items
     var prevWidth = 0;
-    
+
     for (var k = 0; k < row.length; k++) {
       itemOffset += (prevWidth * scale - prevWidth);
       prevWidth = parseInt(window.getComputedStyle(row[k]).width, 10);
@@ -345,7 +345,7 @@ var zoomwall = {
     }
   },
 
-  animate: function(e) {
+  animate: function (e) {
     if (this.classList.contains('active')) {
       zoomwall.shrink(this);
     } else {
@@ -361,7 +361,7 @@ var zoomwall = {
     e.stopPropagation();
   },
 
-  page: function(blocks, isNext) {
+  page: function (blocks, isNext) {
     var actives = blocks.getElementsByClassName('active');
 
     if (actives && actives.length > 0) {
