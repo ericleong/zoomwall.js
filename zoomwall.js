@@ -59,25 +59,25 @@ export var zoomwall = {
 
       if (elem) {
         switch (e.keyCode) {
-          case 27: // escape
-            if (elem.children && elem.children.length > 0) {
-              zoomwall.shrink(elem.children[0]);
-            }
-            e.preventDefault();
+        case 27: // escape
+          if (elem.children && elem.children.length > 0) {
+            zoomwall.shrink(elem.children[0]);
+          }
+          e.preventDefault();
 
-            break;
+          break;
 
-          case 37: // left
-            zoomwall.page(elem, false);
-            e.preventDefault();
+        case 37: // left
+          zoomwall.page(elem, false);
+          e.preventDefault();
 
-            break;
+          break;
 
-          case 39: // right
-            zoomwall.page(elem, true);
-            e.preventDefault();
+        case 39: // right
+          zoomwall.page(elem, true);
+          e.preventDefault();
 
-            break;
+          break;
         }
       }
     };
