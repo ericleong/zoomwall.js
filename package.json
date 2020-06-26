@@ -1,6 +1,6 @@
 {
   "name": "zoomwall.js",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "A content-focused photo gallery using a horizontal masonry layout that scales up in lightbox mode.",
   "main": "zoomwall.js",
   "files": [
