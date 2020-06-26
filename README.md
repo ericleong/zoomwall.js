@@ -4,6 +4,8 @@ zoomwall.js is a content-focused photo gallery using a horizontal masonry layout
 
 Visit [ericleong.github.io/zoomwall.js](http://ericleong.github.io/zoomwall.js) for a demo.
 
+![Node.js CI](https://github.com/ericleong/zoomwall.js/workflows/Node.js%20CI/badge.svg?branch=master)
+
 install
 -------
 For those using [npm](https://www.npmjs.com/)
