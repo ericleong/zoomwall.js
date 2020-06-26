@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "lint": "eslint zoomwall.js",
+    "gpr-package-rename": "node scripts/gpr-package-rename.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
