@@ -1,8 +1,0 @@
-test:
-  override:
-    - node node_modules/eslint/bin/eslint.js zoomwall.js
-
-general:
-  branches:
-    ignore:
-      - gh-pages
