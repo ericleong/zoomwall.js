@@ -159,6 +159,9 @@ export var zoomwall = {
     if (block.dataset.lowres) {
       block.src = block.dataset.lowres;
     }
+    if (block.dataset.sizes) {
+      block.sizes = block.dataset.sizes;
+    }
   },
 
   expand: function (block) {
@@ -195,6 +198,10 @@ export var zoomwall = {
         block.dataset.lowres = block.src;
       }
       block.src = block.dataset.highres;
+    }
+    if (block.sizes) { // responsive images
+      block.dataset.sizes = block.sizes;
+      block.sizes = "100vw" // image is now 100% of the viewport width
     }
 
     // determine what blocks are on this row
@@ -380,6 +387,9 @@ export var zoomwall = {
         // swap images
         if (current.dataset.lowres) {
           current.src = current.dataset.lowres;
+        }
+        if (current.dataset.sizes) {
+          current.sizes = current.dataset.sizes;
         }
 
         zoomwall.expand(next);

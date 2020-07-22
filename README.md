@@ -25,7 +25,20 @@ First, add a reference to `zoomwall.js` and `zoomwall.css` in your HTML file, li
 <script type="text/javascript" src="zoomwall.js"></script>
 ```
 
-Add the `zoomwall` class to the container element. Include high resolution photos using the `data-highres` attribute of each `<img>` tag.
+Add the `zoomwall` class to the container element. 
+
+#### responsive images
+To have the browser determine when to load a high resolution image, use [responsive images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
+
+```html
+<div id="gallery" class="zoomwall">
+    <img srcset="./images/01_lowres.jpg 200w, ./images/01_highres.jpg 800w" sizes="(max-width: 1200px) 200px, 800px" src="./images/01_lowres.jpg">
+    <img srcset="./images/02_lowres.jpg 200w, ./images/02_highres.jpg 800w" sizes="(max-width: 1200px) 200px, 800px" src="./images/02_lowres.jpg">
+</div>
+```
+
+#### high resolution image
+Include high resolution photos using the `data-highres` attribute of each `<img>` tag.
 
 ```html
 <div id="gallery" class="zoomwall">
