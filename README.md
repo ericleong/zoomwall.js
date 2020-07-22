@@ -22,7 +22,7 @@ usage
 First, add a reference to `zoomwall.js` and `zoomwall.css` in your HTML file, like this:
 ```html
 <link rel="stylesheet" type="text/css" href="zoomwall.css" />
-<script type="module" src="./node_modules/zoomwall.js/zoomwall.js"></script>
+<script type="module" src="zoomwall.js"></script>
 ```
 
 Add the `zoomwall` class to the container element. 
@@ -52,7 +52,7 @@ Include high resolution photos using the `data-highres` attribute of each `<img>
 Remember to import the module.
 
 ```javascript
-import { zoomwall } from "./node_modules/zoomwall.js/zoomwall.js"
+import { zoomwall } from "zoomwall.js"
 ```
 
 Run `zoomwall.create()` on the container element (`#gallery` in this example), after they have loaded.
