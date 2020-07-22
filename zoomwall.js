@@ -201,7 +201,7 @@ export var zoomwall = {
     }
     if (block.sizes) { // responsive images
       block.dataset.sizes = block.sizes;
-      block.sizes = "100vw" // image is now 100% of the viewport width
+      block.sizes = '100vw'; // image is now 100% of the viewport width
     }
 
     // determine what blocks are on this row
