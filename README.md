@@ -32,8 +32,8 @@ To have the browser determine when to load a high resolution image, use [respons
 
 ```html
 <div id="gallery" class="zoomwall">
-    <img srcset="./images/01_lowres.jpg 200w, ./images/01_highres.jpg 800w" sizes="(max-width: 1200px) 200px, 800px" src="./images/01_lowres.jpg">
-    <img srcset="./images/02_lowres.jpg 200w, ./images/02_highres.jpg 800w" sizes="(max-width: 1200px) 200px, 800px" src="./images/02_lowres.jpg">
+    <img srcset="01_lowres.jpg 200w, 01_highres.jpg 800w" sizes="(max-width: 1200px) 200px, 800px" src="01_lowres.jpg">
+    <img srcset="02_lowres.jpg 200w, 02_highres.jpg 800w" sizes="(max-width: 1200px) 200px, 800px" src="02_lowres.jpg">
 </div>
 ```
 
@@ -42,8 +42,8 @@ Include high resolution photos using the `data-highres` attribute of each `<img>
 
 ```html
 <div id="gallery" class="zoomwall">
-    <img src="./images/01_lowres.jpg" data-highres="./images/01_highres.jpg" />
-    <img src="./images/02_lowres.jpg" data-highres="./images/02_highres.jpg" />
+    <img src="01_lowres.jpg" data-highres="01_highres.jpg" />
+    <img src="02_lowres.jpg" data-highres="02_highres.jpg" />
 </div>
 ```
 
