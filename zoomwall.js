@@ -206,7 +206,8 @@ export var zoomwall = {
     const blockIndex = imgsArray.indexOf(block);
 
     var row = imgsArray.filter(img => img.offsetTop == block.offsetTop);
-    const numBlocksAfterCurrentInRow = row.length - row.indexOf(block) - 1;
+    const blockIndexInRow = row.indexOf(block);
+    const numBlocksAfterCurrentInRow = row.length - blockIndexInRow - 1;
 
     // calculate scale
     var scale = targetHeight / blockHeight;
@@ -228,21 +229,11 @@ export var zoomwall = {
       }
     }
 
-    var leftOffsetX = 0;  // shift in current row
+    let leftWidth = row.slice(0, blockIndexInRow).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
+    let leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftWidth;
 
-    for (var i = 0; i < row.length && row[i] != block; i++) {
-      leftOffsetX += parseInt(window.getComputedStyle(row[i]).width, 10) * scale;
-    }
-
-    leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftOffsetX;
-
-    var rightOffsetX = 0;  // shift in current row
-
-    for (var j = row.length - 1; j >= 0 && row[j] != block; j--) {
-      rightOffsetX += parseInt(window.getComputedStyle(row[j]).width, 10) * scale;
-    }
-
-    rightOffsetX = parentWidth / 2 - blockWidth * scale / 2 - rightOffsetX;
+    let rightWidth = row.slice(blockIndexInRow + 1).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
+    let rightOffsetX = parentWidth / 2 - blockWidth * scale / 2 - rightWidth;
 
     var percentageOffsetX;
     var percentageOffsetY;
@@ -251,17 +242,17 @@ export var zoomwall = {
     var itemOffset = 0; // offset due to scaling of previous items
     var prevWidth = 0;
 
-    for (var k = 0; k < row.length; k++) {
+    for (let img of row) {
       itemOffset += (prevWidth * scale - prevWidth);
-      prevWidth = parseInt(window.getComputedStyle(row[k]).width, 10);
+      prevWidth = parseInt(window.getComputedStyle(img).width, 10);
 
       percentageOffsetX = (itemOffset + leftOffsetX) / prevWidth * 100;
-      percentageOffsetY = -offsetY / parseInt(window.getComputedStyle(row[k]).height, 10) * 100;
+      percentageOffsetY = -offsetY / parseInt(window.getComputedStyle(img).height, 10) * 100;
 
-      row[k].style.transformOrigin = '0% 0%';
-      row[k].style.webkitTransformOrigin = '0% 0%';
-      row[k].style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-      row[k].style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+      img.style.transformOrigin = '0% 0%';
+      img.style.webkitTransformOrigin = '0% 0%';
+      img.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+      img.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
     }
 
     // transform items after
