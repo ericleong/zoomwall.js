@@ -250,16 +250,9 @@ export var zoomwall = {
     let rowHeights = [...rows.values()].map(r => parseInt(window.getComputedStyle(r[0]).height, 10));
 
     rows.forEach((row, offsetTop, rows) => {
-      let rowOffsetY;
       let index = [...rows.keys()].indexOf(offsetTop);
-      
-      if (index > selectedIndex) { // rows after selected
-        rowOffsetY = (scale - 1) * rowHeights.slice(selectedIndex, index).reduce((offset, height) => offset + height, 0) - offsetY
-      } else if (index < selectedIndex) { // rows before selected
-        rowOffsetY = -(scale - 1) * rowHeights.slice(index, selectedIndex).reduce((offset, height) => offset + height, 0) - offsetY
-      } else {
-        rowOffsetY = -offsetY;
-      }
+      // compute the y offset based on the distance from this row to the selected row
+      let rowOffsetY = Math.sign(index - selectedIndex) * (scale - 1) * rowHeights.slice(...[selectedIndex, index].sort()).reduce((offset, height) => offset + height, 0) - offsetY;
 
       row.map(img => {
         return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
