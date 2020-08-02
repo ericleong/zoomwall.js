@@ -27,10 +27,7 @@ SOFTWARE.
 export var zoomwall = {
 
   create: function (blocks, enableKeys) {
-    this.blocks = blocks;
-
     const imgChildren = blocks.querySelectorAll('img');
-    this.imgChildren = imgChildren;
 
     zoomwall.resize(imgChildren);
 
@@ -51,6 +48,20 @@ export var zoomwall = {
     if (enableKeys) {
       zoomwall.keys(blocks);
     }
+  },
+
+  findWall: function(elem) {
+    var parent;
+
+    do {
+      parent = elem.parentElement;
+
+      if (parent.classList.contains('zoomwall')) {
+        return parent;
+      }
+    } while (parent);
+
+    return null;
   },
 
   keys: function (blocks) {
@@ -143,24 +154,30 @@ export var zoomwall = {
   },
 
   shrink: function (block) {
-    this.blocks.classList.remove('lightbox');
+    const blocks = zoomwall.findWall(block);
+
+    if (blocks) {
+      blocks.classList.remove('lightbox');
+    }
 
     // reset all blocks
     zoomwall.reset(block);
 
-    const imgChildrenArray = [...this.imgChildren];
+    const imgChildren = blocks.querySelectorAll('img');
+
+    const imgChildrenArray = [...imgChildren];
     const blockIndex = imgChildrenArray.indexOf(block)
 
-    var prev = this.imgChildren[blockIndex - 1];
+    var prev = imgChildren[blockIndex - 1];
     while (prev) {
       zoomwall.reset(prev);
-      prev = this.imgChildren[imgChildrenArray.indexOf(prev) - 1];
+      prev = imgChildren[imgChildrenArray.indexOf(prev) - 1];
     }
 
-    var next = this.imgChildren[blockIndex + 1];
+    var next = imgChildren[blockIndex + 1];
     while (next) {
       zoomwall.reset(next);
-      next = this.imgChildren[imgChildrenArray.indexOf(next) + 1];
+      next = imgChildren[imgChildrenArray.indexOf(next) + 1];
     }
 
     // swap images
@@ -174,18 +191,18 @@ export var zoomwall = {
 
   expand: function (block) {
 
-    const gallery = this.blocks;
+    const blocks = zoomwall.findWall(block);
 
     block.classList.add('active');
-    gallery.classList.add('lightbox');
+    blocks.classList.add('lightbox');
 
     // parent dimensions
-    var parentStyle = window.getComputedStyle(gallery);
+    var parentStyle = window.getComputedStyle(blocks);
 
     var parentWidth = parseInt(parentStyle.width, 10);
     var parentHeight = parseInt(parentStyle.height, 10);
 
-    var parentTop = gallery.getBoundingClientRect().top;
+    var parentTop = blocks.getBoundingClientRect().top;
 
     // block dimensions
     var blockStyle = window.getComputedStyle(block);
@@ -218,22 +235,23 @@ export var zoomwall = {
     var row = [];
     row.push(block);
 
-    const imgChildrenArray = [...this.imgChildren];
+    const imgChildren = blocks.querySelectorAll('img');
+    const imgChildrenArray = [...imgChildren];
 
-    var next = this.imgChildren[imgChildrenArray.indexOf(block) + 1];
+    var next = imgChildren[imgChildrenArray.indexOf(block) + 1];
 
     while (next && next.offsetTop == block.offsetTop) {
       row.push(next);
 
-      next = this.imgChildren[imgChildrenArray.indexOf(next) + 1];
+      next = imgChildren[imgChildrenArray.indexOf(next) + 1];
     }
 
-    var prev = this.imgChildren[imgChildrenArray.indexOf(block) - 1];
+    var prev = imgChildren[imgChildrenArray.indexOf(block) - 1];
 
     while (prev && prev.offsetTop == block.offsetTop) {
       row.unshift(prev);
 
-      prev = this.imgChildren[imgChildrenArray.indexOf(prev) - 1];
+      prev = imgChildren[imgChildrenArray.indexOf(prev) - 1];
     }
 
     // calculate scale
@@ -244,7 +262,7 @@ export var zoomwall = {
     }
 
     // determine offset
-    var offsetY = parentTop - gallery.offsetTop + block.offsetTop;
+    var offsetY = parentTop - blocks.offsetTop + block.offsetTop;
 
     if (offsetY > 0) {
       if (parentHeight < window.innerHeight) {
@@ -299,7 +317,7 @@ export var zoomwall = {
     itemOffset = 0; // offset due to scaling of previous items
     prevWidth = 0;
 
-    var nextItem = this.imgChildren[imgChildrenArray.indexOf(row[row.length - 1]) + 1];
+    var nextItem = imgChildren[imgChildrenArray.indexOf(row[row.length - 1]) + 1];
     var nextRowTop = -1;
 
     while (nextItem) {
@@ -328,7 +346,7 @@ export var zoomwall = {
       nextItem.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
       nextItem.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
 
-      nextItem = this.imgChildren[imgChildrenArray.indexOf(nextItem) + 1];
+      nextItem = imgChildren[imgChildrenArray.indexOf(nextItem) + 1];
     }
 
     // transform items before
@@ -336,7 +354,7 @@ export var zoomwall = {
     itemOffset = 0; // offset due to scaling of previous items
     prevWidth = 0;
 
-    var prevItem = this.imgChildren[imgChildrenArray.indexOf(row[0]) - 1];
+    var prevItem = imgChildren[imgChildrenArray.indexOf(row[0]) - 1];
     var prevRowTop = -1;
 
     while (prevItem) {
@@ -360,15 +378,17 @@ export var zoomwall = {
       prevItem.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
       prevItem.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
 
-      prevItem = this.imgChildren[imgChildrenArray.indexOf(prevItem) - 1];
+      prevItem = imgChildren[imgChildrenArray.indexOf(prevItem) - 1];
     }
   },
 
   animate: function (e) {
+    const blocks = zoomwall.findWall(e.target);
+
     if (this.classList.contains('active')) {
       zoomwall.shrink(this);
     } else {
-      var actives = this.parentNode.getElementsByClassName('active');
+      var actives = blocks.getElementsByClassName('active');
 
       for (var i = 0; i < actives.length; i++) {
         actives[i].classList.remove('active');
@@ -388,13 +408,16 @@ export var zoomwall = {
       var current = actives[0];
       var next;
 
-      const imgChildrenArray = [...this.imgChildren];
+      const wall = zoomwall.findWall(current);
+      const imgChildren = wall.querySelectorAll('img');
+
+      const imgChildrenArray = [...imgChildren];
       const blockIndex = imgChildrenArray.indexOf(current)
 
       if (isNext) {
-        next = this.imgChildren[blockIndex + 1];
+        next = imgChildren[blockIndex + 1];
       } else {
-        next = this.imgChildren[blockIndex - 1];
+        next = imgChildren[blockIndex - 1];
       }
 
       if (next) {
