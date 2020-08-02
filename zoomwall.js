@@ -239,28 +239,26 @@ export var zoomwall = {
     var percentageOffsetY;
 
     // transform current row
-    var itemOffset = 0; // offset due to scaling of previous items
-    var prevWidth = 0;
+    row.map(img => {
+      return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
+    })
+      .forEach((item, i, items) => {
+        let offset = items.slice(0, i).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
+        let percentageOffsetX = (offset + leftOffsetX) / item.width * 100;
+        let percentageOffsetY = -offsetY / parseInt(window.getComputedStyle(item.img).height, 10) * 100;
 
-    for (let img of row) {
-      itemOffset += (prevWidth * scale - prevWidth);
-      prevWidth = parseInt(window.getComputedStyle(img).width, 10);
-
-      percentageOffsetX = (itemOffset + leftOffsetX) / prevWidth * 100;
-      percentageOffsetY = -offsetY / parseInt(window.getComputedStyle(img).height, 10) * 100;
-
-      img.style.transformOrigin = '0% 0%';
-      img.style.webkitTransformOrigin = '0% 0%';
-      img.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-      img.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-    }
+        item.img.style.transformOrigin = '0% 0%';
+        item.img.style.webkitTransformOrigin = '0% 0%';
+        item.img.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+        item.img.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+      });
 
     // transform items after
     var curTop;
     var nextOffsetY = blockHeight * (scale - 1) - offsetY;
     var prevHeight;
-    itemOffset = 0; // offset due to scaling of previous items
-    prevWidth = 0;
+    var itemOffset = 0; // offset due to scaling of previous items
+    var prevWidth = 0;
 
     var nextRowTop = -1;
 
