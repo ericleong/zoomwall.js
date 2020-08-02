@@ -161,18 +161,9 @@ export var zoomwall = {
     }
 
     // reset all blocks
-    zoomwall.reset(block);
-
-    const imgs = blocks.querySelectorAll('img');
-    const blockIndex = [...imgs].indexOf(block);
-
-    for (let prevIndex = blockIndex - 1, prev = imgs[prevIndex]; prev != null; prev = imgs[--prevIndex]) {
-      zoomwall.reset(prev);
-    }
-
-    for (let nextIndex = blockIndex + 1, next = imgs[nextIndex]; next != null; next = imgs[++nextIndex]) {
-      zoomwall.reset(next);
-    }
+    blocks.querySelectorAll('img').forEach(function(img) {
+      zoomwall.reset(img);
+    });
 
     // swap images
     if (block.dataset.lowres) {
