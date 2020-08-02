@@ -202,7 +202,7 @@ export var zoomwall = {
 
     // determine what blocks are on this row
     const imgs = [...blocks.querySelectorAll('img')];
-    var row = imgs.filter(img => img.offsetTop == block.offsetTop);
+    var selectedRow = imgs.filter(img => img.offsetTop == block.offsetTop);
 
     // calculate scale
     var scale = targetHeight / blockHeight;
@@ -224,7 +224,7 @@ export var zoomwall = {
       }
     }
 
-    let leftWidth = row.slice(0, row.indexOf(block)).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
+    let leftWidth = selectedRow.slice(0, selectedRow.indexOf(block)).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
     let leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftWidth;
 
     let rows = imgs.reduce(function(rows, block) {
@@ -244,16 +244,16 @@ export var zoomwall = {
     let rowHeights = [...rows.values()].map(r => parseInt(window.getComputedStyle(r[0]).height, 10));
 
     rows.forEach((row, offsetTop, rows) => {
-      let index = [...rows.keys()].indexOf(offsetTop);
+      let rowIndex = [...rows.keys()].indexOf(offsetTop);
       // compute the y offset based on the distance from this row to the selected row
-      let rowOffsetY = Math.sign(index - selectedIndex) * (scale - 1) * rowHeights.slice(...[selectedIndex, index].sort()).reduce((offset, height) => offset + height, 0) - offsetY;
+      let rowOffsetY = Math.sign(rowIndex - selectedIndex) * (scale - 1) * rowHeights.slice(...[selectedIndex, rowIndex].sort()).reduce((offset, height) => offset + height, 0) - offsetY;
 
       row.map(img => {
           return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
         })
-        .forEach((item, i, items) => {
-          let offset = items.slice(0, i).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
-          let percentageOffsetX = (offset + leftOffsetX) / item.width * 100;
+        .forEach((item, columnIndex, items) => {
+          let offsetX = items.slice(0, columnIndex).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
+          let percentageOffsetX = (offsetX + leftOffsetX) / item.width * 100;
           let percentageOffsetY = rowOffsetY / parseInt(window.getComputedStyle(item.img).height, 10) * 100;
 
           item.img.style.transformOrigin = '0% 0%';
