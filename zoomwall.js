@@ -336,11 +336,7 @@ export var zoomwall = {
     if (this.classList.contains('active')) {
       zoomwall.shrink(this);
     } else {
-      var actives = blocks.getElementsByClassName('active');
-
-      for (var i = 0; i < actives.length; i++) {
-        actives[i].classList.remove('active');
-      }
+      [...blocks.getElementsByClassName('active')].forEach(block => block.classList.remove('active'));
 
       zoomwall.expand(this);
     }
