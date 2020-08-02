@@ -203,11 +203,9 @@ export var zoomwall = {
     // determine what blocks are on this row
     const imgs = blocks.querySelectorAll('img');
     const imgsArray = [...imgs];
-    const blockIndex = imgsArray.indexOf(block);
 
     var row = imgsArray.filter(img => img.offsetTop == block.offsetTop);
     const blockIndexInRow = row.indexOf(block);
-    const numBlocksAfterCurrentInRow = row.length - blockIndexInRow - 1;
 
     // calculate scale
     var scale = targetHeight / blockHeight;
@@ -235,88 +233,48 @@ export var zoomwall = {
     let rightWidth = row.slice(blockIndexInRow + 1).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
     let rightOffsetX = parentWidth / 2 - blockWidth * scale / 2 - rightWidth;
 
-    var percentageOffsetX;
-    var percentageOffsetY;
+    let rows = imgsArray.reduce(function(rows, block) {
+      // group rows
+      let offsetTop = block.offsetTop;
 
-    // transform current row
-    row.map(img => {
-      return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
+      if (!rows.has(offsetTop)) {
+        rows.set(offsetTop, [])
+      }
+
+      rows.get(offsetTop).push(block);
+
+      return rows;
+    }, new Map());
+
+    let selectedIndex = [...rows.keys()].indexOf(block.offsetTop);
+    let rowHeights = [...rows.values()].map(r => parseInt(window.getComputedStyle(r[0]).height, 10));
+
+    rows.forEach((row, offsetTop, rows) => {
+      let rowOffsetY;
+      let index = [...rows.keys()].indexOf(offsetTop);
+      
+      if (index > selectedIndex) { // rows after selected
+        rowOffsetY = (scale - 1) * rowHeights.slice(selectedIndex, index).reduce((offset, height) => offset + height, 0) - offsetY
+      } else if (index < selectedIndex) { // rows before selected
+        rowOffsetY = -(scale - 1) * rowHeights.slice(index, selectedIndex).reduce((offset, height) => offset + height, 0) - offsetY
+      } else {
+        rowOffsetY = -offsetY;
+      }
+
+      row.map(img => {
+        return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
+      })
+        .forEach((item, i, items) => {
+          let offset = items.slice(0, i).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
+          let percentageOffsetX = (offset + leftOffsetX) / item.width * 100;
+          let percentageOffsetY = rowOffsetY / parseInt(window.getComputedStyle(item.img).height, 10) * 100;
+
+          item.img.style.transformOrigin = '0% 0%';
+          item.img.style.webkitTransformOrigin = '0% 0%';
+          item.img.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+          item.img.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+        });
     })
-      .forEach((item, i, items) => {
-        let offset = items.slice(0, i).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
-        let percentageOffsetX = (offset + leftOffsetX) / item.width * 100;
-        let percentageOffsetY = -offsetY / parseInt(window.getComputedStyle(item.img).height, 10) * 100;
-
-        item.img.style.transformOrigin = '0% 0%';
-        item.img.style.webkitTransformOrigin = '0% 0%';
-        item.img.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-        item.img.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-      });
-
-    // transform items after
-    var curTop;
-    var nextOffsetY = blockHeight * (scale - 1) - offsetY;
-    var prevHeight;
-    var itemOffset = 0; // offset due to scaling of previous items
-    var prevWidth = 0;
-
-    var nextRowTop = -1;
-
-    for (let nextItemIndex = blockIndex + numBlocksAfterCurrentInRow + 1, nextItem = imgs[nextItemIndex]; nextItem; nextItem = imgs[++nextItemIndex]) {
-      curTop = nextItem.offsetTop;
-
-      if (curTop == nextRowTop) {
-        itemOffset += prevWidth * scale - prevWidth;
-      } else {
-
-        if (nextRowTop != -1) {
-          itemOffset = 0;
-          nextOffsetY += prevHeight * (scale - 1);
-        }
-
-        nextRowTop = curTop;
-      }
-
-      prevWidth = parseInt(window.getComputedStyle(nextItem).width, 10);
-      prevHeight = parseInt(window.getComputedStyle(nextItem).height, 10);
-
-      percentageOffsetX = (itemOffset + leftOffsetX) / prevWidth * 100;
-      percentageOffsetY = nextOffsetY / prevHeight * 100;
-
-      nextItem.style.transformOrigin = '0% 0%';
-      nextItem.style.webkitTransformOrigin = '0% 0%';
-      nextItem.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-      nextItem.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-    }
-
-    // transform items before
-    var prevOffsetY = -offsetY;
-    itemOffset = 0; // offset due to scaling of previous items
-    prevWidth = 0;
-
-    var prevRowTop = -1;
-
-    for (let prevItemIndex = blockIndex - (row.length - numBlocksAfterCurrentInRow - 1) - 1, prevItem = imgs[prevItemIndex]; prevItem; prevItem = imgs[--prevItemIndex]) {
-      curTop = prevItem.offsetTop;
-
-      if (curTop == prevRowTop) {
-        itemOffset -= prevWidth * scale - prevWidth;
-      } else {
-        itemOffset = 0;
-        prevOffsetY -= parseInt(window.getComputedStyle(prevItem).height, 10) * (scale - 1);
-        prevRowTop = curTop;
-      }
-
-      prevWidth = parseInt(window.getComputedStyle(prevItem).width, 10);
-
-      percentageOffsetX = (itemOffset - rightOffsetX) / prevWidth * 100;
-      percentageOffsetY = prevOffsetY / parseInt(window.getComputedStyle(prevItem).height, 10) * 100;
-
-      prevItem.style.transformOrigin = '100% 0%';
-      prevItem.style.webkitTransformOrigin = '100% 0%';
-      prevItem.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-      prevItem.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-    }
   },
 
   animate: function (e) {
