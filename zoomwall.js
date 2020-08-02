@@ -105,46 +105,30 @@ export var zoomwall = {
 
   resizeRow: function (row, width) {
     if (row && row.length > 1) {
-      for (var i in row) {
-        row[i].style.width = (parseInt(window.getComputedStyle(row[i]).width, 10) / width * 100) + '%';
-        row[i].style.height = 'auto';
-      }
+      row.forEach(function(img) {
+        img.style.width = (parseInt(window.getComputedStyle(img).width, 10) / width * 100) + '%';
+        img.style.height = 'auto';
+      });
     }
   },
 
   calcRowWidth: function (row) {
-    var width = 0;
-
-    for (var i in row) {
-      width += parseInt(window.getComputedStyle(row[i]).width, 10);
-    }
-
-    return width;
+    return row.reduce((width, img) => width + parseInt(window.getComputedStyle(img).width, 10), 0);
   },
 
   resize: function (blocks) {
-    var row = [];
-    var top = -1;
+    [...blocks].reduce(function(rows, block) {
+      let offsetTop = block.offsetTop;
 
-    for (var c = 0; c < blocks.length; c++) {
-      var block = blocks[c];
-
-      if (block) {
-        if (top == -1) {
-          top = block.offsetTop;
-
-        } else if (block.offsetTop != top) {
-          zoomwall.resizeRow(row, zoomwall.calcRowWidth(row));
-
-          row = [];
-          top = block.offsetTop;
-        }
-
-        row.push(block);
+      if (!rows.has(offsetTop)) {
+        rows.set(offsetTop, [])
       }
-    }
 
-    zoomwall.resizeRow(row, zoomwall.calcRowWidth(row));
+      rows.get(offsetTop).push(block);
+
+      return rows;
+    }, new Map())
+    .forEach(row => zoomwall.resizeRow(row, zoomwall.calcRowWidth(row)));
   },
 
   reset: function (block) {
