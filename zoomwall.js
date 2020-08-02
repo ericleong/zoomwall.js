@@ -201,11 +201,8 @@ export var zoomwall = {
     }
 
     // determine what blocks are on this row
-    const imgs = blocks.querySelectorAll('img');
-    const imgsArray = [...imgs];
-
-    var row = imgsArray.filter(img => img.offsetTop == block.offsetTop);
-    const blockIndexInRow = row.indexOf(block);
+    const imgs = [...blocks.querySelectorAll('img')];
+    var row = imgs.filter(img => img.offsetTop == block.offsetTop);
 
     // calculate scale
     var scale = targetHeight / blockHeight;
@@ -227,13 +224,10 @@ export var zoomwall = {
       }
     }
 
-    let leftWidth = row.slice(0, blockIndexInRow).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
+    let leftWidth = row.slice(0, row.indexOf(block)).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
     let leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftWidth;
 
-    let rightWidth = row.slice(blockIndexInRow + 1).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
-    let rightOffsetX = parentWidth / 2 - blockWidth * scale / 2 - rightWidth;
-
-    let rows = imgsArray.reduce(function(rows, block) {
+    let rows = imgs.reduce(function(rows, block) {
       // group rows
       let offsetTop = block.offsetTop;
 
@@ -255,8 +249,8 @@ export var zoomwall = {
       let rowOffsetY = Math.sign(index - selectedIndex) * (scale - 1) * rowHeights.slice(...[selectedIndex, index].sort()).reduce((offset, height) => offset + height, 0) - offsetY;
 
       row.map(img => {
-        return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
-      })
+          return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
+        })
         .forEach((item, i, items) => {
           let offset = items.slice(0, i).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
           let percentageOffsetX = (offset + leftOffsetX) / item.width * 100;
