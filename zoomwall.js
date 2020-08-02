@@ -27,7 +27,12 @@ SOFTWARE.
 export var zoomwall = {
 
   create: function (blocks, enableKeys) {
-    zoomwall.resize(blocks.children);
+    this.blocks = blocks;
+
+    const imgChildren = blocks.querySelectorAll('img');
+    this.imgChildren = imgChildren;
+
+    zoomwall.resize(imgChildren);
 
     blocks.classList.remove('loading');
     // shrink blocks if an empty space is clicked
@@ -38,8 +43,8 @@ export var zoomwall = {
     });
 
     // add click listeners to blocks
-    for (var i = 0; i < blocks.children.length; i++) {
-      blocks.children[i].addEventListener('click', zoomwall.animate);
+    for (var i = 0; i < imgChildren.length; i++) {
+      imgChildren[i].addEventListener('click', zoomwall.animate);
     }
 
     // add key down listener
@@ -138,21 +143,24 @@ export var zoomwall = {
   },
 
   shrink: function (block) {
-    block.parentNode.classList.remove('lightbox');
+    this.blocks.classList.remove('lightbox');
 
     // reset all blocks
     zoomwall.reset(block);
 
-    var prev = block.previousElementSibling;
+    const imgChildrenArray = [...this.imgChildren];
+    const blockIndex = imgChildrenArray.indexOf(block)
+
+    var prev = this.imgChildren[blockIndex - 1];
     while (prev) {
       zoomwall.reset(prev);
-      prev = prev.previousElementSibling;
+      prev = this.imgChildren[imgChildrenArray.indexOf(prev) - 1];
     }
 
-    var next = block.nextElementSibling;
+    var next = this.imgChildren[blockIndex + 1];
     while (next) {
       zoomwall.reset(next);
-      next = next.nextElementSibling;
+      next = this.imgChildren[imgChildrenArray.indexOf(next) + 1];
     }
 
     // swap images
@@ -166,16 +174,18 @@ export var zoomwall = {
 
   expand: function (block) {
 
+    const gallery = this.blocks;
+
     block.classList.add('active');
-    block.parentNode.classList.add('lightbox');
+    gallery.classList.add('lightbox');
 
     // parent dimensions
-    var parentStyle = window.getComputedStyle(block.parentNode);
+    var parentStyle = window.getComputedStyle(gallery);
 
     var parentWidth = parseInt(parentStyle.width, 10);
     var parentHeight = parseInt(parentStyle.height, 10);
 
-    var parentTop = block.parentNode.getBoundingClientRect().top;
+    var parentTop = gallery.getBoundingClientRect().top;
 
     // block dimensions
     var blockStyle = window.getComputedStyle(block);
@@ -208,20 +218,22 @@ export var zoomwall = {
     var row = [];
     row.push(block);
 
-    var next = block.nextElementSibling;
+    const imgChildrenArray = [...this.imgChildren];
+
+    var next = this.imgChildren[imgChildrenArray.indexOf(block) + 1];
 
     while (next && next.offsetTop == block.offsetTop) {
       row.push(next);
 
-      next = next.nextElementSibling;
+      next = this.imgChildren[imgChildrenArray.indexOf(next) + 1];
     }
 
-    var prev = block.previousElementSibling;
+    var prev = this.imgChildren[imgChildrenArray.indexOf(block) - 1];
 
     while (prev && prev.offsetTop == block.offsetTop) {
       row.unshift(prev);
 
-      prev = prev.previousElementSibling;
+      prev = this.imgChildren[imgChildrenArray.indexOf(prev) - 1];
     }
 
     // calculate scale
@@ -232,7 +244,7 @@ export var zoomwall = {
     }
 
     // determine offset
-    var offsetY = parentTop - block.parentNode.offsetTop + block.offsetTop;
+    var offsetY = parentTop - gallery.offsetTop + block.offsetTop;
 
     if (offsetY > 0) {
       if (parentHeight < window.innerHeight) {
@@ -287,7 +299,7 @@ export var zoomwall = {
     itemOffset = 0; // offset due to scaling of previous items
     prevWidth = 0;
 
-    var nextItem = row[row.length - 1].nextElementSibling;
+    var nextItem = this.imgChildren[imgChildrenArray.indexOf(row[row.length - 1]) + 1];
     var nextRowTop = -1;
 
     while (nextItem) {
@@ -316,7 +328,7 @@ export var zoomwall = {
       nextItem.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
       nextItem.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
 
-      nextItem = nextItem.nextElementSibling;
+      nextItem = this.imgChildren[imgChildrenArray.indexOf(nextItem) + 1];
     }
 
     // transform items before
@@ -324,7 +336,7 @@ export var zoomwall = {
     itemOffset = 0; // offset due to scaling of previous items
     prevWidth = 0;
 
-    var prevItem = row[0].previousElementSibling;
+    var prevItem = this.imgChildren[imgChildrenArray.indexOf(row[0]) - 1];
     var prevRowTop = -1;
 
     while (prevItem) {
@@ -348,7 +360,7 @@ export var zoomwall = {
       prevItem.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
       prevItem.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
 
-      prevItem = prevItem.previousElementSibling;
+      prevItem = this.imgChildren[imgChildrenArray.indexOf(prevItem) - 1];
     }
   },
 
@@ -376,10 +388,13 @@ export var zoomwall = {
       var current = actives[0];
       var next;
 
+      const imgChildrenArray = [...this.imgChildren];
+      const blockIndex = imgChildrenArray.indexOf(current)
+
       if (isNext) {
-        next = current.nextElementSibling;
+        next = this.imgChildren[blockIndex + 1];
       } else {
-        next = current.previousElementSibling;
+        next = this.imgChildren[blockIndex - 1];
       }
 
       if (next) {
