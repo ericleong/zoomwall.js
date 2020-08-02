@@ -217,21 +217,12 @@ export var zoomwall = {
     }
 
     // determine what blocks are on this row
-    var row = [];
-    row.push(block);
-
     const imgs = blocks.querySelectorAll('img');
-    const blockIndex = [...imgs].indexOf(block);
+    const imgsArray = [...imgs];
+    const blockIndex = imgsArray.indexOf(block);
 
-    for (let nextIndex = blockIndex + 1, next = imgs[nextIndex]; next && next.offsetTop == block.offsetTop; next = imgs[++nextIndex]) {
-      row.push(next);
-    }
-
-    const numBlocksAfterCurrentInRow = row.length - 1;
-
-    for (let prevIndex = blockIndex - 1, prev = imgs[prevIndex]; prev && prev.offsetTop == block.offsetTop; prev = imgs[--prevIndex]) {
-      row.unshift(prev);
-    }
+    var row = imgsArray.filter(img => img.offsetTop == block.offsetTop);
+    const numBlocksAfterCurrentInRow = row.length - row.indexOf(block) - 1;
 
     // calculate scale
     var scale = targetHeight / blockHeight;
