@@ -1,13 +1,15 @@
 import { zoomwall } from './zoomwall.js';
 import { jest } from '@jest/globals';
 
-test('expand rows to fill width of parent', () => {
+beforeEach(() => {
   document.body.innerHTML = 
-  '<div id="gallery" class="zoomwall">' + 
-  '  <img src="01_lowres.jpg" data-highres="01_highres.jpg" width="250" height="167" style="width: 250px"/>' +
-  '  <img src="02_lowres.jpg" data-highres="02_highres.jpg" width="250" height="167" style="width: 250px"/>' +
+  '<div id="gallery" class="zoomwall" style="width: 1024px, height: 768px">' + 
+  '  <img src="01_lowres.jpg" data-highres="01_highres.jpg" width="250" height="167" style="width: 250px; height: 167px"/>' +
+  '  <img src="02_lowres.jpg" data-highres="02_highres.jpg" width="250" height="167" style="width: 250px; height: 167px"/>' +
   '</div>';
+});
 
+test('expand rows to fill width of parent', () => {
   zoomwall.create(document.getElementById('gallery'));
 
   const gallery = document.getElementById('gallery');
@@ -18,13 +20,6 @@ test('expand rows to fill width of parent', () => {
 });
 
 test('clicking image transitions to lightbox', () => {
-
-  document.body.innerHTML = 
-  '<div id="gallery" class="zoomwall" style="width: 1024px, height: 768px">' + 
-  '  <img src="01_lowres.jpg" data-highres="01_highres.jpg" width="250" height="167" style="width: 250px, height: 167px"/>' +
-  '  <img src="02_lowres.jpg" data-highres="02_highres.jpg" width="250" height="167" style="width: 250px, height: 167px"/>' +
-  '</div>';
-
   zoomwall.create(document.getElementById('gallery'));
 
   const gallery = document.getElementById('gallery');
@@ -38,13 +33,6 @@ test('clicking image transitions to lightbox', () => {
 });
 
 test('clicking lightbox closes lightbox', () => {
-
-  document.body.innerHTML = 
-  '<div id="gallery" class="zoomwall" style="width: 1024px, height: 768px">' + 
-  '  <img src="01_lowres.jpg" data-highres="01_highres.jpg" width="250" height="167" style="width: 250px, height: 167px"/>' +
-  '  <img src="02_lowres.jpg" data-highres="02_highres.jpg" width="250" height="167" style="width: 250px, height: 167px"/>' +
-  '</div>';
-
   zoomwall.create(document.getElementById('gallery'));
 
   const gallery = document.getElementById('gallery');
@@ -58,13 +46,6 @@ test('clicking lightbox closes lightbox', () => {
 });
 
 test('calculate row width', () => {
-
-  document.body.innerHTML = 
-  '<div id="gallery" class="zoomwall" style="width: 1024px, height: 768px">' + 
-  '  <img src="01_lowres.jpg" data-highres="01_highres.jpg" width="250" height="167" style="width: 250px, height: 167px"/>' +
-  '  <img src="02_lowres.jpg" data-highres="02_highres.jpg" width="250" height="167" style="width: 250px, height: 167px"/>' +
-  '</div>';
-
   Object.defineProperty(window, 'getComputedStyle', {
     writable: true,
     value: jest.fn().mockImplementation(() => ({
