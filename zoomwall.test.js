@@ -1,4 +1,5 @@
 import { zoomwall } from './zoomwall.js';
+import { jest } from '@jest/globals';
 
 test('expand rows to fill width of parent', () => {
   document.body.innerHTML = 
@@ -54,4 +55,26 @@ test('clicking lightbox closes lightbox', () => {
   expect(gallery.classList).not.toContain('lightbox');
   expect(selected.classList).not.toContain('active');
   expect(selected.src).toBe(`${window.location}02_lowres.jpg`);
+});
+
+test('calculate row width', () => {
+
+  document.body.innerHTML = 
+  '<div id="gallery" class="zoomwall" style="width: 1024px, height: 768px">' + 
+  '  <img src="01_lowres.jpg" data-highres="01_highres.jpg" width="250" height="167" style="width: 250px, height: 167px"/>' +
+  '  <img src="02_lowres.jpg" data-highres="02_highres.jpg" width="250" height="167" style="width: 250px, height: 167px"/>' +
+  '</div>';
+
+  Object.defineProperty(window, 'getComputedStyle', {
+    writable: true,
+    value: jest.fn().mockImplementation(() => ({
+      width: '250px',
+      height: '167px'
+    })),
+  });
+
+  const row = [...document.getElementById('gallery').children];
+  const width = zoomwall.calcRowWidth(row);
+
+  expect(width).toBe(500);
 });
