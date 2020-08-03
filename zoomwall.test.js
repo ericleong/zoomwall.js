@@ -33,4 +33,25 @@ test('clicking image transitions to lightbox', () => {
   expect(gallery.classList).toContain('lightbox');
   expect(selected.classList).toContain('active');
   expect(selected.src).toBe(`${window.location}02_highres.jpg`);
+  expect(selected.dataset.lowres).toBe(`${window.location}02_lowres.jpg`);
+});
+
+test('clicking lightbox closes lightbox', () => {
+
+  document.body.innerHTML = 
+  '<div id="gallery" class="zoomwall" style="width: 1024px, height: 768px">' + 
+  '  <img src="01_lowres.jpg" data-highres="01_highres.jpg" width="250" height="167" style="width: 250px, height: 167px"/>' +
+  '  <img src="02_lowres.jpg" data-highres="02_highres.jpg" width="250" height="167" style="width: 250px, height: 167px"/>' +
+  '</div>';
+
+  zoomwall.create(document.getElementById('gallery'));
+
+  const gallery = document.getElementById('gallery');
+  const selected = gallery.children[1];
+  selected.click(); // open
+  selected.click(); // close
+
+  expect(gallery.classList).not.toContain('lightbox');
+  expect(selected.classList).not.toContain('active');
+  expect(selected.src).toBe(`${window.location}02_lowres.jpg`);
 });
