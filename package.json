@@ -1,5 +1,6 @@
 {
   "name": "zoomwall.js",
+  "type": "module",
   "version": "1.2.0",
   "description": "A content-focused photo gallery using a horizontal masonry layout that scales up in lightbox mode.",
   "main": "zoomwall.js",
@@ -10,7 +11,7 @@
   "scripts": {
     "lint": "eslint zoomwall.js",
     "gpr-package-rename": "node scripts/gpr-package-rename.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
   "homepage": "https://github.com/ericleong/zoomwall.js#readme",
   "devDependencies": {
     "eslint": "^7.3.1",
-    "jest": "^26.2.2"
+    "jest": "^26.2.2",
+    "jest-environment-jsdom-sixteen": "^1.0.3"
   }
 }
