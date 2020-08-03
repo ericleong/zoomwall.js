@@ -9,7 +9,7 @@
     "zoomwall.css"
   ],
   "scripts": {
-    "lint": "eslint zoomwall.js",
+    "lint": "eslint *.js",
     "gpr-package-rename": "node scripts/gpr-package-rename.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
