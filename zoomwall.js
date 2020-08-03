@@ -392,7 +392,7 @@ export var zoomwall = {
 
       const wall = zoomwall.findWall(current);
       const imgs = wall.querySelectorAll('img');
-      const blockIndex = [...imgs].indexOf(current)
+      const blockIndex = [...imgs].indexOf(current);
 
       if (isNext) {
         next = imgs[blockIndex + 1];
