@@ -11,8 +11,6 @@ export default {
       preset: 'jest-puppeteer',
       coverageProvider: 'v8',
       testMatch: ['<rootDir>/__tests__/functional.test.js'],
-      globalSetup: '<rootDir>/__tests__/functional-setup.cjs',
-      globalTeardown: '<rootDir>/__tests__/functional-teardown.cjs'
     }
   ]
 };
