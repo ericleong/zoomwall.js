@@ -9,7 +9,7 @@
     "zoomwall.css"
   ],
   "scripts": {
-    "lint": "eslint **/*.js !scripts/**",
+    "lint": "eslint **/*.js",
     "gpr-package-rename": "node scripts/gpr-package-rename.js",
     "test": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
