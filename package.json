@@ -36,6 +36,6 @@
     "jest-dev-server": "^4.4.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-puppeteer": "^4.4.0",
-    "puppeteer": "^5.2.1"
+    "puppeteer": "^v2.1.1"
   }
 }
