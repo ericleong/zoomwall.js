@@ -1,12 +1,19 @@
 {
     "env": {
+        "es6": true,
         "browser": true,
         "jest": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 8,
         "sourceType": "module"
+    },
+    "globals": {
+        "page": true,
+        "browser": true,
+        "context": true,
+        "jestPuppeteer": true
     },
     "rules": {
         "indent": [
