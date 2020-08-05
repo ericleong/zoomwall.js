@@ -32,6 +32,35 @@ describe.each([
     expect(imgs[1].style.width).toBe('25%');
     expect(imgs[1].style.height).toBe('auto');
   });
+
+  test('clicking image transitions to lightbox', () => {
+    zoomwall.create(document.getElementById('gallery'));
+  
+    const gallery = document.getElementById('gallery');
+    const imgs = [...document.querySelectorAll('#gallery img')];
+    const selected = imgs[1];
+    selected.click();
+  
+    expect(gallery.classList).toContain('lightbox');
+    expect(selected.classList).toContain('active');
+    expect(selected.src).toBe(`${window.location}02_highres.jpg`);
+    expect(selected.dataset.lowres).toBe(`${window.location}02_lowres.jpg`);
+  });
+  
+  test('clicking lightbox closes lightbox', () => {
+    zoomwall.create(document.getElementById('gallery'));
+  
+    const gallery = document.getElementById('gallery');
+    const imgs = [...document.querySelectorAll('#gallery img')];
+    const selected = imgs[1];
+    selected.click(); // open
+    selected.click(); // close
+  
+    expect(gallery.classList).not.toContain('lightbox');
+    expect(selected.classList).not.toContain('active');
+    expect(selected.src).toBe(`${window.location}02_lowres.jpg`);
+  });
+
   test('calculate row width', () => {
     Object.defineProperty(window, 'getComputedStyle', {
       writable: true,
