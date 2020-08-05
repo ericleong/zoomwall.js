@@ -121,14 +121,14 @@ export var zoomwall = {
       let offsetTop = block.offsetTop;
 
       if (!rows.has(offsetTop)) {
-        rows.set(offsetTop, [])
+        rows.set(offsetTop, []);
       }
 
       rows.get(offsetTop).push(block);
 
       return rows;
     }, new Map())
-    .forEach(row => zoomwall.resizeRow(row, zoomwall.calcRowWidth(row)));
+      .forEach(row => zoomwall.resizeRow(row, zoomwall.calcRowWidth(row)));
   },
 
   reset: function (block) {
@@ -232,7 +232,7 @@ export var zoomwall = {
       let offsetTop = block.offsetTop;
 
       if (!rows.has(offsetTop)) {
-        rows.set(offsetTop, [])
+        rows.set(offsetTop, []);
       }
 
       rows.get(offsetTop).push(block);
@@ -249,8 +249,8 @@ export var zoomwall = {
       let rowOffsetY = Math.sign(rowIndex - selectedIndex) * (scale - 1) * rowHeights.slice(...[selectedIndex, rowIndex].sort()).reduce((offset, height) => offset + height, 0) - offsetY;
 
       row.map(img => {
-          return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
-        })
+        return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
+      })
         .forEach((item, columnIndex, items) => {
           let offsetX = items.slice(0, columnIndex).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
           let percentageOffsetX = (offsetX + leftOffsetX) / item.width * 100;
@@ -261,7 +261,7 @@ export var zoomwall = {
           item.img.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
           item.img.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
         });
-    })
+    });
   },
 
   animate: function (e) {
