@@ -27,7 +27,9 @@ SOFTWARE.
 export var zoomwall = {
 
   create: function (blocks, enableKeys) {
-    zoomwall.resize(blocks.children);
+    const imgs = blocks.querySelectorAll('img');
+
+    zoomwall.resize(imgs);
 
     blocks.classList.remove('loading');
     // shrink blocks if an empty space is clicked
@@ -38,14 +40,28 @@ export var zoomwall = {
     });
 
     // add click listeners to blocks
-    for (var i = 0; i < blocks.children.length; i++) {
-      blocks.children[i].addEventListener('click', zoomwall.animate);
-    }
+    imgs.forEach(function(img) {
+      img.addEventListener('click', zoomwall.animate);
+    });
 
     // add key down listener
     if (enableKeys) {
       zoomwall.keys(blocks);
     }
+  },
+
+  findWall: function(elem) { // traverse dom to find gallery root node
+    var parent = elem;
+
+    do {
+      parent = parent.parentElement;
+
+      if (parent.classList.contains('zoomwall')) {
+        return parent;
+      }
+    } while (parent.parentElement);
+
+    return null;
   },
 
   keys: function (blocks) {
@@ -138,21 +154,24 @@ export var zoomwall = {
   },
 
   shrink: function (block) {
-    block.parentNode.classList.remove('lightbox');
+    const blocks = zoomwall.findWall(block);
+
+    if (blocks) {
+      blocks.classList.remove('lightbox');
+    }
 
     // reset all blocks
     zoomwall.reset(block);
 
-    var prev = block.previousElementSibling;
-    while (prev) {
+    const imgs = blocks.querySelectorAll('img');
+    const blockIndex = [...imgs].indexOf(block);
+
+    for (let prevIndex = blockIndex - 1, prev = imgs[prevIndex]; prev != null; prev = imgs[--prevIndex]) {
       zoomwall.reset(prev);
-      prev = prev.previousElementSibling;
     }
 
-    var next = block.nextElementSibling;
-    while (next) {
+    for (let nextIndex = blockIndex + 1, next = imgs[nextIndex]; next != null; next = imgs[++nextIndex]) {
       zoomwall.reset(next);
-      next = next.nextElementSibling;
     }
 
     // swap images
@@ -166,16 +185,18 @@ export var zoomwall = {
 
   expand: function (block) {
 
+    const blocks = zoomwall.findWall(block);
+
     block.classList.add('active');
-    block.parentNode.classList.add('lightbox');
+    blocks.classList.add('lightbox');
 
     // parent dimensions
-    var parentStyle = window.getComputedStyle(block.parentNode);
+    var parentStyle = window.getComputedStyle(blocks);
 
     var parentWidth = parseInt(parentStyle.width, 10);
     var parentHeight = parseInt(parentStyle.height, 10);
 
-    var parentTop = block.parentNode.getBoundingClientRect().top;
+    var parentTop = blocks.getBoundingClientRect().top;
 
     // block dimensions
     var blockStyle = window.getComputedStyle(block);
@@ -208,20 +229,17 @@ export var zoomwall = {
     var row = [];
     row.push(block);
 
-    var next = block.nextElementSibling;
+    const imgs = blocks.querySelectorAll('img');
+    const blockIndex = [...imgs].indexOf(block);
 
-    while (next && next.offsetTop == block.offsetTop) {
+    for (let nextIndex = blockIndex + 1, next = imgs[nextIndex]; next && next.offsetTop == block.offsetTop; next = imgs[++nextIndex]) {
       row.push(next);
-
-      next = next.nextElementSibling;
     }
 
-    var prev = block.previousElementSibling;
+    const numBlocksAfterCurrentInRow = row.length - 1;
 
-    while (prev && prev.offsetTop == block.offsetTop) {
+    for (let prevIndex = blockIndex - 1, prev = imgs[prevIndex]; prev && prev.offsetTop == block.offsetTop; prev = imgs[--prevIndex]) {
       row.unshift(prev);
-
-      prev = prev.previousElementSibling;
     }
 
     // calculate scale
@@ -232,7 +250,7 @@ export var zoomwall = {
     }
 
     // determine offset
-    var offsetY = parentTop - block.parentNode.offsetTop + block.offsetTop;
+    var offsetY = parentTop - blocks.offsetTop + block.offsetTop;
 
     if (offsetY > 0) {
       if (parentHeight < window.innerHeight) {
@@ -287,10 +305,9 @@ export var zoomwall = {
     itemOffset = 0; // offset due to scaling of previous items
     prevWidth = 0;
 
-    var nextItem = row[row.length - 1].nextElementSibling;
     var nextRowTop = -1;
 
-    while (nextItem) {
+    for (let nextItemIndex = blockIndex + numBlocksAfterCurrentInRow + 1, nextItem = imgs[nextItemIndex]; nextItem; nextItem = imgs[++nextItemIndex]) {
       curTop = nextItem.offsetTop;
 
       if (curTop == nextRowTop) {
@@ -315,8 +332,6 @@ export var zoomwall = {
       nextItem.style.webkitTransformOrigin = '0% 0%';
       nextItem.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
       nextItem.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-
-      nextItem = nextItem.nextElementSibling;
     }
 
     // transform items before
@@ -324,10 +339,9 @@ export var zoomwall = {
     itemOffset = 0; // offset due to scaling of previous items
     prevWidth = 0;
 
-    var prevItem = row[0].previousElementSibling;
     var prevRowTop = -1;
 
-    while (prevItem) {
+    for (let prevItemIndex = blockIndex - (row.length - numBlocksAfterCurrentInRow - 1) - 1, prevItem = imgs[prevItemIndex]; prevItem; prevItem = imgs[--prevItemIndex]) {
       curTop = prevItem.offsetTop;
 
       if (curTop == prevRowTop) {
@@ -347,16 +361,16 @@ export var zoomwall = {
       prevItem.style.webkitTransformOrigin = '100% 0%';
       prevItem.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
       prevItem.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-
-      prevItem = prevItem.previousElementSibling;
     }
   },
 
   animate: function (e) {
+    const blocks = zoomwall.findWall(e.target);
+
     if (this.classList.contains('active')) {
       zoomwall.shrink(this);
     } else {
-      var actives = this.parentNode.getElementsByClassName('active');
+      var actives = blocks.getElementsByClassName('active');
 
       for (var i = 0; i < actives.length; i++) {
         actives[i].classList.remove('active');
@@ -376,10 +390,14 @@ export var zoomwall = {
       var current = actives[0];
       var next;
 
+      const wall = zoomwall.findWall(current);
+      const imgs = wall.querySelectorAll('img');
+      const blockIndex = [...imgs].indexOf(current);
+
       if (isNext) {
-        next = current.nextElementSibling;
+        next = imgs[blockIndex + 1];
       } else {
-        next = current.previousElementSibling;
+        next = imgs[blockIndex - 1];
       }
 
       if (next) {
