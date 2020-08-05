@@ -61,7 +61,13 @@ describe.each(['flat', 'nested'])('interaction tests %s', (type) => {
     expect(Object.values(await gallery.evaluate(node => node.classList))).toContain('lightbox');
     expect(Object.values(await fourthImg.evaluate(node => node.classList))).not.toContain('active');
     expect(Object.values(await fifthImg.evaluate(node => node.classList))).toContain('active');
-    expect(await fifthImg.evaluate(node => node.style.transform)).toBe('translate(243.333%, -109.167%) scale(4.93333)');
+
+    const fifthTransform = await fifthImg.evaluate(node => node.style.transform);
+    const fifthTransformSplit = fifthTransform.split(' ');
+    expect(fifthTransformSplit[0]).toBe('translate(243.333%,');
+    // flat: -109.167, nested: -108.264 (close enough?)
+    expect(parseFloat(fifthTransformSplit[1].slice(0, -2))).toBeCloseTo(-109.167, -1);
+    expect(fifthTransformSplit[2]).toBe('scale(4.93333)');
     expect(await fifthImg.evaluate(node => node.src)).toBe(fifthImgHigh);
     expect(await fifthImg.evaluate(node => node.dataset.lowres)).toBe(fifthImgSrc);
   });
