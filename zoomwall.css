@@ -31,6 +31,7 @@ SOFTWARE.
 }
 
 .zoomwall img {
+	width: auto;
 	height: 15vw;
 	opacity: 1;
 	vertical-align: top;
