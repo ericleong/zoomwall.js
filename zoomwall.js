@@ -51,15 +51,15 @@ export var zoomwall = {
   },
 
   findWall: function(elem) { // traverse dom to find gallery root node
-    var parent;
+    var parent = elem;
 
     do {
-      parent = elem.parentElement;
+      parent = parent.parentElement;
 
       if (parent.classList.contains('zoomwall')) {
         return parent;
       }
-    } while (parent);
+    } while (parent.parentElement);
 
     return null;
   },
