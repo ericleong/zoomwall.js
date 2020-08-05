@@ -27,3 +27,18 @@ test('click to open lightbox', async () => {
   expect(await fourthImg.evaluate(node => node.src)).toBe(fourthImgHigh);
   expect(await fourthImg.evaluate(node => node.dataset.lowres)).toBe(fourthImgSrc);
 });
+
+test('click to close lightbox', async () => {
+  const gallery = await expect(page).toMatchElement('#gallery');
+  expect(Object.values(await gallery.evaluate(node => node.classList))).toContain('lightbox');
+
+  const fourthImg = await expect(page).toMatchElement('#gallery > img:nth-child(4)');
+  const fourthImgLow = await fourthImg.evaluate(node => node.dataset.lowres);
+
+  await expect(page).toClick('#gallery > img:nth-child(4)');
+
+  expect(Object.values(await gallery.evaluate(node => node.classList))).not.toContain('lightbox');
+  expect(Object.values(await fourthImg.evaluate(node => node.classList))).not.toContain('active');
+  expect(await fourthImg.evaluate(node => node.style.transform)).toBe('translate(0px, 0px) scale(1)');
+  expect(await fourthImg.evaluate(node => node.src)).toBe(fourthImgLow);
+});
