@@ -105,46 +105,30 @@ export var zoomwall = {
 
   resizeRow: function (row, width) {
     if (row && row.length > 1) {
-      for (var i in row) {
-        row[i].style.width = (parseInt(window.getComputedStyle(row[i]).width, 10) / width * 100) + '%';
-        row[i].style.height = 'auto';
-      }
+      row.forEach(function(img) {
+        img.style.width = (parseInt(window.getComputedStyle(img).width, 10) / width * 100) + '%';
+        img.style.height = 'auto';
+      });
     }
   },
 
   calcRowWidth: function (row) {
-    var width = 0;
-
-    for (var i in row) {
-      width += parseInt(window.getComputedStyle(row[i]).width, 10);
-    }
-
-    return width;
+    return row.reduce((width, img) => width + parseInt(window.getComputedStyle(img).width, 10), 0);
   },
 
   resize: function (blocks) {
-    var row = [];
-    var top = -1;
+    [...blocks].reduce(function(rows, block) {
+      let offsetTop = block.offsetTop;
 
-    for (var c = 0; c < blocks.length; c++) {
-      var block = blocks[c];
-
-      if (block) {
-        if (top == -1) {
-          top = block.offsetTop;
-
-        } else if (block.offsetTop != top) {
-          zoomwall.resizeRow(row, zoomwall.calcRowWidth(row));
-
-          row = [];
-          top = block.offsetTop;
-        }
-
-        row.push(block);
+      if (!rows.has(offsetTop)) {
+        rows.set(offsetTop, []);
       }
-    }
 
-    zoomwall.resizeRow(row, zoomwall.calcRowWidth(row));
+      rows.get(offsetTop).push(block);
+
+      return rows;
+    }, new Map())
+      .forEach(row => zoomwall.resizeRow(row, zoomwall.calcRowWidth(row)));
   },
 
   reset: function (block) {
@@ -161,18 +145,9 @@ export var zoomwall = {
     }
 
     // reset all blocks
-    zoomwall.reset(block);
-
-    const imgs = blocks.querySelectorAll('img');
-    const blockIndex = [...imgs].indexOf(block);
-
-    for (let prevIndex = blockIndex - 1, prev = imgs[prevIndex]; prev != null; prev = imgs[--prevIndex]) {
-      zoomwall.reset(prev);
-    }
-
-    for (let nextIndex = blockIndex + 1, next = imgs[nextIndex]; next != null; next = imgs[++nextIndex]) {
-      zoomwall.reset(next);
-    }
+    blocks.querySelectorAll('img').forEach(function(img) {
+      zoomwall.reset(img);
+    });
 
     // swap images
     if (block.dataset.lowres) {
@@ -226,21 +201,8 @@ export var zoomwall = {
     }
 
     // determine what blocks are on this row
-    var row = [];
-    row.push(block);
-
-    const imgs = blocks.querySelectorAll('img');
-    const blockIndex = [...imgs].indexOf(block);
-
-    for (let nextIndex = blockIndex + 1, next = imgs[nextIndex]; next && next.offsetTop == block.offsetTop; next = imgs[++nextIndex]) {
-      row.push(next);
-    }
-
-    const numBlocksAfterCurrentInRow = row.length - 1;
-
-    for (let prevIndex = blockIndex - 1, prev = imgs[prevIndex]; prev && prev.offsetTop == block.offsetTop; prev = imgs[--prevIndex]) {
-      row.unshift(prev);
-    }
+    const imgs = [...blocks.querySelectorAll('img')];
+    var selectedRow = imgs.filter(img => img.offsetTop == block.offsetTop);
 
     // calculate scale
     var scale = targetHeight / blockHeight;
@@ -262,106 +224,44 @@ export var zoomwall = {
       }
     }
 
-    var leftOffsetX = 0;  // shift in current row
+    let leftWidth = selectedRow.slice(0, selectedRow.indexOf(block)).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
+    let leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftWidth;
 
-    for (var i = 0; i < row.length && row[i] != block; i++) {
-      leftOffsetX += parseInt(window.getComputedStyle(row[i]).width, 10) * scale;
-    }
+    let rows = imgs.reduce(function(rows, block) {
+      // group rows
+      let offsetTop = block.offsetTop;
 
-    leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftOffsetX;
-
-    var rightOffsetX = 0;  // shift in current row
-
-    for (var j = row.length - 1; j >= 0 && row[j] != block; j--) {
-      rightOffsetX += parseInt(window.getComputedStyle(row[j]).width, 10) * scale;
-    }
-
-    rightOffsetX = parentWidth / 2 - blockWidth * scale / 2 - rightOffsetX;
-
-    var percentageOffsetX;
-    var percentageOffsetY;
-
-    // transform current row
-    var itemOffset = 0; // offset due to scaling of previous items
-    var prevWidth = 0;
-
-    for (var k = 0; k < row.length; k++) {
-      itemOffset += (prevWidth * scale - prevWidth);
-      prevWidth = parseInt(window.getComputedStyle(row[k]).width, 10);
-
-      percentageOffsetX = (itemOffset + leftOffsetX) / prevWidth * 100;
-      percentageOffsetY = -offsetY / parseInt(window.getComputedStyle(row[k]).height, 10) * 100;
-
-      row[k].style.transformOrigin = '0% 0%';
-      row[k].style.webkitTransformOrigin = '0% 0%';
-      row[k].style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-      row[k].style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-    }
-
-    // transform items after
-    var curTop;
-    var nextOffsetY = blockHeight * (scale - 1) - offsetY;
-    var prevHeight;
-    itemOffset = 0; // offset due to scaling of previous items
-    prevWidth = 0;
-
-    var nextRowTop = -1;
-
-    for (let nextItemIndex = blockIndex + numBlocksAfterCurrentInRow + 1, nextItem = imgs[nextItemIndex]; nextItem; nextItem = imgs[++nextItemIndex]) {
-      curTop = nextItem.offsetTop;
-
-      if (curTop == nextRowTop) {
-        itemOffset += prevWidth * scale - prevWidth;
-      } else {
-
-        if (nextRowTop != -1) {
-          itemOffset = 0;
-          nextOffsetY += prevHeight * (scale - 1);
-        }
-
-        nextRowTop = curTop;
+      if (!rows.has(offsetTop)) {
+        rows.set(offsetTop, []);
       }
 
-      prevWidth = parseInt(window.getComputedStyle(nextItem).width, 10);
-      prevHeight = parseInt(window.getComputedStyle(nextItem).height, 10);
+      rows.get(offsetTop).push(block);
 
-      percentageOffsetX = (itemOffset + leftOffsetX) / prevWidth * 100;
-      percentageOffsetY = nextOffsetY / prevHeight * 100;
+      return rows;
+    }, new Map());
 
-      nextItem.style.transformOrigin = '0% 0%';
-      nextItem.style.webkitTransformOrigin = '0% 0%';
-      nextItem.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-      nextItem.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-    }
+    let selectedIndex = [...rows.keys()].indexOf(block.offsetTop);
+    let rowHeights = [...rows.values()].map(r => parseInt(window.getComputedStyle(r[0]).height, 10));
 
-    // transform items before
-    var prevOffsetY = -offsetY;
-    itemOffset = 0; // offset due to scaling of previous items
-    prevWidth = 0;
+    rows.forEach((row, offsetTop, rows) => {
+      let rowIndex = [...rows.keys()].indexOf(offsetTop);
+      // compute the y offset based on the distance from this row to the selected row
+      let rowOffsetY = Math.sign(rowIndex - selectedIndex) * (scale - 1) * rowHeights.slice(...[selectedIndex, rowIndex].sort()).reduce((offset, height) => offset + height, 0) - offsetY;
 
-    var prevRowTop = -1;
+      row.map(img => {
+        return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
+      })
+        .forEach((item, columnIndex, items) => {
+          let offsetX = items.slice(0, columnIndex).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
+          let percentageOffsetX = (offsetX + leftOffsetX) / item.width * 100;
+          let percentageOffsetY = rowOffsetY / parseInt(window.getComputedStyle(item.img).height, 10) * 100;
 
-    for (let prevItemIndex = blockIndex - (row.length - numBlocksAfterCurrentInRow - 1) - 1, prevItem = imgs[prevItemIndex]; prevItem; prevItem = imgs[--prevItemIndex]) {
-      curTop = prevItem.offsetTop;
-
-      if (curTop == prevRowTop) {
-        itemOffset -= prevWidth * scale - prevWidth;
-      } else {
-        itemOffset = 0;
-        prevOffsetY -= parseInt(window.getComputedStyle(prevItem).height, 10) * (scale - 1);
-        prevRowTop = curTop;
-      }
-
-      prevWidth = parseInt(window.getComputedStyle(prevItem).width, 10);
-
-      percentageOffsetX = (itemOffset - rightOffsetX) / prevWidth * 100;
-      percentageOffsetY = prevOffsetY / parseInt(window.getComputedStyle(prevItem).height, 10) * 100;
-
-      prevItem.style.transformOrigin = '100% 0%';
-      prevItem.style.webkitTransformOrigin = '100% 0%';
-      prevItem.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-      prevItem.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-    }
+          item.img.style.transformOrigin = '0% 0%';
+          item.img.style.webkitTransformOrigin = '0% 0%';
+          item.img.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+          item.img.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+        });
+    });
   },
 
   animate: function (e) {
@@ -370,11 +270,7 @@ export var zoomwall = {
     if (this.classList.contains('active')) {
       zoomwall.shrink(this);
     } else {
-      var actives = blocks.getElementsByClassName('active');
-
-      for (var i = 0; i < actives.length; i++) {
-        actives[i].classList.remove('active');
-      }
+      [...blocks.getElementsByClassName('active')].forEach(block => block.classList.remove('active'));
 
       zoomwall.expand(this);
     }
