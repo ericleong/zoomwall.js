@@ -64,3 +64,18 @@ test('right arrow to advance to next image', async () => {
   expect(await fifthImg.evaluate(node => node.src)).toBe(fifthImgHigh);
   expect(await fifthImg.evaluate(node => node.dataset.lowres)).toBe(fifthImgSrc);
 });
+
+test('escape closes lightbox', async () => {
+  const gallery = await expect(page).toMatchElement('#gallery');
+  expect(Object.values(await gallery.evaluate(node => node.classList))).toContain('lightbox');
+
+  const fourthImg = await expect(page).toMatchElement('#gallery > img:nth-child(4)');
+  const fifthImg = await expect(page).toMatchElement('#gallery > img:nth-child(5)');
+
+  await page.keyboard.press('Escape');
+
+  expect(Object.values(await gallery.evaluate(node => node.classList))).not.toContain('lightbox');
+  expect(Object.values(await fourthImg.evaluate(node => node.classList))).not.toContain('active');
+  expect(Object.values(await fifthImg.evaluate(node => node.classList))).not.toContain('active');
+  expect(await fifthImg.evaluate(node => node.style.transform)).toBe('translate(0px, 0px) scale(1)');
+});
