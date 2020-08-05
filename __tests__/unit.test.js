@@ -1,4 +1,4 @@
-import { zoomwall } from './zoomwall.js';
+import { zoomwall } from '../zoomwall.js';
 import { jest } from '@jest/globals';
 
 beforeEach(() => {
