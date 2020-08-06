@@ -2,7 +2,7 @@ import 'expect-puppeteer';
 
 describe.each(['flat', 'nested'])('interaction tests %s', (type) => {
   beforeAll(async () => {
-    await page.goto(`http://localhost:8080/__tests__/${type}.html`);
+    await page.goto(`http://localhost:3000/?type=${type}`);
   });
   
   test('resize images on create', async () => {
