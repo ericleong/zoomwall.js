@@ -133,7 +133,6 @@ export var zoomwall = {
 
   reset: function (block) {
     block.style.transform = 'translate(0, 0) scale(1)';
-    block.style.webkitTransform = 'translate(0, 0) scale(1)';
     block.classList.remove('active');
   },
 
@@ -257,9 +256,7 @@ export var zoomwall = {
           let percentageOffsetY = rowOffsetY / parseInt(window.getComputedStyle(item.img).height, 10) * 100;
 
           item.img.style.transformOrigin = '0% 0%';
-          item.img.style.webkitTransformOrigin = '0% 0%';
           item.img.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
-          item.img.style.webkitTransform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
         });
     });
   },
