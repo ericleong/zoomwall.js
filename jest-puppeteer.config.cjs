@@ -1,6 +1,6 @@
 module.exports = {
   server: {
-    command: 'node __tests__/server.js',
-    port: 3000
+    command: 'npx http-server',
+    port: 8080
   }
 };
