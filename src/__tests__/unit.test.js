@@ -1,4 +1,4 @@
-import { zoomwall } from '../zoomwall.js';
+import { zoomwall } from '../../built/zoomwall.js';
 import { jest } from '@jest/globals';
 
 describe.each([

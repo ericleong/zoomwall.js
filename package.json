@@ -5,12 +5,13 @@
   "description": "A content-focused photo gallery using a horizontal masonry layout that scales up in lightbox mode.",
   "main": "zoomwall.js",
   "files": [
-    "zoomwall.js",
+    "built/zoomwall.js",
     "zoomwall.css"
   ],
   "scripts": {
+    "build": "tsc --project tsconfig.json",
     "gpr-package-rename": "node scripts/gpr-package-rename.js",
-    "lint-js": "eslint \"**/*.{js,mjs,cjs}\"",
+    "lint-js": "eslint \"**/*.{ts,js,mjs,cjs}\"",
     "lint-css": "stylelint \"**/*.css\"",
     "lint": "concurrently \"npm:lint-*\"",
     "test": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js"
@@ -41,6 +42,7 @@
     "jest-puppeteer": "^4.4.0",
     "puppeteer": "^v2.1.1",
     "stylelint": "^13.6.1",
-    "stylelint-config-standard": "^20.0.0"
+    "stylelint-config-standard": "^20.0.0",
+    "typescript": "^3.9.7"
   }
 }

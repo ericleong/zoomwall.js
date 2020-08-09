@@ -26,16 +26,17 @@ SOFTWARE.
 
 export var zoomwall = {
 
-  create: function (blocks, enableKeys) {
+  create: function (blocks: HTMLElement, enableKeys = false) {
     const imgs = blocks.querySelectorAll('img');
 
-    zoomwall.resize(imgs);
+    zoomwall.resize([...imgs]);
 
     blocks.classList.remove('loading');
     // shrink blocks if an empty space is clicked
     blocks.addEventListener('click', function () {
-      if (this.children && this.children.length > 0) {
-        zoomwall.shrink(this.children[0]);
+      let imgs = blocks.getElementsByTagName('img');
+      if (imgs.length > 0) {
+        zoomwall.shrink(imgs[0]);
       }
     });
 
@@ -50,47 +51,58 @@ export var zoomwall = {
     }
   },
 
-  findWall: function(elem) { // traverse dom to find gallery root node
-    var parent = elem;
+  findWall: function(elem: Element): HTMLElement | null { // traverse dom to find gallery root node
+    let parent: Element | null = elem;
 
-    do {
+    while (parent.parentElement) {
       parent = parent.parentElement;
 
-      if (parent.classList.contains('zoomwall')) {
+      if (parent instanceof HTMLElement && parent.classList.contains('zoomwall')) {
         return parent;
       }
-    } while (parent.parentElement);
+    }
 
     return null;
   },
 
-  keys: function (blocks) {
-    var keyPager = function (e) {
+  keys: function (blocks: HTMLElement) {
+    var keyPager = function (e: KeyboardEvent) {
       if (e.defaultPrevented) {
         return;
       }
 
       // either use the provided blocks, or query for the first lightboxed zoomwall
-      var elem = blocks || document.getElementsByClassName('zoomwall lightbox')[0];
+      if (!(blocks instanceof HTMLElement)) {
+        for (var div of document.getElementsByClassName('zoomwall lightbox')) {
+          if (div instanceof HTMLElement) {
+            blocks = div;
+          }
+        }
+      }
 
-      if (elem) {
+      if (!(blocks instanceof HTMLElement)) {
+        return;
+      }
+
+      if (blocks && blocks.classList.contains('lightbox')) {
         switch (e.keyCode) {
         case 27: // escape
-          if (elem.children && elem.children.length > 0) {
-            zoomwall.shrink(elem.children[0]);
+          let imgs = blocks.getElementsByTagName('img');
+          if (imgs.length > 0) {
+            zoomwall.shrink(imgs[0]);
+            e.preventDefault();
           }
-          e.preventDefault();
 
           break;
 
         case 37: // left
-          zoomwall.page(elem, false);
+          zoomwall.page(blocks, false);
           e.preventDefault();
 
           break;
 
         case 39: // right
-          zoomwall.page(elem, true);
+          zoomwall.page(blocks, true);
           e.preventDefault();
 
           break;
@@ -103,7 +115,7 @@ export var zoomwall = {
     return keyPager;
   },
 
-  resizeRow: function (row, width) {
+  resizeRow: function (row: HTMLElement[], width: number) {
     if (row && row.length > 1) {
       row.forEach(function(img) {
         img.style.width = (parseInt(window.getComputedStyle(img).width, 10) / width * 100) + '%';
@@ -112,12 +124,12 @@ export var zoomwall = {
     }
   },
 
-  calcRowWidth: function (row) {
+  calcRowWidth: function (row: HTMLElement[]) {
     return row.reduce((width, img) => width + parseInt(window.getComputedStyle(img).width, 10), 0);
   },
 
-  resize: function (blocks) {
-    [...blocks].reduce(function(rows, block) {
+  resize: function (blocks: HTMLElement[]) {
+    blocks.reduce(function(rows, block) {
       let offsetTop = block.offsetTop;
 
       if (!rows.has(offsetTop)) {
@@ -131,22 +143,22 @@ export var zoomwall = {
       .forEach(row => zoomwall.resizeRow(row, zoomwall.calcRowWidth(row)));
   },
 
-  reset: function (block) {
+  reset: function (block: HTMLElement) {
     block.style.transform = 'translate(0, 0) scale(1)';
     block.classList.remove('active');
   },
 
-  shrink: function (block) {
+  shrink: function (block: HTMLImageElement) {
     const blocks = zoomwall.findWall(block);
 
     if (blocks) {
       blocks.classList.remove('lightbox');
-    }
 
-    // reset all blocks
-    blocks.querySelectorAll('img').forEach(function(img) {
-      zoomwall.reset(img);
-    });
+      // reset all blocks
+      blocks.querySelectorAll('img').forEach(function(img) {
+        zoomwall.reset(img);
+      });
+    }
 
     // swap images
     if (block.dataset.lowres) {
@@ -157,9 +169,13 @@ export var zoomwall = {
     }
   },
 
-  expand: function (block) {
+  expand: function (block: HTMLImageElement) {
 
     const blocks = zoomwall.findWall(block);
+
+    if (blocks == null) {
+      return;
+    }
 
     block.classList.add('active');
     blocks.classList.add('lightbox');
@@ -226,9 +242,9 @@ export var zoomwall = {
     let leftWidth = selectedRow.slice(0, selectedRow.indexOf(block)).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
     let leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftWidth;
 
-    let rows = imgs.reduce(function(rows, block) {
+    let rows: Map<number, HTMLImageElement[]> = imgs.reduce(function(rows, block) {
       // group rows
-      let offsetTop = block.offsetTop;
+      let offsetTop: number = block.offsetTop;
 
       if (!rows.has(offsetTop)) {
         rows.set(offsetTop, []);
@@ -247,7 +263,7 @@ export var zoomwall = {
       // compute the y offset based on the distance from this row to the selected row
       let rowOffsetY = Math.sign(rowIndex - selectedIndex) * (scale - 1) * rowHeights.slice(...[selectedIndex, rowIndex].sort()).reduce((offset, height) => offset + height, 0) - offsetY;
 
-      row.map(img => {
+      row.map((img) => {
         return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
       })
         .forEach((item, columnIndex, items) => {
@@ -261,29 +277,40 @@ export var zoomwall = {
     });
   },
 
-  animate: function (e) {
-    const blocks = zoomwall.findWall(e.target);
+  animate: function (e: MouseEvent) {
+    let block: HTMLImageElement;
+    if (!(e.target instanceof HTMLImageElement)) {
+      return;
+    }
+    block = e.target;
 
-    if (this.classList.contains('active')) {
-      zoomwall.shrink(this);
-    } else {
+    const blocks = zoomwall.findWall(block);
+
+    if (block.classList.contains('active')) {
+      zoomwall.shrink(block);
+    } else if (blocks instanceof HTMLElement) {
       [...blocks.getElementsByClassName('active')].forEach(block => block.classList.remove('active'));
 
-      zoomwall.expand(this);
+      zoomwall.expand(block);
     }
 
     e.stopPropagation();
   },
 
-  page: function (blocks, isNext) {
-    var actives = blocks.getElementsByClassName('active');
+  page: function (blocks: HTMLElement, isNext = true) {
+    var actives = blocks.querySelectorAll<HTMLImageElement>('img.active');
 
     if (actives && actives.length > 0) {
 
       var current = actives[0];
-      var next;
+      var next: HTMLImageElement;
 
       const wall = zoomwall.findWall(current);
+
+      if (wall == null) {
+        return;
+      }
+
       const imgs = wall.querySelectorAll('img');
       const blockIndex = [...imgs].indexOf(current);
 
