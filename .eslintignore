@@ -1,2 +1,3 @@
 scripts/*.js
 node_modules
+built/*.js
