@@ -24,9 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-export var zoomwall = {
+export const zoomwall = {
 
-  create: function (blocks: HTMLElement, enableKeys = false) {
+  create: function (blocks: HTMLElement, enableKeys = false): void {
     const imgs = blocks.querySelectorAll('img');
 
     zoomwall.resize([...imgs]);
@@ -34,7 +34,7 @@ export var zoomwall = {
     blocks.classList.remove('loading');
     // shrink blocks if an empty space is clicked
     blocks.addEventListener('click', function () {
-      let imgs = blocks.getElementsByTagName('img');
+      const imgs = blocks.getElementsByTagName('img');
       if (imgs.length > 0) {
         zoomwall.shrink(imgs[0]);
       }
@@ -65,15 +65,15 @@ export var zoomwall = {
     return null;
   },
 
-  keys: function (blocks: HTMLElement) {
-    var keyPager = function (e: KeyboardEvent) {
+  keys: function (blocks: HTMLElement): (e: KeyboardEvent) => void {
+    const keyPager = function (e: KeyboardEvent) {
       if (e.defaultPrevented) {
         return;
       }
 
       // either use the provided blocks, or query for the first lightboxed zoomwall
       if (!(blocks instanceof HTMLElement)) {
-        for (var div of document.getElementsByClassName('zoomwall lightbox')) {
+        for (const div of document.getElementsByClassName('zoomwall lightbox')) {
           if (div instanceof HTMLElement) {
             blocks = div;
           }
@@ -86,15 +86,15 @@ export var zoomwall = {
 
       if (blocks && blocks.classList.contains('lightbox')) {
         switch (e.keyCode) {
-        case 27: // escape
-          let imgs = blocks.getElementsByTagName('img');
+        case 27: {// escape
+          const imgs = blocks.getElementsByTagName('img');
           if (imgs.length > 0) {
             zoomwall.shrink(imgs[0]);
             e.preventDefault();
           }
 
           break;
-
+        }
         case 37: // left
           zoomwall.page(blocks, false);
           e.preventDefault();
@@ -115,40 +115,40 @@ export var zoomwall = {
     return keyPager;
   },
 
-  resizeRow: function (row: HTMLElement[], width: number) {
+  resizeRow: function (row: HTMLElement[], width: number): void {
     if (row && row.length > 1) {
       row.forEach(function(img) {
-        img.style.width = (parseInt(window.getComputedStyle(img).width, 10) / width * 100) + '%';
+        img.style.width = `${parseInt(window.getComputedStyle(img).width, 10) / width * 100}%`;
         img.style.height = 'auto';
       });
     }
   },
 
-  calcRowWidth: function (row: HTMLElement[]) {
+  calcRowWidth: function (row: HTMLElement[]): number {
     return row.reduce((width, img) => width + parseInt(window.getComputedStyle(img).width, 10), 0);
   },
 
-  resize: function (blocks: HTMLElement[]) {
+  resize: function (blocks: HTMLElement[]): void {
     blocks.reduce(function(rows, block) {
-      let offsetTop = block.offsetTop;
+      const offsetTop = block.offsetTop;
 
       if (!rows.has(offsetTop)) {
         rows.set(offsetTop, []);
       }
 
-      rows.get(offsetTop).push(block);
+      rows.get(offsetTop)?.push(block);
 
       return rows;
-    }, new Map())
+    }, new Map<number, HTMLElement[]>())
       .forEach(row => zoomwall.resizeRow(row, zoomwall.calcRowWidth(row)));
   },
 
-  reset: function (block: HTMLElement) {
+  reset: function (block: HTMLElement): void {
     block.style.transform = 'translate(0, 0) scale(1)';
     block.classList.remove('active');
   },
 
-  shrink: function (block: HTMLImageElement) {
+  shrink: function (block: HTMLImageElement): void {
     const blocks = zoomwall.findWall(block);
 
     if (blocks) {
@@ -169,7 +169,7 @@ export var zoomwall = {
     }
   },
 
-  expand: function (block: HTMLImageElement) {
+  expand: function (block: HTMLImageElement): void {
 
     const blocks = zoomwall.findWall(block);
 
@@ -181,21 +181,21 @@ export var zoomwall = {
     blocks.classList.add('lightbox');
 
     // parent dimensions
-    var parentStyle = window.getComputedStyle(blocks);
+    const parentStyle = window.getComputedStyle(blocks);
 
-    var parentWidth = parseInt(parentStyle.width, 10);
-    var parentHeight = parseInt(parentStyle.height, 10);
+    const parentWidth = parseInt(parentStyle.width, 10);
+    const parentHeight = parseInt(parentStyle.height, 10);
 
-    var parentTop = blocks.getBoundingClientRect().top;
+    const parentTop = blocks.getBoundingClientRect().top;
 
     // block dimensions
-    var blockStyle = window.getComputedStyle(block);
+    const blockStyle = window.getComputedStyle(block);
 
-    var blockWidth = parseInt(blockStyle.width, 10);
-    var blockHeight = parseInt(blockStyle.height, 10);
+    const blockWidth = parseInt(blockStyle.width, 10);
+    const blockHeight = parseInt(blockStyle.height, 10);
 
     // determine maximum height
-    var targetHeight = window.innerHeight;
+    let targetHeight = window.innerHeight;
 
     if (parentHeight < window.innerHeight) {
       targetHeight = parentHeight;
@@ -217,17 +217,17 @@ export var zoomwall = {
 
     // determine what blocks are on this row
     const imgs = [...blocks.querySelectorAll('img')];
-    var selectedRow = imgs.filter(img => img.offsetTop == block.offsetTop);
+    const selectedRow = imgs.filter(img => img.offsetTop == block.offsetTop);
 
     // calculate scale
-    var scale = targetHeight / blockHeight;
+    let scale = targetHeight / blockHeight;
 
     if (blockWidth * scale > parentWidth) {
       scale = parentWidth / blockWidth;
     }
 
     // determine offset
-    var offsetY = parentTop - blocks.offsetTop + block.offsetTop;
+    let offsetY = parentTop - blocks.offsetTop + block.offsetTop;
 
     if (offsetY > 0) {
       if (parentHeight < window.innerHeight) {
@@ -239,37 +239,37 @@ export var zoomwall = {
       }
     }
 
-    let leftWidth = selectedRow.slice(0, selectedRow.indexOf(block)).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
-    let leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftWidth;
+    const leftWidth = selectedRow.slice(0, selectedRow.indexOf(block)).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
+    const leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftWidth;
 
-    let rows: Map<number, HTMLImageElement[]> = imgs.reduce(function(rows, block) {
+    const rows: Map<number, HTMLImageElement[]> = imgs.reduce(function(rows, block) {
       // group rows
-      let offsetTop: number = block.offsetTop;
+      const offsetTop: number = block.offsetTop;
 
       if (!rows.has(offsetTop)) {
         rows.set(offsetTop, []);
       }
 
-      rows.get(offsetTop).push(block);
+      rows.get(offsetTop)?.push(block);
 
       return rows;
-    }, new Map());
+    }, new Map<number, HTMLImageElement[]>());
 
-    let selectedIndex = [...rows.keys()].indexOf(block.offsetTop);
-    let rowHeights = [...rows.values()].map(r => parseInt(window.getComputedStyle(r[0]).height, 10));
+    const selectedIndex = [...rows.keys()].indexOf(block.offsetTop);
+    const rowHeights = [...rows.values()].map(r => parseInt(window.getComputedStyle(r[0]).height, 10));
 
     rows.forEach((row, offsetTop, rows) => {
-      let rowIndex = [...rows.keys()].indexOf(offsetTop);
+      const rowIndex = [...rows.keys()].indexOf(offsetTop);
       // compute the y offset based on the distance from this row to the selected row
-      let rowOffsetY = Math.sign(rowIndex - selectedIndex) * (scale - 1) * rowHeights.slice(...[selectedIndex, rowIndex].sort()).reduce((offset, height) => offset + height, 0) - offsetY;
+      const rowOffsetY = Math.sign(rowIndex - selectedIndex) * (scale - 1) * rowHeights.slice(...[selectedIndex, rowIndex].sort()).reduce((offset, height) => offset + height, 0) - offsetY;
 
       row.map((img) => {
         return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
       })
         .forEach((item, columnIndex, items) => {
-          let offsetX = items.slice(0, columnIndex).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
-          let percentageOffsetX = (offsetX + leftOffsetX) / item.width * 100;
-          let percentageOffsetY = rowOffsetY / parseInt(window.getComputedStyle(item.img).height, 10) * 100;
+          const offsetX = items.slice(0, columnIndex).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
+          const percentageOffsetX = (offsetX + leftOffsetX) / item.width * 100;
+          const percentageOffsetY = rowOffsetY / parseInt(window.getComputedStyle(item.img).height, 10) * 100;
 
           item.img.style.transformOrigin = '0% 0%';
           item.img.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
@@ -277,12 +277,11 @@ export var zoomwall = {
     });
   },
 
-  animate: function (e: MouseEvent) {
-    let block: HTMLImageElement;
+  animate: function (e: MouseEvent): void {
     if (!(e.target instanceof HTMLImageElement)) {
       return;
     }
-    block = e.target;
+    const block: HTMLImageElement = e.target;
 
     const blocks = zoomwall.findWall(block);
 
@@ -297,13 +296,13 @@ export var zoomwall = {
     e.stopPropagation();
   },
 
-  page: function (blocks: HTMLElement, isNext = true) {
-    var actives = blocks.querySelectorAll<HTMLImageElement>('img.active');
+  page: function (blocks: HTMLElement, isNext = true): void {
+    const actives = blocks.querySelectorAll<HTMLImageElement>('img.active');
 
     if (actives && actives.length > 0) {
 
-      var current = actives[0];
-      var next: HTMLImageElement;
+      const current = actives[0];
+      let next: HTMLImageElement;
 
       const wall = zoomwall.findWall(current);
 
