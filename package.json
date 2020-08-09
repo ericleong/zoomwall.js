@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "lint": "eslint \"**/*.{js,mjs,cjs}\"",
+    "lintcss": "npx stylelint \"**/*.css\"",
     "gpr-package-rename": "node scripts/gpr-package-rename.js",
     "test": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
@@ -36,6 +37,8 @@
     "jest-dev-server": "^4.4.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-puppeteer": "^4.4.0",
-    "puppeteer": "^v2.1.1"
+    "puppeteer": "^v2.1.1",
+    "stylelint": "^13.6.1",
+    "stylelint-config-standard": "^20.0.0"
   }
 }
