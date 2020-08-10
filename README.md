@@ -18,11 +18,9 @@ usage
 -----
 
 ### html
-
-First, add a reference to `zoomwall.js` and `zoomwall.css` in your HTML file, like this:
+First, add a reference to `zoomwall.css` in your HTML file, like this:
 ```html
 <link rel="stylesheet" type="text/css" href="zoomwall.css" />
-<script type="module" src="zoomwall.js"></script>
 ```
 
 Add the `zoomwall` class to the container element. 
@@ -48,7 +46,6 @@ Include high resolution photos using the `data-highres` attribute of each `<img>
 ```
 
 ### javascript
-
 Remember to import the module.
 
 ```javascript
