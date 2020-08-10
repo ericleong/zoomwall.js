@@ -49,7 +49,7 @@ Include high resolution photos using the `data-highres` attribute of each `<img>
 Remember to import the module.
 
 ```javascript
-import { zoomwall } from "zoomwall.js"
+import * as zoomwall from "zoomwall.js"
 ```
 
 Run `zoomwall.create()` on the container element (`#gallery` in this example), after they have loaded.
