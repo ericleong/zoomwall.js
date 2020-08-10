@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
-    "copy": "copyfiles -u 1 \"./src/zoomwall.css\" \"./src/zoomwall.d.ts\" lib",
+    "copy": "copyfiles -u 1 \"./src/zoomwall.css\" lib",
     "docs": "typedoc --theme minimal --mode library --out docs src/zoomwall.ts",
     "gpr-package-rename": "node scripts/gpr-package-rename.js",
     "lint-js": "eslint \"**/*.{ts,js,mjs,cjs}\"",
