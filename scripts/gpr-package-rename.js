@@ -2,11 +2,12 @@
 // https://stackoverflow.com/questions/58347746/automating-the-build-and-publish-process-with-github-actions-and-github-package
 // based off of https://github.com/EndBug/uptime-monitor/blob/v4.0.3/scripts/gpr.js
 
-const fs = require("fs")
-const { join } = require("path")
+import { writeFileSync } from "fs";
+import { join } from "path";
 
-const pkg = require("../package.json")
+import pkg from "../package.json";
 
-pkg.name = `@ericleong/${pkg.name}`
+// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+pkg.name = `@ericleong/${pkg.name}`;
 
-fs.writeFileSync(join(__dirname, "../package.json"), JSON.stringify(pkg))
+writeFileSync(join(__dirname, "../package.json"), JSON.stringify(pkg));

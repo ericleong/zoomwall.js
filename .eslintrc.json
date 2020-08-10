@@ -1,41 +1,29 @@
 {
-    "env": {
-        "es6": true,
-        "browser": true,
-        "jest": true,
-        "node": true
-    },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking"
-    ],
-    "parserOptions": {
-        "ecmaVersion": 8,
-        "sourceType": "module",
-        "project": "./tsconfig.eslint.json",
-        "extraFileExtensions": [".cjs"]
-    },
-    "globals": {
-        "page": true,
-        "browser": true,
-        "context": true,
-        "jestPuppeteer": true
-    },
-    "rules": {
-        "indent": [
-            "error",
-            2
-        ],
-        "linebreak-style": "off",
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "@typescript-eslint/no-var-requires": "off"
-    }
+  "env": {
+    "es6": true,
+    "browser": true,
+    "jest": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "sourceType": "module",
+    "project": "./tsconfig.eslint.json",
+    "extraFileExtensions": [".cjs"]
+  },
+  "globals": {
+    "page": true,
+    "browser": true,
+    "context": true,
+    "jestPuppeteer": true
+  },
+  "rules": {
+    "@typescript-eslint/no-var-requires": "off"
+  }
 }
