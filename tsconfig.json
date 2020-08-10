@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+      "module": "es6",
+      "moduleResolution": "node",
+      "noImplicitAny": true,
+      "outDir": "./lib",
+      "strict": true,
+      "target": "es6",
+      "esModuleInterop": true
+  },
+  "include": [
+      "./src/**/*", "lib/zoomwall.d.ts"
+  ]
+}

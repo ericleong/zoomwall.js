@@ -1,5 +1,4 @@
-import { zoomwall } from '../zoomwall.js';
-import { jest } from '@jest/globals';
+import * as zoomwall from '../zoomwall';
 
 describe.each([
   `<div id="gallery" class="zoomwall" style="width: 1024px, height: 768px">
@@ -24,9 +23,16 @@ describe.each([
   });
 
   test('expand rows to fill width of parent', () => {
-    zoomwall.create(document.getElementById('gallery'));
+    const gallery = document.getElementById('gallery');
+    expect(gallery).toBeTruthy();
+
+    if (gallery == null) {
+      return;
+    }
   
-    const imgs = [...document.querySelectorAll('#gallery img')];
+    zoomwall.create(gallery);
+    const imgs = [...document.querySelectorAll<HTMLImageElement>('#gallery img')];
+
     expect(imgs[0].style.width).toBe('25%');
     expect(imgs[0].style.height).toBe('auto');
     expect(imgs[1].style.width).toBe('25%');
@@ -34,45 +40,41 @@ describe.each([
   });
 
   test('clicking image transitions to lightbox', () => {
-    zoomwall.create(document.getElementById('gallery'));
-  
     const gallery = document.getElementById('gallery');
-    const imgs = [...document.querySelectorAll('#gallery img')];
+    expect(gallery).toBeTruthy();
+
+    if (gallery == null) {
+      return;
+    }
+  
+    zoomwall.create(gallery);
+    const imgs = [...document.querySelectorAll<HTMLImageElement>('#gallery img')];
     const selected = imgs[1];
     selected.click();
   
-    expect(gallery.classList).toContain('lightbox');
+    expect(gallery?.classList).toContain('lightbox');
     expect(selected.classList).toContain('active');
-    expect(selected.src).toBe(`${window.location}02_highres.jpg`);
-    expect(selected.dataset.lowres).toBe(`${window.location}02_lowres.jpg`);
+    expect(selected.src).toBe(`${window.location.href}02_highres.jpg`);
+    expect(selected.dataset.lowres).toBe(`${window.location.href}02_lowres.jpg`);
   });
   
   test('clicking lightbox closes lightbox', () => {
-    zoomwall.create(document.getElementById('gallery'));
-  
     const gallery = document.getElementById('gallery');
-    const imgs = [...document.querySelectorAll('#gallery img')];
+    expect(gallery).toBeTruthy();
+
+    if (gallery == null) {
+      return;
+    }
+    
+    zoomwall.create(gallery);
+    const imgs = [...document.querySelectorAll<HTMLImageElement>('#gallery img')];
     const selected = imgs[1];
     selected.click(); // open
     selected.click(); // close
   
-    expect(gallery.classList).not.toContain('lightbox');
+    expect(gallery?.classList).not.toContain('lightbox');
     expect(selected.classList).not.toContain('active');
-    expect(selected.src).toBe(`${window.location}02_lowres.jpg`);
-  });
-
-  test('calculate row width', () => {
-    Object.defineProperty(window, 'getComputedStyle', {
-      writable: true,
-      value: jest.fn().mockImplementation(() => ({
-        width: '250px',
-        height: '167px'
-      })),
-    });
-  
-    const row = [...document.querySelectorAll('#gallery img')];
-    const width = zoomwall.calcRowWidth(row);
-  
-    expect(width).toBe(1000);
+    
+    expect(selected.src).toBe(`${window.location.href}02_lowres.jpg`);
   });
 });
