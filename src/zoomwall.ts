@@ -26,6 +26,12 @@ SOFTWARE.
 
 export const zoomwall = {
 
+  /**
+   * Create a gallery with the provided HTMLElement.
+   * 
+   * @param blocks contains the images that belong to the gallery
+   * @param enableKeys enables keyboard navigation
+   */
   create: function (blocks: HTMLElement, enableKeys = false): void {
     const imgs = blocks.querySelectorAll('img');
 
@@ -65,6 +71,12 @@ export const zoomwall = {
     return null;
   },
 
+  /**
+   * Enables keyboard support for a gallery.
+   * 
+   * @param blocks the root element of the gallery.
+   * @return the listener attached to each image of the gallery.
+   */
   keys: function (blocks: HTMLElement): (e: KeyboardEvent) => void {
     const keyPager = function (e: KeyboardEvent) {
       if (e.defaultPrevented) {
