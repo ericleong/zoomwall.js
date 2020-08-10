@@ -26,27 +26,27 @@ SOFTWARE.
 
 /**
  * Create a gallery with the provided HTMLElement.
- * 
+ *
  * @param blocks contains the images that belong to the gallery
  * @param enableKeys enables keyboard navigation
  */
 export function create(blocks: HTMLElement, enableKeys = false): void {
-  const imgs = blocks.querySelectorAll('img');
+  const imgs = blocks.querySelectorAll("img");
 
   resize([...imgs]);
 
-  blocks.classList.remove('loading');
+  blocks.classList.remove("loading");
   // shrink blocks if an empty space is clicked
-  blocks.addEventListener('click', function () {
-    const imgs = blocks.getElementsByTagName('img');
+  blocks.addEventListener("click", function () {
+    const imgs = blocks.getElementsByTagName("img");
     if (imgs.length > 0) {
       shrink(imgs[0]);
     }
   });
 
   // add click listeners to blocks
-  imgs.forEach(function(img) {
-    img.addEventListener('click', animate);
+  imgs.forEach(function (img) {
+    img.addEventListener("click", animate);
   });
 
   // add key down listener
@@ -55,13 +55,17 @@ export function create(blocks: HTMLElement, enableKeys = false): void {
   }
 }
 
-function findWall(elem: Element): HTMLElement | null { // traverse dom to find gallery root node
+function findWall(elem: Element): HTMLElement | null {
+  // traverse dom to find gallery root node
   let parent: Element | null = elem;
 
   while (parent.parentElement) {
     parent = parent.parentElement;
 
-    if (parent instanceof HTMLElement && parent.classList.contains('zoomwall')) {
+    if (
+      parent instanceof HTMLElement &&
+      parent.classList.contains("zoomwall")
+    ) {
       return parent;
     }
   }
@@ -71,7 +75,7 @@ function findWall(elem: Element): HTMLElement | null { // traverse dom to find g
 
 /**
  * Enables keyboard support for a gallery.
- * 
+ *
  * @param blocks the root element of the gallery.
  * @return the listener attached to each image of the gallery.
  */
@@ -83,7 +87,7 @@ export function keys(blocks: HTMLElement): (e: KeyboardEvent) => void {
 
     // either use the provided blocks, or query for the first lightboxed zoomwall
     if (!(blocks instanceof HTMLElement)) {
-      for (const div of document.getElementsByClassName('zoomwall lightbox')) {
+      for (const div of document.getElementsByClassName("zoomwall lightbox")) {
         if (div instanceof HTMLElement) {
           blocks = div;
         }
@@ -94,78 +98,85 @@ export function keys(blocks: HTMLElement): (e: KeyboardEvent) => void {
       return;
     }
 
-    if (blocks && blocks.classList.contains('lightbox')) {
+    if (blocks && blocks.classList.contains("lightbox")) {
       switch (e.keyCode) {
-      case 27: {// escape
-        const imgs = blocks.getElementsByTagName('img');
-        if (imgs.length > 0) {
-          shrink(imgs[0]);
-          e.preventDefault();
+        case 27: {
+          // escape
+          const imgs = blocks.getElementsByTagName("img");
+          if (imgs.length > 0) {
+            shrink(imgs[0]);
+            e.preventDefault();
+          }
+
+          break;
         }
+        case 37: // left
+          page(blocks, false);
+          e.preventDefault();
 
-        break;
-      }
-      case 37: // left
-        page(blocks, false);
-        e.preventDefault();
+          break;
 
-        break;
+        case 39: // right
+          page(blocks, true);
+          e.preventDefault();
 
-      case 39: // right
-        page(blocks, true);
-        e.preventDefault();
-
-        break;
+          break;
       }
     }
   };
 
-  document.addEventListener('keydown', keyPager);
+  document.addEventListener("keydown", keyPager);
 
   return keyPager;
 }
 
 function resizeRow(row: HTMLElement[], width: number): void {
   if (row && row.length > 1) {
-    row.forEach(function(img) {
-      img.style.width = `${parseInt(window.getComputedStyle(img).width, 10) / width * 100}%`;
-      img.style.height = 'auto';
+    row.forEach(function (img) {
+      img.style.width = `${
+        (parseInt(window.getComputedStyle(img).width, 10) / width) * 100
+      }%`;
+      img.style.height = "auto";
     });
   }
 }
 
 function calcRowWidth(row: HTMLElement[]): number {
-  return row.reduce((width, img) => width + parseInt(window.getComputedStyle(img).width, 10), 0);
+  return row.reduce(
+    (width, img) => width + parseInt(window.getComputedStyle(img).width, 10),
+    0
+  );
 }
 
 function resize(blocks: HTMLElement[]): void {
-  blocks.reduce(function(rows, block) {
-    const offsetTop = block.offsetTop;
+  blocks
+    .reduce(function (rows, block) {
+      const offsetTop = block.offsetTop;
 
-    if (!rows.has(offsetTop)) {
-      rows.set(offsetTop, []);
-    }
+      if (!rows.has(offsetTop)) {
+        rows.set(offsetTop, []);
+      }
 
-    rows.get(offsetTop)?.push(block);
+      rows.get(offsetTop)?.push(block);
 
-    return rows;
-  }, new Map<number, HTMLElement[]>())
-    .forEach(row => resizeRow(row, calcRowWidth(row)));
+      return rows;
+    }, new Map<number, HTMLElement[]>())
+    .forEach((row) => resizeRow(row, calcRowWidth(row)));
 }
 
 function reset(block: HTMLElement): void {
-  block.style.transform = 'translate(0, 0) scale(1)';
-  block.classList.remove('active');
+  block.style.transform = "translate(0, 0) scale(1)";
+  block.classList.remove("active");
 }
 
 function shrink(block: HTMLImageElement): void {
   const blocks = findWall(block);
 
   if (blocks) {
-    blocks.classList.remove('lightbox');
+    blocks.classList.remove("lightbox");
 
     // reset all blocks
-    blocks.querySelectorAll('img').forEach(function(img) {
+    blocks.querySelectorAll("img").forEach(function (img) {
       reset(img);
     });
   }
@@ -180,15 +191,14 @@ function shrink(block: HTMLImageElement): void {
 }
 
 function expand(block: HTMLImageElement): void {
-
   const blocks = findWall(block);
 
   if (blocks == null) {
     return;
   }
 
-  block.classList.add('active');
-  blocks.classList.add('lightbox');
+  block.classList.add("active");
+  blocks.classList.add("lightbox");
 
   // parent dimensions
   const parentStyle = window.getComputedStyle(blocks);
@@ -215,19 +225,23 @@ function expand(block: HTMLImageElement): void {
 
   // swap images
   if (block.dataset.highres) {
-    if (block.src != block.dataset.highres && block.dataset.lowres === undefined) {
+    if (
+      block.src != block.dataset.highres &&
+      block.dataset.lowres === undefined
+    ) {
       block.dataset.lowres = block.src;
     }
     block.src = block.dataset.highres;
   }
-  if (block.sizes) { // responsive images
+  if (block.sizes) {
+    // responsive images
     block.dataset.sizes = block.sizes;
-    block.sizes = '100vw'; // image is now 100% of the viewport width
+    block.sizes = "100vw"; // image is now 100% of the viewport width
   }
 
   // determine what blocks are on this row
-  const imgs = [...blocks.querySelectorAll('img')];
-  const selectedRow = imgs.filter(img => img.offsetTop == block.offsetTop);
+  const imgs = [...blocks.querySelectorAll("img")];
+  const selectedRow = imgs.filter((img) => img.offsetTop == block.offsetTop);
 
   // calculate scale
   let scale = targetHeight / blockHeight;
@@ -241,7 +255,7 @@ function expand(block: HTMLImageElement): void {
 
   if (offsetY > 0) {
     if (parentHeight < window.innerHeight) {
-      offsetY -= targetHeight / 2 - blockHeight * scale / 2;
+      offsetY -= targetHeight / 2 - (blockHeight * scale) / 2;
     }
 
     if (parentTop > 0) {
@@ -249,10 +263,19 @@ function expand(block: HTMLImageElement): void {
     }
   }
 
-  const leftWidth = selectedRow.slice(0, selectedRow.indexOf(block)).reduce((offset, img) => offset + parseInt(window.getComputedStyle(img).width, 10) * scale, 0);
-  const leftOffsetX = parentWidth / 2 - blockWidth * scale / 2 - leftWidth;
+  const leftWidth = selectedRow
+    .slice(0, selectedRow.indexOf(block))
+    .reduce(
+      (offset, img) =>
+        offset + parseInt(window.getComputedStyle(img).width, 10) * scale,
+      0
+    );
+  const leftOffsetX = parentWidth / 2 - (blockWidth * scale) / 2 - leftWidth;
 
-  const rows: Map<number, HTMLImageElement[]> = imgs.reduce(function(rows, block) {
+  const rows: Map<number, HTMLImageElement[]> = imgs.reduce(function (
+    rows,
+    block
+  ) {
     // group rows
     const offsetTop: number = block.offsetTop;
 
@@ -263,26 +286,53 @@ function expand(block: HTMLImageElement): void {
     rows.get(offsetTop)?.push(block);
 
     return rows;
-  }, new Map<number, HTMLImageElement[]>());
+  },
+  new Map<number, HTMLImageElement[]>());
 
   const selectedIndex = [...rows.keys()].indexOf(block.offsetTop);
-  const rowHeights = [...rows.values()].map(r => parseInt(window.getComputedStyle(r[0]).height, 10));
+  const rowHeights = [...rows.values()].map((r) =>
+    parseInt(window.getComputedStyle(r[0]).height, 10)
+  );
 
   rows.forEach((row, offsetTop, rows) => {
     const rowIndex = [...rows.keys()].indexOf(offsetTop);
     // compute the y offset based on the distance from this row to the selected row
-    const rowOffsetY = Math.sign(rowIndex - selectedIndex) * (scale - 1) * rowHeights.slice(...[selectedIndex, rowIndex].sort()).reduce((offset, height) => offset + height, 0) - offsetY;
+    const rowOffsetY =
+      Math.sign(rowIndex - selectedIndex) *
+        (scale - 1) *
+        rowHeights
+          .slice(...[selectedIndex, rowIndex].sort())
+          .reduce((offset, height) => offset + height, 0) -
+      offsetY;
 
-    row.map((img) => {
-      return {img: img, width: parseInt(window.getComputedStyle(img).width, 10)};
-    })
+    row
+      .map((img) => {
+        return {
+          img: img,
+          width: parseInt(window.getComputedStyle(img).width, 10),
+        };
+      })
       .forEach((item, columnIndex, items) => {
-        const offsetX = items.slice(0, columnIndex).reduce((offset, elem) => offset + elem.width, 0) * (scale - 1);
-        const percentageOffsetX = (offsetX + leftOffsetX) / item.width * 100;
-        const percentageOffsetY = rowOffsetY / parseInt(window.getComputedStyle(item.img).height, 10) * 100;
+        const offsetX =
+          items
+            .slice(0, columnIndex)
+            .reduce((offset, elem) => offset + elem.width, 0) *
+          (scale - 1);
+        const percentageOffsetX = ((offsetX + leftOffsetX) / item.width) * 100;
+        const percentageOffsetY =
+          (rowOffsetY /
+            parseInt(window.getComputedStyle(item.img).height, 10)) *
+          100;
 
-        item.img.style.transformOrigin = '0% 0%';
-        item.img.style.transform = 'translate(' + percentageOffsetX.toFixed(8) + '%, ' + percentageOffsetY.toFixed(8) + '%) scale(' + scale.toFixed(8) + ')';
+        item.img.style.transformOrigin = "0% 0%";
+        item.img.style.transform =
+          "translate(" +
+          percentageOffsetX.toFixed(8) +
+          "%, " +
+          percentageOffsetY.toFixed(8) +
+          "%) scale(" +
+          scale.toFixed(8) +
+          ")";
       });
   });
 }
@@ -295,10 +345,12 @@ function animate(e: MouseEvent): void {
 
   const blocks = findWall(block);
 
-  if (block.classList.contains('active')) {
+  if (block.classList.contains("active")) {
     shrink(block);
   } else if (blocks instanceof HTMLElement) {
-    [...blocks.getElementsByClassName('active')].forEach(block => block.classList.remove('active'));
+    [...blocks.getElementsByClassName("active")].forEach((block) =>
+      block.classList.remove("active")
+    );
 
     expand(block);
   }
@@ -307,10 +359,9 @@ function animate(e: MouseEvent): void {
 }
 
 function page(blocks: HTMLElement, isNext = true): void {
-  const actives = blocks.querySelectorAll<HTMLImageElement>('img.active');
+  const actives = blocks.querySelectorAll<HTMLImageElement>("img.active");
 
   if (actives && actives.length > 0) {
-
     const current = actives[0];
     let next: HTMLImageElement;
 
@@ -320,7 +371,7 @@ function page(blocks: HTMLElement, isNext = true): void {
       return;
     }
 
-    const imgs = wall.querySelectorAll('img');
+    const imgs = wall.querySelectorAll("img");
     const blockIndex = [...imgs].indexOf(current);
 
     if (isNext) {
@@ -330,7 +381,7 @@ function page(blocks: HTMLElement, isNext = true): void {
     }
 
     if (next) {
-      current.classList.remove('active');
+      current.classList.remove("active");
       // swap images
       if (current.dataset.lowres) {
         current.src = current.dataset.lowres;
