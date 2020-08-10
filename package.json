@@ -5,7 +5,7 @@
   "description": "A content-focused photo gallery using a horizontal masonry layout that scales up in lightbox mode.",
   "main": "zoomwall.js",
   "files": [
-    "built/zoomwall.js",
+    "lib/zoomwall.js",
     "zoomwall.css"
   ],
   "scripts": {

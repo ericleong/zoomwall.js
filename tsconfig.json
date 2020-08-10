@@ -3,7 +3,7 @@
       "module": "es6",
       "moduleResolution": "node",
       "noImplicitAny": true,
-      "outDir": "./built",
+      "outDir": "./lib",
       "strict": true,
       "target": "es6",
       "esModuleInterop": true

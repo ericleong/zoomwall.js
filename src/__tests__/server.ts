@@ -5,7 +5,7 @@ import * as url from 'url';
 const hostname = '127.0.0.1';
 const port = 3000;
 const files = new Map<string, string>();
-files.set('/built/zoomwall.js', 'text/javascript');
+files.set('/lib/zoomwall.js', 'text/javascript');
 files.set('/zoomwall.css', 'text/css');
 
 const server = http.createServer((req, res) => {
