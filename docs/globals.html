@@ -2396,36 +2396,44 @@ img {
 			</a>
 			<p>First, add a reference to <code>zoomwall.css</code> in your HTML file, like this:</p>
 			<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/css"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"zoomwall.css"</span> /&gt;</span></code></pre>
-			<p>Add the <code>zoomwall</code> class to the container element. </p>
+			<p>Add the <code>zoomwall</code> class to the container element.</p>
 			<a href="#responsive-images" id="responsive-images" style="color: inherit; text-decoration: none;">
 				<h4>responsive images</h4>
 			</a>
 			<p>To have the browser determine when to load a high resolution image, use <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
 			<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"gallery"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"zoomwall"</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">srcset</span>=<span class="hljs-string">"01_lowres.jpg 200w, 01_highres.jpg 800w"</span> <span class="hljs-attr">sizes</span>=<span class="hljs-string">"(max-width: 1200px) 200px, 800px"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"01_lowres.jpg"</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">srcset</span>=<span class="hljs-string">"02_lowres.jpg 200w, 02_highres.jpg 800w"</span> <span class="hljs-attr">sizes</span>=<span class="hljs-string">"(max-width: 1200px) 200px, 800px"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"02_lowres.jpg"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">img</span>
+    <span class="hljs-attr">srcset</span>=<span class="hljs-string">"01_lowres.jpg 200w, 01_highres.jpg 800w"</span>
+    <span class="hljs-attr">sizes</span>=<span class="hljs-string">"(max-width: 1200px) 200px, 800px"</span>
+    <span class="hljs-attr">src</span>=<span class="hljs-string">"01_lowres.jpg"</span>
+  /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">img</span>
+    <span class="hljs-attr">srcset</span>=<span class="hljs-string">"02_lowres.jpg 200w, 02_highres.jpg 800w"</span>
+    <span class="hljs-attr">sizes</span>=<span class="hljs-string">"(max-width: 1200px) 200px, 800px"</span>
+    <span class="hljs-attr">src</span>=<span class="hljs-string">"02_lowres.jpg"</span>
+  /&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 			<a href="#high-resolution-image" id="high-resolution-image" style="color: inherit; text-decoration: none;">
 				<h4>high resolution image</h4>
 			</a>
 			<p>Include high resolution photos using the <code>data-highres</code> attribute of each <code>&lt;img&gt;</code> tag.</p>
 			<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"gallery"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"zoomwall"</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"01_lowres.jpg"</span> <span class="hljs-attr">data-highres</span>=<span class="hljs-string">"01_highres.jpg"</span> /&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"02_lowres.jpg"</span> <span class="hljs-attr">data-highres</span>=<span class="hljs-string">"02_highres.jpg"</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"01_lowres.jpg"</span> <span class="hljs-attr">data-highres</span>=<span class="hljs-string">"01_highres.jpg"</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"02_lowres.jpg"</span> <span class="hljs-attr">data-highres</span>=<span class="hljs-string">"02_highres.jpg"</span> /&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 			<a href="#javascript" id="javascript" style="color: inherit; text-decoration: none;">
 				<h3>javascript</h3>
 			</a>
 			<p>See <a href="http://ericleong.github.io/zoomwall.js/docs">documentation</a>. Remember to import the module.</p>
-			<pre><code class="language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> zoomwall <span class="hljs-keyword">from</span> <span class="hljs-string">"zoomwall.js"</span></code></pre>
+			<pre><code class="language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> zoomwall <span class="hljs-keyword">from</span> <span class="hljs-string">"zoomwall.js"</span>;</code></pre>
 			<p>Run <code>zoomwall.create()</code> on the container element (<code>#gallery</code> in this example), after they have loaded.</p>
-			<pre><code class="language-javascript"><span class="hljs-built_in">window</span>.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    zoomwall.create(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'gallery'</span>));
+			<pre><code class="language-javascript"><span class="hljs-built_in">window</span>.onload = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  zoomwall.create(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"gallery"</span>));
 };</code></pre>
 			<p>Enable support for paging through photos with the left and right arrow keys by setting the second argument to <code>true</code>, like this: <code>zoomwall.create(&lt;element&gt;, true)</code>.</p>
 			<p>If there are multiple galleries, call <code>zoomwall.keys()</code> after loading the last gallery.</p>
-			<pre><code class="language-javascript">zoomwall.create(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'first-gallery'</span>));
-zoomwall.create(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'second-gallery'</span>));
+			<pre><code class="language-javascript">zoomwall.create(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"first-gallery"</span>));
+zoomwall.create(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"second-gallery"</span>));
 zoomwall.keys();</code></pre>
 		</div>
 		<section class="tsd-panel-group tsd-index-group">
@@ -2454,7 +2462,7 @@ zoomwall.keys();</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ericleong/zoomwall.js/blob/d32720e/src/zoomwall.ts#L33">zoomwall.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/ericleong/zoomwall.js/blob/1bd0fb8/src/zoomwall.ts#L33">zoomwall.ts:33</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2491,7 +2499,7 @@ zoomwall.keys();</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ericleong/zoomwall.js/blob/d32720e/src/zoomwall.ts#L78">zoomwall.ts:78</a></li>
+								<li>Defined in <a href="https://github.com/ericleong/zoomwall.js/blob/1bd0fb8/src/zoomwall.ts#L82">zoomwall.ts:82</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
