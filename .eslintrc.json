@@ -13,7 +13,8 @@
     "parserOptions": {
         "ecmaVersion": 8,
         "sourceType": "module",
-        "project": "tsconfig.json"
+        "project": "./tsconfig.eslint.json",
+        "extraFileExtensions": [".cjs"]
     },
     "globals": {
         "page": true,
@@ -34,6 +35,7 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "@typescript-eslint/no-var-requires": "off"
     }
 }
