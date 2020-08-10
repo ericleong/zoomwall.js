@@ -16,7 +16,7 @@
     "lint-js": "eslint \"**/*.{ts,js,mjs,cjs}\"",
     "lint-css": "stylelint \"**/*.css\"",
     "lint": "concurrently \"npm:lint-*\"",
-    "prettier": "prettier --check .",
+    "format": "prettier --check .",
     "test": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "repository": {
