@@ -1,5 +1,4 @@
-import { zoomwall } from '../zoomwall';
-import { jest } from '@jest/globals';
+import * as zoomwall from '../zoomwall';
 
 describe.each([
   `<div id="gallery" class="zoomwall" style="width: 1024px, height: 768px">
@@ -77,20 +76,5 @@ describe.each([
     expect(selected.classList).not.toContain('active');
     
     expect(selected.src).toBe(`${window.location.href}02_lowres.jpg`);
-  });
-
-  test('calculate row width', () => {
-    Object.defineProperty(window, 'getComputedStyle', {
-      writable: true,
-      value: jest.fn().mockImplementation(() => ({
-        width: '250px',
-        height: '167px'
-      })),
-    });
-  
-    const row = [...document.querySelectorAll<HTMLImageElement>('#gallery img')];
-    const width = zoomwall.calcRowWidth(row);
-  
-    expect(width).toBe(1000);
   });
 });
