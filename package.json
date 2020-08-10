@@ -3,10 +3,11 @@
   "type": "module",
   "version": "1.2.0",
   "description": "A content-focused photo gallery using a horizontal masonry layout that scales up in lightbox mode.",
-  "main": "zoomwall.js",
+  "main": "./lib/zoomwall.js",
+  "types": "./lib/zoomwall.d.ts",
   "files": [
-    "lib/zoomwall.js",
-    "zoomwall.css"
+    "./lib/zoomwall.js",
+    "./zoomwall.css"
   ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
