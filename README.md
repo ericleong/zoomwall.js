@@ -46,7 +46,7 @@ Include high resolution photos using the `data-highres` attribute of each `<img>
 ```
 
 ### javascript
-Remember to import the module.
+See [documentation](http://ericleong.github.io/zoomwall.js/docs). Remember to import the module.
 
 ```javascript
 import * as zoomwall from "zoomwall.js"
