@@ -1,4 +1,5 @@
 import 'expect-puppeteer';
+import { ElementHandle } from 'puppeteer';
 
 describe.each(['flat', 'nested'])('interaction tests %s', (type) => {
   beforeAll(async () => {
@@ -6,9 +7,9 @@ describe.each(['flat', 'nested'])('interaction tests %s', (type) => {
   });
   
   test('resize images on create', async () => {
-    const fourthImg = await expect(page).toMatchElement('#four');
+    const fourthImg: ElementHandle<HTMLImageElement> = await expect(page).toMatchElement('#four');
     expect(await fourthImg.evaluate(node => node.style.width)).toBe('25%');
-    const fifthImg = await expect(page).toMatchElement('#five');
+    const fifthImg: ElementHandle<HTMLImageElement> = await expect(page).toMatchElement('#five');
     expect(await fifthImg.evaluate(node => node.style.width)).toBe('10.296%');
   });
   
@@ -16,9 +17,9 @@ describe.each(['flat', 'nested'])('interaction tests %s', (type) => {
     const gallery = await expect(page).toMatchElement('#gallery');
     expect(Object.values(await gallery.evaluate(node => node.classList))).not.toContain('lightbox');
   
-    const fourthImg = await expect(page).toMatchElement('#four');
+    const fourthImg: ElementHandle<HTMLImageElement> = await expect(page).toMatchElement('#four');
     const fourthImgSrc = await fourthImg.evaluate(node => node.src);
-    const fourthImgHigh = await fourthImg.evaluate(node => node.dataset.highres);
+    const fourthImgHigh = await fourthImg.evaluate(node => node.dataset.highres) as string;
   
     await expect(page).toClick('#four');
   
@@ -33,7 +34,7 @@ describe.each(['flat', 'nested'])('interaction tests %s', (type) => {
     const gallery = await expect(page).toMatchElement('#gallery');
     expect(Object.values(await gallery.evaluate(node => node.classList))).toContain('lightbox');
   
-    const fourthImg = await expect(page).toMatchElement('#four');
+    const fourthImg: ElementHandle<HTMLImageElement> = await expect(page).toMatchElement('#four');
     const fourthImgLow = await fourthImg.evaluate(node => node.dataset.lowres);
   
     await expect(page).toClick('#four');
@@ -51,8 +52,8 @@ describe.each(['flat', 'nested'])('interaction tests %s', (type) => {
     await expect(page).toClick('#four');
     expect(Object.values(await gallery.evaluate(node => node.classList))).toContain('lightbox');
   
-    const fourthImg = await expect(page).toMatchElement('#four');
-    const fifthImg = await expect(page).toMatchElement('#five');
+    const fourthImg: ElementHandle<HTMLImageElement> = await expect(page).toMatchElement('#four');
+    const fifthImg: ElementHandle<HTMLImageElement> = await expect(page).toMatchElement('#five');
     const fifthImgSrc = await fifthImg.evaluate(node => node.src);
     const fifthImgHigh = await fifthImg.evaluate(node => node.dataset.highres);
   
@@ -76,8 +77,8 @@ describe.each(['flat', 'nested'])('interaction tests %s', (type) => {
     const gallery = await expect(page).toMatchElement('#gallery');
     expect(Object.values(await gallery.evaluate(node => node.classList))).toContain('lightbox');
   
-    const fourthImg = await expect(page).toMatchElement('#four');
-    const fifthImg = await expect(page).toMatchElement('#five');
+    const fourthImg: ElementHandle<HTMLImageElement> = await expect(page).toMatchElement('#four');
+    const fifthImg: ElementHandle<HTMLImageElement> = await expect(page).toMatchElement('#five');
   
     await page.keyboard.press('Escape');
   

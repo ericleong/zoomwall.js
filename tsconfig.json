@@ -1,13 +1,14 @@
 {
-    "compilerOptions": {
-        "module": "es6",
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "outDir": "./built",
-        "strict": true,
-        "target": "es6"
-    },
-    "include": [
-        "./src/**/*"
-    ]
+  "compilerOptions": {
+      "module": "es6",
+      "moduleResolution": "node",
+      "noImplicitAny": true,
+      "outDir": "./built",
+      "strict": true,
+      "target": "es6",
+      "esModuleInterop": true
+  },
+  "include": [
+      "./src/**/*"
+  ]
 }
