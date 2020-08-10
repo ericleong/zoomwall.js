@@ -8,5 +8,5 @@
     "target": "es6",
     "esModuleInterop": true
   },
-  "include": ["./src/**/*", "lib/zoomwall.d.ts"]
+  "include": ["./src/**/*", "src/zoomwall.d.ts"]
 }
