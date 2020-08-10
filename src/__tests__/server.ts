@@ -6,7 +6,7 @@ const hostname = '127.0.0.1';
 const port = 3000;
 const files = new Map<string, string>();
 files.set('/lib/zoomwall.js', 'text/javascript');
-files.set('/zoomwall.css', 'text/css');
+files.set('/lib/zoomwall.css', 'text/css');
 
 const server = http.createServer((req, res) => {
   if (req.url) {
@@ -23,6 +23,9 @@ const server = http.createServer((req, res) => {
         res.writeHead(200, { 'Content-Type': files.get(reqUrl) });
         res.end(data, 'utf-8');
       });
+    } else {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end();
     }
   }
 });

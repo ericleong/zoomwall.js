@@ -2,10 +2,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
-  <link rel="stylesheet" type="text/css" href="./zoomwall.css" />
-  <script type="module" src="../lib/zoomwall.js"></script>
+  <link rel="stylesheet" type="text/css" href="./lib/zoomwall.css" />
+  <script type="module" src="./lib/zoomwall.js"></script>
   <script type="module">
-  import { zoomwall } from "../lib/zoomwall.js";
+  import { zoomwall } from "./lib/zoomwall.js";
 
   window.onload = function() {
     zoomwall.create(document.getElementById('gallery'), true);

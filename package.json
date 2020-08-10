@@ -7,7 +7,7 @@
   "types": "./lib/zoomwall.d.ts",
   "files": [
     "./lib/zoomwall.js",
-    "./zoomwall.css"
+    "./lib/zoomwall.css"
   ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
