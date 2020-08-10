@@ -1,0 +1,4 @@
+scripts/*.js
+node_modules
+lib/**/*.js
+docs
