@@ -28,11 +28,21 @@ jobs:
       - run: npm run lint
       - run: npm run format-check
       - run: npm test
-
       - name: Code Coverage
         run: npm run cover:all
-
-      - name: Coveralls
+      - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.github_token }}
+          flag-name: run-${{ matrix.test_number }}
+          parallel: true
+
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
