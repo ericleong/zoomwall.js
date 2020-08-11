@@ -1,4 +1,4 @@
-name: Publish Docs
+name: Publish GitHub Pages
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm run docs
-      - name: Publish Docs to GitHub Pages
+      - name: Publish GitHub Pages
         uses: peaceiris/actions-gh-pages@v3.7.0-8
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
