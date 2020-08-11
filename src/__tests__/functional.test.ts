@@ -7,7 +7,6 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   beforeAll(async () => {
     await Promise.all([
       page.coverage.startJSCoverage(),
-      page.coverage.startCSSCoverage(),
     ]);
 
     await page.goto(`http://localhost:3000/?type=${type}`);
@@ -161,12 +160,11 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   afterAll(async () => {
-    const [jsCoverage, cssCoverage] = await Promise.all([
+    const [jsCoverage] = await Promise.all([
       page.coverage.stopJSCoverage(),
-      page.coverage.stopCSSCoverage(),
     ]);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    pti.write([...jsCoverage, ...cssCoverage], {
+    pti.write([...jsCoverage], {
       storagePath: "./.nyc_output",
     });
   });
