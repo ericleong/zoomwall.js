@@ -2,7 +2,9 @@ import fs from "fs";
 import * as path from "path";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const report = JSON.parse(fs.readFileSync("./.nyc_output/out.json")?.toString());
+const report = JSON.parse(
+  fs.readFileSync("./.nyc_output/out.json")?.toString()
+);
 
 for (const key of Object.keys(report)) {
   if (key.endsWith("zoomwall.ts")) {
