@@ -163,8 +163,9 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     const [jsCoverage] = await Promise.all([
       page.coverage.stopJSCoverage(),
     ]);
+    // skips the javascript in the html file
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    pti.write([...jsCoverage], {
+    await pti.write([...jsCoverage].slice(1), {
       includeHostname: false
     });
   });
