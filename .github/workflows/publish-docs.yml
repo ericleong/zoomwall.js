@@ -23,5 +23,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
           destination_dir: ./
-          exclude_assets: .!(git)*,.github,!(docs|lib),lib/__tests__,scripts,src,*.json,*.cjs,LICENSE,README.md,lib/*.d.ts
+          exclude_assets: .*ignore,.github,!(docs|lib),lib/__tests__,scripts,src,*.json,*.cjs,LICENSE,README.md,lib/*.d.ts
           keep_files: true
