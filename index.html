@@ -1,96 +1,182 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1.0, user-scalable=no, width=device-width"
+    />
 
-<head>
+    <title>zoomwall.js</title>
 
-<meta charset="utf-8" />
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+    <link rel="stylesheet" type="text/css" href="./lib/zoomwall.css" />
 
-<title>zoomwall.js</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
 
-<link rel="stylesheet" type="text/css" href="./lib/zoomwall.css" />
+      body {
+        background-color: black;
+      }
 
-<style>
+      header {
+        padding: 1em;
+        background-color: #333;
+        text-align: center;
+      }
 
-	html, body {
-		margin: 0;
-		padding: 0;
-	}
+      a:link,
+      a:visited {
+        text-decoration: none;
+        font-family: sans-serif;
+        color: white;
+      }
 
-	body {
-		background-color: black;
-	}
+      a:hover {
+        color: #ddd;
+      }
 
-	header {
-		padding: 1em;
-		background-color: #333;
-		text-align: center;
-	}
+      #author {
+        float: left;
+      }
 
-	a:link, a:visited {
-		text-decoration: none;
-		font-family: sans-serif;
-		color: white;
-	}
+      #repo {
+        float: right;
+      }
 
-	a:hover {
-		color: #ddd;
-	}
+      #title {
+        display: inline-block;
+        font-weight: bold;
+      }
+    </style>
 
-	#author {
-		float: left;
-	}
+    <script type="module">
+      import * as zoomwall from "./lib/zoomwall.js";
 
-	#repo {
-		float: right;
-	}
+      window.onload = function () {
+        zoomwall.create(document.getElementById("zoomwall"), true);
+      };
+    </script>
+  </head>
 
-	#title {
-		display: inline-block;
-		font-weight: bold;
-	}
+  <body>
+    <header>
+      <a id="author" href="http://ericleong.me">photos by eric leong</a
+      ><a id="repo" href="https://github.com/ericleong/zoomwall.js">github</a
+      ><a id="title" href="https://github.com/ericleong/zoomwall.js"
+        >zoomwall.js</a
+      >
+    </header>
 
-</style>
-
-<script type="module">
-	import * as zoomwall from "./lib/zoomwall.js"
-
-	window.onload = function() {
-		zoomwall.create(document.getElementById('zoomwall'), true);
-	};
-</script>
-
-</head>
-
-<body>
-
-<header>
-	<a id="author" href="http://ericleong.me">photos by eric leong</a><a id="repo" href="https://github.com/ericleong/zoomwall.js">github</a><a id="title" href="https://github.com/ericleong/zoomwall.js">zoomwall.js</a>
-</header>
-
-<div id="zoomwall" class="zoomwall">
-	<img srcset="./images/01_250.jpg 250w, ./images/01_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/01_250.jpg">
-<img srcset="./images/02_250.jpg 250w, ./images/02_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/02_250.jpg">
-<img srcset="./images/03_250.jpg 250w, ./images/03_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/03_250.jpg">
-<img srcset="./images/04_250.jpg 250w, ./images/04_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/04_250.jpg">
-<img srcset="./images/05_250.jpg 250w, ./images/05_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/05_250.jpg">
-<img srcset="./images/06_250.jpg 250w, ./images/06_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/06_250.jpg">
-<img src="./images/07_250.jpg" data-highres="./images/07_1280.jpg" />
-<img srcset="./images/08_250.jpg 250w, ./images/08_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/08_250.jpg">
-<img srcset="./images/09_250.jpg 250w, ./images/09_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/09_250.jpg">
-<img srcset="./images/10_250.jpg 250w, ./images/10_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/10_250.jpg">
-<img srcset="./images/11_250.jpg 250w, ./images/11_1280.jpg 1280w, ./images/11_2400.jpg 2400w" sizes="(max-width: 1280px) 250px, (max-width: 2560px) 1280px, 2400px" src="./images/11_250.jpg">
-<img srcset="./images/12_250.jpg 250w, ./images/12_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/12_250.jpg">
-<img srcset="./images/13_250.jpg 250w, ./images/13_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/13_250.jpg">
-<img srcset="./images/14_250.jpg 250w, ./images/14_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/14_250.jpg">
-<img srcset="./images/15_250.jpg 250w, ./images/15_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/15_250.jpg">
-<img srcset="./images/16_250.jpg 250w, ./images/16_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/16_250.jpg">
-<img srcset="./images/17_250.jpg 250w, ./images/17_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/17_250.jpg">
-<img srcset="./images/18_250.jpg 250w, ./images/18_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/18_250.jpg">
-<img srcset="./images/19_250.jpg 250w, ./images/19_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/19_250.jpg">
-<img srcset="./images/20_250.jpg 250w, ./images/20_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/20_250.jpg">
-<img srcset="./images/21_250.jpg 250w, ./images/21_1280.jpg 1280w" sizes="(max-width: 1280px) 250px, 1280px" src="./images/21_250.jpg">
-</div>
-
-</body>
+    <div id="zoomwall" class="zoomwall">
+      <img
+        srcset="./images/01_250.jpg 250w, ./images/01_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/01_250.jpg"
+      />
+      <img
+        srcset="./images/02_250.jpg 250w, ./images/02_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/02_250.jpg"
+      />
+      <img
+        srcset="./images/03_250.jpg 250w, ./images/03_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/03_250.jpg"
+      />
+      <img
+        srcset="./images/04_250.jpg 250w, ./images/04_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/04_250.jpg"
+      />
+      <img
+        srcset="./images/05_250.jpg 250w, ./images/05_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/05_250.jpg"
+      />
+      <img
+        srcset="./images/06_250.jpg 250w, ./images/06_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/06_250.jpg"
+      />
+      <img src="./images/07_250.jpg" data-highres="./images/07_1280.jpg" />
+      <img
+        srcset="./images/08_250.jpg 250w, ./images/08_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/08_250.jpg"
+      />
+      <img
+        srcset="./images/09_250.jpg 250w, ./images/09_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/09_250.jpg"
+      />
+      <img
+        srcset="./images/10_250.jpg 250w, ./images/10_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/10_250.jpg"
+      />
+      <img
+        srcset="
+          ./images/11_250.jpg   250w,
+          ./images/11_1280.jpg 1280w,
+          ./images/11_2400.jpg 2400w
+        "
+        sizes="(max-width: 1280px) 250px, (max-width: 2560px) 1280px, 2400px"
+        src="./images/11_250.jpg"
+      />
+      <img
+        srcset="./images/12_250.jpg 250w, ./images/12_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/12_250.jpg"
+      />
+      <img
+        srcset="./images/13_250.jpg 250w, ./images/13_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/13_250.jpg"
+      />
+      <img
+        srcset="./images/14_250.jpg 250w, ./images/14_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/14_250.jpg"
+      />
+      <img
+        srcset="./images/15_250.jpg 250w, ./images/15_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/15_250.jpg"
+      />
+      <img
+        srcset="./images/16_250.jpg 250w, ./images/16_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/16_250.jpg"
+      />
+      <img
+        srcset="./images/17_250.jpg 250w, ./images/17_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/17_250.jpg"
+      />
+      <img
+        srcset="./images/18_250.jpg 250w, ./images/18_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/18_250.jpg"
+      />
+      <img
+        srcset="./images/19_250.jpg 250w, ./images/19_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/19_250.jpg"
+      />
+      <img
+        srcset="./images/20_250.jpg 250w, ./images/20_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/20_250.jpg"
+      />
+      <img
+        srcset="./images/21_250.jpg 250w, ./images/21_1280.jpg 1280w"
+        sizes="(max-width: 1280px) 250px, 1280px"
+        src="./images/21_250.jpg"
+      />
+    </div>
+  </body>
 </html>
