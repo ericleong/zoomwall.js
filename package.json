@@ -22,8 +22,10 @@
     "format": "prettier --write .",
     "test": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "cover": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "cover:copy:map": "npx copyfiles \"lib/*.map\" \"./.nyc_output/js\"",
+    "cover:copy:src": "npx copyfiles \"src/*.ts\" \"./.nyc_output/js\"",
     "cover:merge": "nyc report --reporter=html --exclude-after-remap=false",
-    "cover:all": "npm run source-map && npm run cover && npm run cover:merge",
+    "cover:all": "npm run source-map && npm run cover:copy:map && npm run cover:copy:src&& npm run cover && npm run cover:merge",
     "prepare": "concurrently \"npm:build\" \"npm:copy\""
   },
   "repository": {
@@ -62,7 +64,7 @@
     "nyc": "^15.1.0",
     "prettier": "2.0.5",
     "puppeteer": "^v2.1.1",
-    "puppeteer-to-istanbul": "^1.4.0",
+    "puppeteer-to-istanbul": "git@github.com:skerit/puppeteer-to-istanbul.git#master",
     "source-map-support": "^0.5.19",
     "stylelint": "^13.6.1",
     "stylelint-config-prettier": "^8.0.2",

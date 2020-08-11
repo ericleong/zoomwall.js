@@ -165,8 +165,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     ]);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     pti.write([...jsCoverage], {
-      includeHostname: true,
-      storagePath: "./.nyc_output",
+      includeHostname: false
     });
   });
 });
