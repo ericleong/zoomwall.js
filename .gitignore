@@ -13,3 +13,7 @@ node_modules
 
 .npmrc
 lib/
+
+# code coverage
+coverage
+.nyc_output

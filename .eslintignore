@@ -1,3 +1,5 @@
 node_modules
-lib/**/*.js
+lib
 docs
+coverage
+.nyc_output

@@ -1,8 +1,15 @@
 import "expect-puppeteer";
 import { ElementHandle } from "puppeteer";
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const pti = require("puppeteer-to-istanbul");
 
 describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   beforeAll(async () => {
+    await Promise.all([
+      page.coverage.startJSCoverage(),
+      page.coverage.startCSSCoverage(),
+    ]);
+
     await page.goto(`http://localhost:3000/?type=${type}`);
   });
 
@@ -151,5 +158,16 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     expect(await fifthImg.evaluate((node) => node.style.transform)).toBe(
       "translate(0px, 0px) scale(1)"
     );
+  });
+
+  afterAll(async () => {
+    const [jsCoverage, cssCoverage] = await Promise.all([
+      page.coverage.stopJSCoverage(),
+      page.coverage.stopCSSCoverage(),
+    ]);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    pti.write([...jsCoverage, ...cssCoverage], {
+      storagePath: "./.nyc_output",
+    });
   });
 });
