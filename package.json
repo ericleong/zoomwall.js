@@ -24,8 +24,8 @@
     "cover": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "cover:copy:map": "npx copyfiles \"lib/*.map\" \"./.nyc_output/js\"",
     "cover:copy:src": "npx copyfiles \"src/*.ts\" \"./.nyc_output/js\"",
-    "cover:merge": "nyc report --reporter=html --exclude-after-remap=false",
-    "cover:all": "npm run source-map && npm run cover:copy:map && npm run cover:copy:src&& npm run cover && npm run cover:merge",
+    "cover:report": "nyc report --reporter=html --exclude-after-remap=false",
+    "cover:all": "npm run source-map && npm run cover:copy:map && npm run cover:copy:src&& npm run cover && npm run cover:report",
     "prepare": "concurrently \"npm:build\" \"npm:copy\""
   },
   "repository": {
