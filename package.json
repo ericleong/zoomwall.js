@@ -22,6 +22,7 @@
     "format": "prettier --write .",
     "test": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "cover": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "cover:merge": "nyc report --reporter=html",
     "prepare": "concurrently \"npm:build\" \"npm:copy\""
   },
   "repository": {
