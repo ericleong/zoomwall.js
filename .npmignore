@@ -11,9 +11,4 @@ Thumbs.db
 # node
 node_modules
 
-.npmrc
-lib/
-
-# code coverage
-coverage
-.nyc_output
+.github
