@@ -128,6 +128,40 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     );
   });
 
+  test("left arrow to go to previous image", async () => {
+    const gallery = await expect(page).toMatchElement("#gallery");
+
+    const fourthImg: ElementHandle<HTMLImageElement> = await expect(
+      page
+    ).toMatchElement("#four");
+    const fifthImg: ElementHandle<HTMLImageElement> = await expect(
+      page
+    ).toMatchElement("#five");
+    const fourthImgSrc = await fourthImg.evaluate((node) => node.src);
+    const fourthImgHigh = await fourthImg.evaluate(
+      (node) => node.dataset.highres
+    );
+
+    await page.keyboard.press("ArrowLeft");
+
+    expect(
+      Object.values(await gallery.evaluate((node) => node.classList))
+    ).toContain("lightbox");
+    expect(
+      Object.values(await fourthImg.evaluate((node) => node.classList))
+    ).toContain("active");
+    expect(
+      Object.values(await fifthImg.evaluate((node) => node.classList))
+    ).not.toContain("active");
+    expect(await fourthImg.evaluate((node) => node.style.transform)).toBe(
+      "translate(-300%, 0%) scale(4)"
+    );
+    expect(await fourthImg.evaluate((node) => node.src)).toBe(fourthImgHigh);
+    expect(await fourthImg.evaluate((node) => node.dataset.lowres)).toBe(
+      fourthImgSrc
+    );
+  });
+
   test("escape closes lightbox", async () => {
     const gallery = await expect(page).toMatchElement("#gallery");
     expect(
