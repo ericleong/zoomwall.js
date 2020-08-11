@@ -24,4 +24,4 @@ jobs:
           publish_dir: ./
           destination_dir: ./test
           exclude_assets: .*,*,.git,node_modules,!(.git|docs|lib|node_modules)/**,lib/__tests__
-          keep_files: false
+          keep_files: true
