@@ -3,7 +3,7 @@ import * as path from "path";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const report = JSON.parse(
-  fs.readFileSync("./.nyc_output/out.json")?.toString()
+  fs.readFileSync("./.nyc_output/out.json").toString()
 );
 
 for (const key of Object.keys(report)) {
