@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
-    "debug": "tsc --inlineSourceMap --inlineSources --project tsconfig.json",
+    "source-map": "tsc --sourceMap --project tsconfig.json",
     "copy": "copyfiles -u 1 \"./src/zoomwall.css\" lib",
     "docs": "typedoc --theme minimal --mode library --out docs src/zoomwall.ts",
     "gpr-package-rename": "node scripts/gpr-package-rename.js",
@@ -22,7 +22,8 @@
     "format": "prettier --write .",
     "test": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "cover": "cross-env JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
-    "cover:merge": "nyc report --reporter=html",
+    "cover:merge": "nyc report --reporter=html --exclude-after-remap=false",
+    "cover:all": "npm run source-map && npm run cover && npm run cover:merge",
     "prepare": "concurrently \"npm:build\" \"npm:copy\""
   },
   "repository": {
