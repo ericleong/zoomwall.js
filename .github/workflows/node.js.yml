@@ -28,3 +28,11 @@ jobs:
       - run: npm run lint
       - run: npm run format-check
       - run: npm test
+
+      - name: Code Coverage
+        run: npm run cover:all
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
