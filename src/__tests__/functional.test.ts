@@ -18,7 +18,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     const fifthImg: ElementHandle<HTMLImageElement> = await expect(
       page
     ).toMatchElement("#five");
-    expect(await fifthImg.evaluate((node) => node.style.width)).toBe("10.296%");
+    expect(await fifthImg.evaluate((node) => node.style.width)).toBe("10.3093%");
   });
 
   test("click to open lightbox", async () => {
