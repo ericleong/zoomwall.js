@@ -1,12 +1,8 @@
-# zoomwall.js
+# zoomwall.js [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ericleong/zoomwall.js)](https://github.com/ericleong/zoomwall.js/releases) [![npm](https://img.shields.io/npm/dm/zoomwall.js)](https://www.npmjs.com/package/zoomwall.js) [![Coverage Status](https://coveralls.io/repos/github/ericleong/zoomwall.js/badge.svg?branch=master)](https://coveralls.io/github/ericleong/zoomwall.js?branch=master) [![Node.js CI](https://github.com/ericleong/zoomwall.js/workflows/Node.js%20CI/badge.svg?branch=master)](https://github.com/ericleong/zoomwall.js/actions?query=workflow%3A%22Node.js+CI%22)
 
 zoomwall.js is a content-focused photo gallery using a horizontal masonry layout that scales up in lightbox mode.
 
 Visit [ericleong.github.io/zoomwall.js](http://ericleong.github.io/zoomwall.js) for a demo.
-
-![Node.js CI](https://github.com/ericleong/zoomwall.js/workflows/Node.js%20CI/badge.svg?branch=master)
-![Node.js Package](https://github.com/ericleong/zoomwall.js/workflows/Node.js%20Package/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/ericleong/zoomwall.js/badge.svg?branch=master)](https://coveralls.io/github/ericleong/zoomwall.js?branch=master)
 
 ## install
 
