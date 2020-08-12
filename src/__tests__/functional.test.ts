@@ -18,20 +18,22 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     const fifthImg: ElementHandle<HTMLImageElement> = await expect(
       page
     ).toMatchElement("#five");
-    expect(await fifthImg.evaluate((node) => node.style.width)).toBe("10.3093%");
+    expect(await fifthImg.evaluate((node) => node.style.width)).toBe(
+      "10.3093%"
+    );
   });
 
-  test("click to open lightbox", async () => {
+  test(`click to open dataset lightbox`, async () => {
     const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(await gallery.evaluate((node) => node.classList))
     ).not.toContain("lightbox");
 
-    const fourthImg: ElementHandle<HTMLImageElement> = await expect(
+    const img: ElementHandle<HTMLImageElement> = await expect(
       page
     ).toMatchElement("#four");
-    const fourthImgSrc = await fourthImg.evaluate((node) => node.src);
-    const fourthImgHigh = (await fourthImg.evaluate(
+    const imgSrc = await img.evaluate((node) => node.src);
+    const imgHigh = (await img.evaluate(
       (node) => node.dataset.highres
     )) as string;
 
@@ -41,29 +43,25 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
       Object.values(await gallery.evaluate((node) => node.classList))
     ).toContain("lightbox");
     expect(
-      Object.values(await fourthImg.evaluate((node) => node.classList))
+      Object.values(await img.evaluate((node) => node.classList))
     ).toContain("active");
-    expect(await fourthImg.evaluate((node) => node.style.transform)).toBe(
+    expect(await img.evaluate((node) => node.style.transform)).toBe(
       "translate(-300%, 0%) scale(4)"
     );
-    expect(await fourthImg.evaluate((node) => node.src)).toBe(fourthImgHigh);
-    expect(await fourthImg.evaluate((node) => node.dataset.lowres)).toBe(
-      fourthImgSrc
-    );
+    expect(await img.evaluate((node) => node.src)).toBe(imgHigh);
+    expect(await img.evaluate((node) => node.dataset.lowres)).toBe(imgSrc);
   });
 
-  test("click to close lightbox", async () => {
+  test(`click to close dataset lightbox`, async () => {
     const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(await gallery.evaluate((node) => node.classList))
     ).toContain("lightbox");
 
-    const fourthImg: ElementHandle<HTMLImageElement> = await expect(
+    const img: ElementHandle<HTMLImageElement> = await expect(
       page
     ).toMatchElement("#four");
-    const fourthImgLow = await fourthImg.evaluate(
-      (node) => node.dataset.lowres
-    );
+    const imgLow = await img.evaluate((node) => node.dataset.lowres);
 
     await expect(page).toClick("#four");
 
@@ -71,12 +69,65 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
       Object.values(await gallery.evaluate((node) => node.classList))
     ).not.toContain("lightbox");
     expect(
-      Object.values(await fourthImg.evaluate((node) => node.classList))
+      Object.values(await img.evaluate((node) => node.classList))
     ).not.toContain("active");
-    expect(await fourthImg.evaluate((node) => node.style.transform)).toBe(
+    expect(await img.evaluate((node) => node.style.transform)).toBe(
       "translate(0px, 0px) scale(1)"
     );
-    expect(await fourthImg.evaluate((node) => node.src)).toBe(fourthImgLow);
+    expect(await img.evaluate((node) => node.src)).toBe(imgLow);
+  });
+
+  test(`click to open srcset lightbox`, async () => {
+    const gallery = await expect(page).toMatchElement("#gallery");
+    expect(
+      Object.values(await gallery.evaluate((node) => node.classList))
+    ).not.toContain("lightbox");
+
+    const img: ElementHandle<HTMLImageElement> = await expect(
+      page
+    ).toMatchElement("#ten");
+
+    await expect(page).toClick("#ten");
+
+    expect(
+      Object.values(await gallery.evaluate((node) => node.classList))
+    ).toContain("lightbox");
+    expect(
+      Object.values(await img.evaluate((node) => node.classList))
+    ).toContain("active");
+    expect(await img.evaluate((node) => node.style.transform)).toBe(
+      "translate(-638.613%, -110.084%) scale(4.97479)"
+    );
+    expect(await img.evaluate((node) => node.sizes)).toBe("100vw");
+    expect(await img.evaluate((node) => node.dataset.sizes)).toBe(
+      "(max-width: 800px) 10vw, 853px"
+    );
+  });
+
+  test(`click to close srcset lightbox`, async () => {
+    const gallery = await expect(page).toMatchElement("#gallery");
+    expect(
+      Object.values(await gallery.evaluate((node) => node.classList))
+    ).toContain("lightbox");
+
+    const img: ElementHandle<HTMLImageElement> = await expect(
+      page
+    ).toMatchElement("#ten");
+
+    await expect(page).toClick("#ten");
+
+    expect(
+      Object.values(await gallery.evaluate((node) => node.classList))
+    ).not.toContain("lightbox");
+    expect(
+      Object.values(await img.evaluate((node) => node.classList))
+    ).not.toContain("active");
+    expect(await img.evaluate((node) => node.style.transform)).toBe(
+      "translate(0px, 0px) scale(1)"
+    );
+    expect(await img.evaluate((node) => node.sizes)).toBe(
+      "(max-width: 800px) 10vw, 853px"
+    );
   });
 
   test("right arrow to advance to next image", async () => {
