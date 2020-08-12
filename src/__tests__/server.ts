@@ -10,15 +10,18 @@ files.set("/lib/zoomwall.js.map", "application/json");
 files.set("/src/zoomwall.css", "text/css");
 files.set("/src/zoomwall.ts", "application/x-typescript");
 
+const pages = ["flat", "nested", "multi"];
+
 const server = http.createServer((req, res) => {
   if (req.url) {
     const reqUrl: string = req.url;
     const parsedUrl = url.parse(req.url, true);
+    const pageType = parsedUrl.query["type"];
 
     if (parsedUrl.pathname == "/") {
       fs.readFile(
         `./src/__tests__/${
-          parsedUrl.query["type"] == "nested" ? "nested" : "flat"
+          pages.includes(pageType as string) ? (pageType as string) : "flat"
         }.html`,
         (err, data) => {
           res.writeHead(200, { "Content-Type": "text/html" });
