@@ -34,8 +34,9 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.github_token }}
-          flag-name: run-${{ matrix.test_number }}
           parallel: true
+        env:
+          COVERALLS_FLAG_NAME: run-${{ matrix.test_number }}
 
   finish:
     needs: build
