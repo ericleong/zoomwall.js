@@ -1,12 +1,12 @@
 import "expect-puppeteer";
-import { ElementHandle } from "puppeteer";
+import { ElementHandle, CoverageEntry } from "puppeteer";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const pti = require("puppeteer-to-istanbul");
+const totalJsCoverage: CoverageEntry[] = [];
 
 describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   beforeAll(async () => {
-    await Promise.all([page.coverage.startJSCoverage()]);
-
+    await page.coverage.startJSCoverage();
     await page.goto(`http://localhost:3000/?type=${type}`);
   });
 
@@ -252,11 +252,141 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   afterAll(async () => {
-    const [jsCoverage] = await Promise.all([page.coverage.stopJSCoverage()]);
-    // skips the javascript in the html file
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    await pti.write([...jsCoverage].slice(1), {
-      includeHostname: false,
-    });
+    const jsCoverage = await page.coverage.stopJSCoverage();
+    totalJsCoverage.push(...jsCoverage.slice(1));
+  });
+});
+
+describe("multiple galleries with keyboards", () => {
+  beforeAll(async () => {
+    await page.coverage.startJSCoverage();
+    await page.goto(`http://localhost:3000/?type=multi`);
+  });
+
+  test("right arrow to advance to next image in second gallery", async () => {
+    const flat = await expect(page).toMatchElement("#flat");
+    const nested = await expect(page).toMatchElement("#nested");
+
+    // open second lightbox
+    await expect(page).toClick("#nested-four");
+    expect(
+      Object.values(await nested.evaluate((node) => node.classList))
+    ).toContain("lightbox");
+
+    const fourthImg: ElementHandle<HTMLImageElement> = await expect(
+      page
+    ).toMatchElement("#nested-four");
+    const fifthImg: ElementHandle<HTMLImageElement> = await expect(
+      page
+    ).toMatchElement("#nested-five");
+    const fifthImgSrc = await fifthImg.evaluate((node) => node.src);
+    const fifthImgHigh = await fifthImg.evaluate(
+      (node) => node.dataset.highres
+    );
+
+    await page.keyboard.press("ArrowRight");
+
+    expect(
+      Object.values(await flat.evaluate((node) => node.classList))
+    ).not.toContain("lightbox");
+    expect(
+      Object.values(await nested.evaluate((node) => node.classList))
+    ).toContain("lightbox");
+    expect(
+      Object.values(await fourthImg.evaluate((node) => node.classList))
+    ).not.toContain("active");
+    expect(
+      Object.values(await fifthImg.evaluate((node) => node.classList))
+    ).toContain("active");
+
+    const fifthTransform = await fifthImg.evaluate(
+      (node) => node.style.transform
+    );
+    const fifthTransformSplit = fifthTransform.split(" ");
+    expect(fifthTransformSplit[0]).toBe("translate(337.819%,");
+    // flat: -109.167, nested: -108.264 (close enough?)
+    expect(parseFloat(fifthTransformSplit[1].slice(0, -2))).toBeCloseTo(
+      -109.167,
+      -1
+    );
+    expect(fifthTransformSplit[2]).toBe("scale(3.04362)");
+    expect(await fifthImg.evaluate((node) => node.src)).toBe(fifthImgHigh);
+    expect(await fifthImg.evaluate((node) => node.dataset.lowres)).toBe(
+      fifthImgSrc
+    );
+  });
+
+  test("escape closes first lightbox", async () => {
+    const flat = await expect(page).toMatchElement("#flat");
+    // open first lightbox
+    await expect(page).toClick("#flat-four");
+    expect(
+      Object.values(await flat.evaluate((node) => node.classList))
+    ).toContain("lightbox");
+
+    const nested = await expect(page).toMatchElement("#nested");
+    expect(
+      Object.values(await nested.evaluate((node) => node.classList))
+    ).toContain("lightbox");
+
+    const firstFourthImg: ElementHandle<HTMLImageElement> = await expect(
+      page
+    ).toMatchElement("#flat-four");
+    const firstFifthImg: ElementHandle<HTMLImageElement> = await expect(
+      page
+    ).toMatchElement("#flat-five");
+
+    const secondFourthImg: ElementHandle<HTMLImageElement> = await expect(
+      page
+    ).toMatchElement("#nested-four");
+    const secondFifthImg: ElementHandle<HTMLImageElement> = await expect(
+      page
+    ).toMatchElement("#nested-five");
+
+    await page.keyboard.press("Escape");
+
+    expect(
+      Object.values(await flat.evaluate((node) => node.classList))
+    ).not.toContain("lightbox");
+    expect(
+      Object.values(await nested.evaluate((node) => node.classList))
+    ).toContain("lightbox");
+    expect(
+      Object.values(await firstFourthImg.evaluate((node) => node.classList))
+    ).not.toContain("active");
+    expect(
+      Object.values(await firstFifthImg.evaluate((node) => node.classList))
+    ).not.toContain("active");
+    expect(
+      Object.values(await secondFourthImg.evaluate((node) => node.classList))
+    ).not.toContain("active");
+    expect(
+      Object.values(await secondFifthImg.evaluate((node) => node.classList))
+    ).toContain("active");
+    expect(await firstFifthImg.evaluate((node) => node.style.transform)).toBe(
+      "translate(0px, 0px) scale(1)"
+    );
+    expect(await firstFourthImg.evaluate((node) => node.style.transform)).toBe(
+      "translate(0px, 0px) scale(1)"
+    );
+    expect(await firstFourthImg.evaluate((node) => node.src)).toBe(
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAACnAQMAAAACMtNXAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAADUExURX9/f5DKGyMAAAAcSURBVBgZ7cExAQAAAMIg+6deCj9gAAAAAAA8BRWHAAFREbyXAAAAAElFTkSuQmCC"
+    );
+    expect(await firstFifthImg.evaluate((node) => node.src)).toBe(
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKcAAAD6AQMAAAD+yMWGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAADUExURaGhoWkNFFsAAAAcSURBVBgZ7cExAQAAAMIg+6deCU9gAAAAAADcBRV8AAE4UWJ7AAAAAElFTkSuQmCC"
+    );
+  });
+
+  afterAll(async () => {
+    const jsCoverage = await page.coverage.stopJSCoverage();
+    totalJsCoverage.push(...jsCoverage.slice(1));
+  });
+});
+
+afterAll(async () => {
+  // skips the javascript in the html file
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+  await pti.write(totalJsCoverage, {
+    includeHostname: false,
   });
 });
