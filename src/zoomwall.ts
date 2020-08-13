@@ -79,26 +79,13 @@ function findWall(elem: Element): HTMLElement | null {
  * @param blocks the root element of the gallery.
  * @return the listener attached to each image of the gallery.
  */
-export function keys(blocks: HTMLElement): (e: KeyboardEvent) => void {
+function keys(blocks: HTMLElement): (e: KeyboardEvent) => void {
   const keyPager = function (e: KeyboardEvent) {
     if (e.defaultPrevented) {
       return;
     }
 
-    // either use the provided blocks, or query for the first lightboxed zoomwall
-    if (!(blocks instanceof HTMLElement)) {
-      for (const div of document.getElementsByClassName("zoomwall lightbox")) {
-        if (div instanceof HTMLElement) {
-          blocks = div;
-        }
-      }
-    }
-
-    if (!(blocks instanceof HTMLElement)) {
-      return;
-    }
-
-    if (blocks && blocks.classList.contains("lightbox")) {
+    if (blocks.classList.contains("lightbox")) {
       switch (e.keyCode) {
         case 27: {
           // escape

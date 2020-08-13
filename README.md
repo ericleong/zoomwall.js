@@ -71,11 +71,3 @@ window.onload = function () {
 ```
 
 Enable support for paging through photos with the left and right arrow keys by setting the second argument to `true`, like this: `zoomwall.create(<element>, true)`.
-
-If there are multiple galleries, call `zoomwall.keys()` after loading the last gallery.
-
-```javascript
-zoomwall.create(document.getElementById("first-gallery"));
-zoomwall.create(document.getElementById("second-gallery"));
-zoomwall.keys();
-```
