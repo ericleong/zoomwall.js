@@ -73,12 +73,6 @@ function findWall(elem: Element): HTMLElement | null {
   return null;
 }
 
-/**
- * Enables keyboard support for a gallery.
- *
- * @param blocks the root element of the gallery.
- * @return the listener attached to each image of the gallery.
- */
 function keys(blocks: HTMLElement): (e: KeyboardEvent) => void {
   const keyPager = function (e: KeyboardEvent) {
     if (e.defaultPrevented) {
