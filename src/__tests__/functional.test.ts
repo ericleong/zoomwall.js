@@ -251,33 +251,6 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     );
   });
 
-  test(`clicking empty space closes lightbox`, async () => {
-    const gallery = await expect(page).toMatchElement("#gallery");
-
-    const img: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#five");
-
-    await expect(page).toClick("#five");
-    // this clicks the gallery, not the image
-    await page.evaluate(() => {
-      document.getElementById("gallery")?.click();
-    });
-
-    expect(
-      Object.values(await gallery.evaluate((node) => node.classList))
-    ).not.toContain("lightbox");
-    expect(
-      Object.values(await img.evaluate((node) => node.classList))
-    ).not.toContain("active");
-    expect(await img.evaluate((node) => node.style.transform)).toBe(
-      "translate(0px, 0px) scale(1)"
-    );
-    expect(await img.evaluate((node) => node.src)).toBe(
-      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKcAAAD6AQMAAAD+yMWGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAADUExURaGhoWkNFFsAAAAcSURBVBgZ7cExAQAAAMIg+6deCU9gAAAAAADcBRV8AAE4UWJ7AAAAAElFTkSuQmCC"
-    );
-  });
-
   afterAll(async () => {
     const [jsCoverage] = await Promise.all([page.coverage.stopJSCoverage()]);
     // skips the javascript in the html file
