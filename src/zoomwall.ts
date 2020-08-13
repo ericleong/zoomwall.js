@@ -164,9 +164,17 @@ function resize(blocks: HTMLElement[]): void {
     .forEach((row) => resizeRow(row, calcRowWidth(row)));
 }
 
-function reset(block: HTMLElement): void {
+function reset(block: HTMLImageElement): void {
   block.style.transform = "translate(0, 0) scale(1)";
   block.classList.remove("active");
+
+  // swap images
+  if (block.dataset.lowres) {
+    block.src = block.dataset.lowres;
+  }
+  if (block.dataset.sizes) {
+    block.sizes = block.dataset.sizes;
+  }
 }
 
 function shrink(block: HTMLImageElement): void {
@@ -179,14 +187,6 @@ function shrink(block: HTMLImageElement): void {
     blocks.querySelectorAll("img").forEach(function (img) {
       reset(img);
     });
-  }
-
-  // swap images
-  if (block.dataset.lowres) {
-    block.src = block.dataset.lowres;
-  }
-  if (block.dataset.sizes) {
-    block.sizes = block.dataset.sizes;
   }
 }
 
