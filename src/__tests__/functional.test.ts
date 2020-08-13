@@ -240,6 +240,15 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     expect(await fifthImg.evaluate((node) => node.style.transform)).toBe(
       "translate(0px, 0px) scale(1)"
     );
+    expect(await fourthImg.evaluate((node) => node.style.transform)).toBe(
+      "translate(0px, 0px) scale(1)"
+    );
+    expect(await fourthImg.evaluate((node) => node.src)).toBe(
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAACnAQMAAAACMtNXAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAADUExURX9/f5DKGyMAAAAcSURBVBgZ7cExAQAAAMIg+6deCj9gAAAAAAA8BRWHAAFREbyXAAAAAElFTkSuQmCC"
+    );
+    expect(await fifthImg.evaluate((node) => node.src)).toBe(
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKcAAAD6AQMAAAD+yMWGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAADUExURaGhoWkNFFsAAAAcSURBVBgZ7cExAQAAAMIg+6deCU9gAAAAAADcBRV8AAE4UWJ7AAAAAElFTkSuQmCC"
+    );
   });
 
   afterAll(async () => {
