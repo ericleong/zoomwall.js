@@ -91,7 +91,9 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
       (node) => node.dataset.highres
     )) as string;
 
+    await page.waitFor(200);
     await expect(page).toClick("#five");
+    await page.waitFor(200);
     await expect(page).toClick("#six");
 
     expect(
