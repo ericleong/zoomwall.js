@@ -72,7 +72,7 @@
     "stylelint-config-standard": "^20.0.0",
     "ts-jest": "^26.1.4",
     "ts-node": "^9.0.0",
-    "typedoc": "0.17.0-3",
+    "typedoc": "0.20.27",
     "typescript": "^3.9.7"
   }
 }
