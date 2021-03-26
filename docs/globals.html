@@ -2368,22 +2368,16 @@ img {
 		<li class=" tsd-kind-function">
 			<a href="globals.html#create" class="tsd-kind-icon">create</a>
 		</li>
-		<li class=" tsd-kind-function">
-			<a href="globals.html#keys" class="tsd-kind-icon">keys</a>
-		</li>
 	</ul>
 </nav>
 <div class="container container-main">
 	<div class="content-wrap">
 		<div class="tsd-panel tsd-typography">
-			<a href="#zoomwalljs" id="zoomwalljs" style="color: inherit; text-decoration: none;">
-				<h1>zoomwall.js</h1>
+			<a href="#zoomwalljs----" id="zoomwalljs----" style="color: inherit; text-decoration: none;">
+				<h1>zoomwall.js <a href="https://github.com/ericleong/zoomwall.js/releases"><img src="https://img.shields.io/github/v/release/ericleong/zoomwall.js" alt="GitHub release (latest by date)"></a> <a href="https://www.npmjs.com/package/zoomwall.js"><img src="https://img.shields.io/npm/dm/zoomwall.js" alt="npm"></a> <a href="https://coveralls.io/github/ericleong/zoomwall.js?branch=master"><img src="https://coveralls.io/repos/github/ericleong/zoomwall.js/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://github.com/ericleong/zoomwall.js/actions?query=workflow%3A%22Node.js+CI%22"><img src="https://github.com/ericleong/zoomwall.js/workflows/Node.js%20CI/badge.svg?branch=master" alt="Node.js CI"></a></h1>
 			</a>
 			<p>zoomwall.js is a content-focused photo gallery using a horizontal masonry layout that scales up in lightbox mode.</p>
 			<p>Visit <a href="http://ericleong.github.io/zoomwall.js">ericleong.github.io/zoomwall.js</a> for a demo.</p>
-			<p><img src="https://github.com/ericleong/zoomwall.js/workflows/Node.js%20CI/badge.svg?branch=master" alt="Node.js CI">
-				<img src="https://github.com/ericleong/zoomwall.js/workflows/Node.js%20Package/badge.svg" alt="Node.js Package">
-			<a href="https://coveralls.io/github/ericleong/zoomwall.js?branch=master"><img src="https://coveralls.io/repos/github/ericleong/zoomwall.js/badge.svg?branch=master" alt="Coverage Status"></a></p>
 			<a href="#install" id="install" style="color: inherit; text-decoration: none;">
 				<h2>install</h2>
 			</a>
@@ -2432,10 +2426,6 @@ img {
   zoomwall.create(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"gallery"</span>));
 };</code></pre>
 			<p>Enable support for paging through photos with the left and right arrow keys by setting the second argument to <code>true</code>, like this: <code>zoomwall.create(&lt;element&gt;, true)</code>.</p>
-			<p>If there are multiple galleries, call <code>zoomwall.keys()</code> after loading the last gallery.</p>
-			<pre><code class="language-javascript">zoomwall.create(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"first-gallery"</span>));
-zoomwall.create(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"second-gallery"</span>));
-zoomwall.keys();</code></pre>
 		</div>
 		<section class="tsd-panel-group tsd-index-group">
 			<h2>Index</h2>
@@ -2445,7 +2435,6 @@ zoomwall.keys();</code></pre>
 						<h3>Functions</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function"><a href="globals.html#create" class="tsd-kind-icon">create</a></li>
-							<li class="tsd-kind-function"><a href="globals.html#keys" class="tsd-kind-icon">keys</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2463,7 +2452,7 @@ zoomwall.keys();</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ericleong/zoomwall.js/blob/40b8be5/src/zoomwall.ts#L33">zoomwall.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/ericleong/zoomwall.js/blob/d157d82/src/zoomwall.ts#L33">zoomwall.ts:33</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2487,56 +2476,6 @@ zoomwall.keys();</code></pre>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function">
-				<a name="keys" class="tsd-anchor"></a>
-				<h3>keys</h3>
-				<ul class="tsd-signatures tsd-kind-function">
-					<li class="tsd-signature tsd-kind-icon">keys<span class="tsd-signature-symbol">(</span>blocks<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">KeyboardEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/ericleong/zoomwall.js/blob/40b8be5/src/zoomwall.ts#L82">zoomwall.ts:82</a></li>
-							</ul>
-						</aside>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Enables keyboard support for a gallery.</p>
-							</div>
-						</div>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>blocks: <span class="tsd-signature-type">HTMLElement</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>the root element of the gallery.</p>
-								</div>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">KeyboardEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
-						<p>the listener attached to each image of the gallery.</p>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-signature">
-								<ul class="tsd-signatures tsd-kind-type-literal">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">KeyboardEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>e: <span class="tsd-signature-type">KeyboardEvent</span></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
 					</li>
 				</ul>
 			</section>
