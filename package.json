@@ -61,7 +61,7 @@
     "jest": "^26.4.0",
     "jest-dev-server": "^4.4.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
-    "jest-puppeteer": "^4.4.0",
+    "jest-puppeteer": "^5.0.1",
     "nyc": "^15.1.0",
     "prettier": "2.2.1",
     "puppeteer": "^v2.1.1",
