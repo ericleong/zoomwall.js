@@ -500,13 +500,13 @@ describe("multiple galleries with keyboards", () => {
       (node: HTMLElement): string => node.style.transform
     );
     const fifthTransformSplit = fifthTransform.split(" ");
-    expect(fifthTransformSplit[0]).toBe("translate(337.819%,");
+    expect(fifthTransformSplit[0]).toBe("translate(337.832%,");
     // flat: -109.167, nested: -108.264 (close enough?)
     expect(parseFloat(fifthTransformSplit[1].slice(0, -2))).toBeCloseTo(
       -109.167,
       -1
     );
-    expect(fifthTransformSplit[2]).toBe("scale(3.04362)");
+    expect(fifthTransformSplit[2]).toBe("scale(3.04336)");
     expect(
       await fifthImg.evaluate((node: HTMLImageElement): string => node.src)
     ).toBe(fifthImgHigh);
