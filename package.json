@@ -13,7 +13,7 @@
     "build": "tsc --project tsconfig.json",
     "source-map": "tsc --sourceMap --project tsconfig.json",
     "copy": "copyfiles -u 1 \"./src/zoomwall.css\" lib",
-    "docs": "typedoc --theme minimal --out docs src/zoomwall.ts",
+    "docs": "typedoc --out docs src/zoomwall.ts",
     "gpr-package-rename": "node scripts/gpr-package-rename.cjs",
     "lint-js": "eslint \"**/*.{ts,js,mjs,cjs}\"",
     "lint-css": "stylelint \"**/*.css\"",
