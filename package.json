@@ -59,7 +59,7 @@
     "eslint-config-prettier": "^8.1.0",
     "expect-puppeteer": "^6.0.0",
     "jest": "^26.4.0",
-    "jest-dev-server": "^5.0.0",
+    "jest-dev-server": "^6.0.0",
     "jest-environment-jsdom-sixteen": "^2.0.0",
     "jest-puppeteer": "^6.0.0",
     "nyc": "^15.1.0",
