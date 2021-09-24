@@ -30,9 +30,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
 
@@ -50,9 +48,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
     expect(
@@ -77,9 +73,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
@@ -94,9 +88,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
     expect(
@@ -116,9 +108,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
 
@@ -139,9 +129,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
     expect(
@@ -168,9 +156,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
 
@@ -182,9 +168,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
     expect(
@@ -209,9 +193,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
@@ -223,9 +205,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
     expect(
@@ -248,9 +228,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     await expect(page).toClick("#four");
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
@@ -271,9 +249,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
     expect(
@@ -332,9 +308,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
     expect(
@@ -370,9 +344,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
     const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
@@ -387,9 +359,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     expect(
       Object.values(
-        await gallery.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
     expect(
@@ -448,9 +418,7 @@ describe("multiple galleries with keyboards", () => {
     await expect(page).toClick("#nested-four");
     expect(
       Object.values(
-        await nested.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await nested.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
@@ -471,14 +439,12 @@ describe("multiple galleries with keyboards", () => {
 
     expect(
       Object.values(
-        await flat.evaluate((node: HTMLElement): DOMTokenList => node.classList)
+        await flat.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
     expect(
       Object.values(
-        await nested.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await nested.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
     expect(
@@ -500,13 +466,13 @@ describe("multiple galleries with keyboards", () => {
       (node: HTMLElement): string => node.style.transform
     );
     const fifthTransformSplit = fifthTransform.split(" ");
-    expect(fifthTransformSplit[0]).toBe("translate(337.832%,");
+    expect(fifthTransformSplit[0]).toBe("translate(337.819%,");
     // flat: -109.167, nested: -108.264 (close enough?)
     expect(parseFloat(fifthTransformSplit[1].slice(0, -2))).toBeCloseTo(
       -109.167,
       -1
     );
-    expect(fifthTransformSplit[2]).toBe("scale(3.04336)");
+    expect(fifthTransformSplit[2]).toBe("scale(3.04362)");
     expect(
       await fifthImg.evaluate((node: HTMLImageElement): string => node.src)
     ).toBe(fifthImgHigh);
@@ -523,16 +489,14 @@ describe("multiple galleries with keyboards", () => {
     await expect(page).toClick("#flat-four");
     expect(
       Object.values(
-        await flat.evaluate((node: HTMLElement): DOMTokenList => node.classList)
+        await flat.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
     const nested = await expect(page).toMatchElement("#nested");
     expect(
       Object.values(
-        await nested.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await nested.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
@@ -554,14 +518,12 @@ describe("multiple galleries with keyboards", () => {
 
     expect(
       Object.values(
-        await flat.evaluate((node: HTMLElement): DOMTokenList => node.classList)
+        await flat.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
     expect(
       Object.values(
-        await nested.evaluate(
-          (node: HTMLElement): DOMTokenList => node.classList
-        )
+        await nested.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
     expect(
