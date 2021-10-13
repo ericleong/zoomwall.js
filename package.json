@@ -68,7 +68,7 @@
     "puppeteer-to-istanbul": "github:skerit/puppeteer-to-istanbul#d0ebc44",
     "source-map-support": "^0.5.19",
     "stylelint": "^13.6.1",
-    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-prettier": "^9.0.2",
     "stylelint-config-standard": "^22.0.0",
     "ts-jest": "^26.1.4",
     "ts-node": "^10.0.0",
