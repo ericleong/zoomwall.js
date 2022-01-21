@@ -6,8 +6,8 @@
   "main": "./lib/zoomwall.js",
   "types": "./lib/zoomwall.d.ts",
   "files": [
-    "./lib/zoomwall.js",
-    "./lib/zoomwall.css"
+    "lib/zoomwall.js",
+    "lib/zoomwall.css"
   ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
