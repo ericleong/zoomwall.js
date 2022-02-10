@@ -15,6 +15,8 @@ jobs:
       - uses: actions/setup-node@v2.5.1
         with:
           node-version: 12
+      - name: Update to npm@8 for github deps
+        run: npm install -g npm@8
       - run: npm ci
       - run: npm test
 
@@ -27,6 +29,8 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+      - name: Update to npm@8 for github deps
+        run: npm install -g npm@8
       - run: npm ci
       - run: npm publish
         env:
@@ -41,6 +45,8 @@ jobs:
         with:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
+      - name: Update to npm@8 for github deps
+        run: npm install -g npm@8
       - run: npm ci
       - run: npm run gpr-package-rename
       - run: npm publish
