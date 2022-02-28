@@ -55,7 +55,7 @@
     "concurrently": "^7.0.0",
     "copyfiles": "^2.3.0",
     "cross-env": "^7.0.2",
-    "eslint": "^7.6.0",
+    "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.1.0",
     "expect-puppeteer": "^6.0.0",
     "jest": "^26.4.0",
