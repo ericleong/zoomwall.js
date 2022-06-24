@@ -1,6 +1,6 @@
 import "expect-puppeteer";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { ElementHandle, CoverageEntry } from "puppeteer";
+import { CoverageEntry, HandleFor } from "puppeteer";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const pti = require("puppeteer-to-istanbul");
 const totalJsCoverage: CoverageEntry[] = [];
@@ -12,31 +12,33 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test("resize images on create", async () => {
-    const fourthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#four");
+    const fourthImg = (await expect(page).toMatchElement(
+      "#four"
+    )) as HandleFor<HTMLImageElement>;
     expect(
       await fourthImg.evaluate((node: HTMLElement): string => node.style.width)
     ).toBe("25%");
-    const fifthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#five");
+    const fifthImg = (await expect(page).toMatchElement(
+      "#five"
+    )) as HandleFor<HTMLImageElement>;
     expect(
       await fifthImg.evaluate((node: HTMLElement): string => node.style.width)
     ).toBe("10.3093%");
   });
 
   test(`click to open dataset lightbox`, async () => {
-    const gallery = await expect(page).toMatchElement("#gallery");
+    const gallery = (await expect(page).toMatchElement(
+      "#gallery"
+    )) as HandleFor<Element>;
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
 
-    const img: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#four");
+    const img = (await expect(page).toMatchElement(
+      "#four"
+    )) as HandleFor<HTMLImageElement>;
     const imgSrc = await img.evaluate(
       (node: HTMLImageElement): string => node.src
     );
@@ -70,16 +72,18 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test(`click to close dataset lightbox`, async () => {
-    const gallery = await expect(page).toMatchElement("#gallery");
+    const gallery = (await expect(page).toMatchElement(
+      "#gallery"
+    )) as HandleFor<Element>;
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
-    const img: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#four");
+    const img = (await expect(page).toMatchElement(
+      "#four"
+    )) as HandleFor<HTMLImageElement>;
     const imgLow = await img.evaluate(
       (node: HTMLElement): string => node.dataset.lowres as string
     );
@@ -105,16 +109,18 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test(`click to advance dataset lightbox`, async () => {
-    const gallery = await expect(page).toMatchElement("#gallery");
+    const gallery = (await expect(page).toMatchElement(
+      "#gallery"
+    )) as HandleFor<Element>;
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
 
-    const img: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#six");
+    const img = (await expect(page).toMatchElement(
+      "#six"
+    )) as HandleFor<HTMLImageElement>;
     const imgSrc = await img.evaluate(
       (node: HTMLImageElement): string => node.src
     );
@@ -122,9 +128,9 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
       (node: HTMLElement): string => node.dataset.highres as string
     );
 
-    await page.waitFor(200);
+    await page.waitForTimeout(200);
     await expect(page).toClick("#five");
-    await page.waitFor(200);
+    await page.waitForTimeout(200);
     await expect(page).toClick("#six");
 
     expect(
@@ -153,16 +159,18 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test(`click to open srcset lightbox`, async () => {
-    const gallery = await expect(page).toMatchElement("#gallery");
+    const gallery = (await expect(page).toMatchElement(
+      "#gallery"
+    )) as HandleFor<Element>;
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).not.toContain("lightbox");
 
-    const img: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#ten");
+    const img = (await expect(page).toMatchElement(
+      "#ten"
+    )) as HandleFor<HTMLImageElement>;
 
     await expect(page).toClick("#ten");
 
@@ -190,16 +198,18 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test(`click to close srcset lightbox`, async () => {
-    const gallery = await expect(page).toMatchElement("#gallery");
+    const gallery = (await expect(page).toMatchElement(
+      "#gallery"
+    )) as HandleFor<Element>;
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
-    const img: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#ten");
+    const img = (await expect(page).toMatchElement(
+      "#ten"
+    )) as HandleFor<HTMLImageElement>;
 
     await expect(page).toClick("#ten");
 
@@ -222,7 +232,9 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test("right arrow to advance to next image", async () => {
-    const gallery = await expect(page).toMatchElement("#gallery");
+    const gallery = (await expect(page).toMatchElement(
+      "#gallery"
+    )) as HandleFor<Element>;
 
     // open lightbox
     await expect(page).toClick("#four");
@@ -232,12 +244,12 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
       )
     ).toContain("lightbox");
 
-    const fourthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#four");
-    const fifthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#five");
+    const fourthImg = (await expect(page).toMatchElement(
+      "#four"
+    )) as HandleFor<HTMLImageElement>;
+    const fifthImg = (await expect(page).toMatchElement(
+      "#five"
+    )) as HandleFor<HTMLImageElement>;
     const fifthImgSrc = await fifthImg.evaluate(
       (node: HTMLImageElement): string => node.src
     );
@@ -289,14 +301,16 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test("left arrow to go to previous image", async () => {
-    const gallery = await expect(page).toMatchElement("#gallery");
+    const gallery = (await expect(page).toMatchElement(
+      "#gallery"
+    )) as HandleFor<Element>;
 
-    const fourthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#four");
-    const fifthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#five");
+    const fourthImg = (await expect(page).toMatchElement(
+      "#four"
+    )) as HandleFor<HTMLImageElement>;
+    const fifthImg = (await expect(page).toMatchElement(
+      "#five"
+    )) as HandleFor<HTMLImageElement>;
     const fourthImgSrc = await fourthImg.evaluate(
       (node: HTMLImageElement): string => node.src
     );
@@ -341,19 +355,21 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test("escape closes lightbox", async () => {
-    const gallery = await expect(page).toMatchElement("#gallery");
+    const gallery = (await expect(page).toMatchElement(
+      "#gallery"
+    )) as HandleFor<Element>;
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
-    const fourthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#four");
-    const fifthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#five");
+    const fourthImg = (await expect(page).toMatchElement(
+      "#four"
+    )) as HandleFor<HTMLImageElement>;
+    const fifthImg = (await expect(page).toMatchElement(
+      "#five"
+    )) as HandleFor<HTMLImageElement>;
 
     await page.keyboard.press("Escape");
 
@@ -411,8 +427,12 @@ describe("multiple galleries with keyboards", () => {
   });
 
   test("right arrow to advance to next image in second gallery", async () => {
-    const flat = await expect(page).toMatchElement("#flat");
-    const nested = await expect(page).toMatchElement("#nested");
+    const flat = (await expect(page).toMatchElement(
+      "#flat"
+    )) as HandleFor<Element>;
+    const nested = (await expect(page).toMatchElement(
+      "#nested"
+    )) as HandleFor<Element>;
 
     // open second lightbox
     await expect(page).toClick("#nested-four");
@@ -422,12 +442,12 @@ describe("multiple galleries with keyboards", () => {
       )
     ).toContain("lightbox");
 
-    const fourthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#nested-four");
-    const fifthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#nested-five");
+    const fourthImg = (await expect(page).toMatchElement(
+      "#nested-four"
+    )) as HandleFor<HTMLImageElement>;
+    const fifthImg = (await expect(page).toMatchElement(
+      "#nested-five"
+    )) as HandleFor<HTMLImageElement>;
     const fifthImgSrc = await fifthImg.evaluate(
       (node: HTMLImageElement): string => node.src
     );
@@ -484,7 +504,9 @@ describe("multiple galleries with keyboards", () => {
   });
 
   test("escape closes first lightbox", async () => {
-    const flat = await expect(page).toMatchElement("#flat");
+    const flat = (await expect(page).toMatchElement(
+      "#flat"
+    )) as HandleFor<Element>;
     // open first lightbox
     await expect(page).toClick("#flat-four");
     expect(
@@ -493,26 +515,28 @@ describe("multiple galleries with keyboards", () => {
       )
     ).toContain("lightbox");
 
-    const nested = await expect(page).toMatchElement("#nested");
+    const nested = (await expect(page).toMatchElement(
+      "#nested"
+    )) as HandleFor<Element>;
     expect(
       Object.values(
         await nested.evaluate((node: Element): DOMTokenList => node.classList)
       )
     ).toContain("lightbox");
 
-    const firstFourthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#flat-four");
-    const firstFifthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#flat-five");
+    const firstFourthImg = (await expect(page).toMatchElement(
+      "#flat-four"
+    )) as HandleFor<HTMLImageElement>;
+    const firstFifthImg = (await expect(page).toMatchElement(
+      "#flat-five"
+    )) as HandleFor<HTMLImageElement>;
 
-    const secondFourthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#nested-four");
-    const secondFifthImg: ElementHandle<HTMLImageElement> = await expect(
-      page
-    ).toMatchElement("#nested-five");
+    const secondFourthImg = (await expect(page).toMatchElement(
+      "#nested-four"
+    )) as HandleFor<HTMLImageElement>;
+    const secondFifthImg = (await expect(page).toMatchElement(
+      "#nested-five"
+    )) as HandleFor<HTMLImageElement>;
 
     await page.keyboard.press("Escape");
 
