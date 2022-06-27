@@ -27,9 +27,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test(`click to open dataset lightbox`, async () => {
-    const gallery = (await expect(page).toMatchElement(
-      "#gallery"
-    )) as HandleFor<Element>;
+    const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
@@ -72,9 +70,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test(`click to close dataset lightbox`, async () => {
-    const gallery = (await expect(page).toMatchElement(
-      "#gallery"
-    )) as HandleFor<Element>;
+    const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
@@ -109,9 +105,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test(`click to advance dataset lightbox`, async () => {
-    const gallery = (await expect(page).toMatchElement(
-      "#gallery"
-    )) as HandleFor<Element>;
+    const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
@@ -159,9 +153,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test(`click to open srcset lightbox`, async () => {
-    const gallery = (await expect(page).toMatchElement(
-      "#gallery"
-    )) as HandleFor<Element>;
+    const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
@@ -198,9 +190,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test(`click to close srcset lightbox`, async () => {
-    const gallery = (await expect(page).toMatchElement(
-      "#gallery"
-    )) as HandleFor<Element>;
+    const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
@@ -232,9 +222,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test("right arrow to advance to next image", async () => {
-    const gallery = (await expect(page).toMatchElement(
-      "#gallery"
-    )) as HandleFor<Element>;
+    const gallery = await expect(page).toMatchElement("#gallery");
 
     // open lightbox
     await expect(page).toClick("#four");
@@ -301,9 +289,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test("left arrow to go to previous image", async () => {
-    const gallery = (await expect(page).toMatchElement(
-      "#gallery"
-    )) as HandleFor<Element>;
+    const gallery = await expect(page).toMatchElement("#gallery");
 
     const fourthImg = (await expect(page).toMatchElement(
       "#four"
@@ -355,9 +341,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   });
 
   test("escape closes lightbox", async () => {
-    const gallery = (await expect(page).toMatchElement(
-      "#gallery"
-    )) as HandleFor<Element>;
+    const gallery = await expect(page).toMatchElement("#gallery");
     expect(
       Object.values(
         await gallery.evaluate((node: Element): DOMTokenList => node.classList)
@@ -427,12 +411,8 @@ describe("multiple galleries with keyboards", () => {
   });
 
   test("right arrow to advance to next image in second gallery", async () => {
-    const flat = (await expect(page).toMatchElement(
-      "#flat"
-    )) as HandleFor<Element>;
-    const nested = (await expect(page).toMatchElement(
-      "#nested"
-    )) as HandleFor<Element>;
+    const flat = await expect(page).toMatchElement("#flat");
+    const nested = await expect(page).toMatchElement("#nested");
 
     // open second lightbox
     await expect(page).toClick("#nested-four");
@@ -504,9 +484,7 @@ describe("multiple galleries with keyboards", () => {
   });
 
   test("escape closes first lightbox", async () => {
-    const flat = (await expect(page).toMatchElement(
-      "#flat"
-    )) as HandleFor<Element>;
+    const flat = await expect(page).toMatchElement("#flat");
     // open first lightbox
     await expect(page).toClick("#flat-four");
     expect(
@@ -515,9 +493,7 @@ describe("multiple galleries with keyboards", () => {
       )
     ).toContain("lightbox");
 
-    const nested = (await expect(page).toMatchElement(
-      "#nested"
-    )) as HandleFor<Element>;
+    const nested = await expect(page).toMatchElement("#nested");
     expect(
       Object.values(
         await nested.evaluate((node: Element): DOMTokenList => node.classList)
