@@ -1,6 +1,6 @@
 import "expect-puppeteer";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { CoverageEntry, HandleFor } from "puppeteer";
+import { CoverageEntry, ElementHandle } from "puppeteer";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const pti = require("puppeteer-to-istanbul");
 const totalJsCoverage: CoverageEntry[] = [];
@@ -14,13 +14,13 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
   test("resize images on create", async () => {
     const fourthImg = (await expect(page).toMatchElement(
       "#four"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     expect(
       await fourthImg.evaluate((node: HTMLElement): string => node.style.width)
     ).toBe("25%");
     const fifthImg = (await expect(page).toMatchElement(
       "#five"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     expect(
       await fifthImg.evaluate((node: HTMLElement): string => node.style.width)
     ).toBe("10.3093%");
@@ -36,7 +36,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     const img = (await expect(page).toMatchElement(
       "#four"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const imgSrc = await img.evaluate(
       (node: HTMLImageElement): string => node.src
     );
@@ -79,7 +79,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     const img = (await expect(page).toMatchElement(
       "#four"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const imgLow = await img.evaluate(
       (node: HTMLElement): string => node.dataset.lowres as string
     );
@@ -114,7 +114,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     const img = (await expect(page).toMatchElement(
       "#six"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const imgSrc = await img.evaluate(
       (node: HTMLImageElement): string => node.src
     );
@@ -162,7 +162,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     const img = (await expect(page).toMatchElement(
       "#ten"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
 
     await expect(page).toClick("#ten");
 
@@ -199,7 +199,7 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     const img = (await expect(page).toMatchElement(
       "#ten"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
 
     await expect(page).toClick("#ten");
 
@@ -234,10 +234,10 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     const fourthImg = (await expect(page).toMatchElement(
       "#four"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const fifthImg = (await expect(page).toMatchElement(
       "#five"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const fifthImgSrc = await fifthImg.evaluate(
       (node: HTMLImageElement): string => node.src
     );
@@ -293,10 +293,10 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     const fourthImg = (await expect(page).toMatchElement(
       "#four"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const fifthImg = (await expect(page).toMatchElement(
       "#five"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const fourthImgSrc = await fourthImg.evaluate(
       (node: HTMLImageElement): string => node.src
     );
@@ -350,10 +350,10 @@ describe.each(["flat", "nested"])("interaction tests %s", (type) => {
 
     const fourthImg = (await expect(page).toMatchElement(
       "#four"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const fifthImg = (await expect(page).toMatchElement(
       "#five"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
 
     await page.keyboard.press("Escape");
 
@@ -424,10 +424,10 @@ describe("multiple galleries with keyboards", () => {
 
     const fourthImg = (await expect(page).toMatchElement(
       "#nested-four"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const fifthImg = (await expect(page).toMatchElement(
       "#nested-five"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const fifthImgSrc = await fifthImg.evaluate(
       (node: HTMLImageElement): string => node.src
     );
@@ -502,17 +502,17 @@ describe("multiple galleries with keyboards", () => {
 
     const firstFourthImg = (await expect(page).toMatchElement(
       "#flat-four"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const firstFifthImg = (await expect(page).toMatchElement(
       "#flat-five"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
 
     const secondFourthImg = (await expect(page).toMatchElement(
       "#nested-four"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
     const secondFifthImg = (await expect(page).toMatchElement(
       "#nested-five"
-    )) as HandleFor<HTMLImageElement>;
+    )) as ElementHandle<HTMLImageElement>;
 
     await page.keyboard.press("Escape");
 
