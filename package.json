@@ -64,7 +64,7 @@
     "jest-environment-jsdom-sixteen": "^2.0.0",
     "jest-puppeteer": "^6.0.0",
     "nyc": "^15.1.0",
-    "prettier": "2.7.1",
+    "prettier": "2.8.0",
     "puppeteer": "^17.0.0",
     "puppeteer-to-istanbul": "github:skerit/puppeteer-to-istanbul#d0ebc44",
     "source-map-support": "^0.5.19",
