@@ -11,7 +11,7 @@ module.exports = {
     {
       displayName: "unit",
       preset: "ts-jest",
-      testEnvironment: "jest-environment-jsdom-sixteen",
+      testEnvironment: "jsdom",
       testMatch: ["<rootDir>/src/__tests__/unit.test.ts"],
     },
     {
