@@ -65,7 +65,7 @@
     "jest-puppeteer": "^6.2.0",
     "nyc": "^15.1.0",
     "prettier": "2.8.3",
-    "puppeteer": "17.1.3",
+    "puppeteer": "19.8.2",
     "puppeteer-to-istanbul": "github:skerit/puppeteer-to-istanbul#d0ebc44",
     "source-map-support": "^0.5.21",
     "stylelint": "^14.16.1",
