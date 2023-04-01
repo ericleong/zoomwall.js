@@ -17,7 +17,7 @@ jobs:
       - run: npm run build --if-present
       - run: npm run docs
       - name: Publish GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3.9.2
+        uses: peaceiris/actions-gh-pages@v3.9.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
