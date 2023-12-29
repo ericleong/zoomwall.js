@@ -1,0 +1,16 @@
+[
+    {
+        "url":"https://ericleong.me/zoomwall.js/images/01_250.jpg",
+        "srcset":"https://ericleong.me/zoomwall.js/images/01_250.jpg 250w, https://ericleong.me/zoomwall.js/images/01_1280.jpg 1280w",
+        "sizes":"(max-width: 1280px) 250px, 1280px"
+    },
+    {
+        "url":"https://ericleong.me/zoomwall.js/images/02_250.jpg"
+    },
+    {
+        "url":"https://ericleong.me/zoomwall.js/images/03_250.jpg"
+    },
+    {
+        "url":"https://ericleong.me/zoomwall.js/images/04_250.jpg"
+    }
+]

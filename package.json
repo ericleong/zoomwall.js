@@ -10,6 +10,7 @@
     "lib/zoomwall.css"
   ],
   "scripts": {
+    "build-demo":"npm run build && copyfiles -u 1 \"./lib/zoomwall.*\" \"./demo\"",
     "build": "tsc --project tsconfig.json",
     "source-map": "tsc --sourceMap --project tsconfig.json",
     "copy": "copyfiles -u 1 \"./src/zoomwall.css\" lib",

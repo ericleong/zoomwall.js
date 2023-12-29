@@ -23,7 +23,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
+let dataSourceUrl: string | null = null;
+let container: HTMLElement ;
 /**
  * Create a gallery with the provided HTMLElement.
  *
@@ -31,8 +32,17 @@ SOFTWARE.
  * @param enableKeys enables keyboard navigation
  */
 export function create(blocks: HTMLElement, enableKeys = false): void {
-  const imgs = blocks.querySelectorAll("img");
+  
+  if(blocks.hasAttribute('data-src')){
+    container = blocks;
+    dataSourceUrl = container.getAttribute('data-src');
+    if (dataSourceUrl) {
+      addScrollEvent();
+      fetchImages(dataSourceUrl, container);
+    }
+  }
 
+  const imgs = blocks.querySelectorAll("img");
   resize([...imgs]);
 
   blocks.classList.remove("loading");
@@ -54,7 +64,58 @@ export function create(blocks: HTMLElement, enableKeys = false): void {
     keys(blocks);
   }
 }
+let currentPage = 1;
 
+function addScrollEvent(){
+  window.addEventListener('scroll', () => {
+    const scrollTriggerHeight = document.body.offsetHeight - window.innerHeight * 1.5;
+    let loading = false;
+    if (window.scrollY > scrollTriggerHeight) {
+      loading = true;
+    }
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      loading = true;
+    }
+    if(loading) {
+      // User has scrolled to the bottom of the page!
+      currentPage++;
+      const nextPageUrl = dataSourceUrl + '?page=' + currentPage; // Adjust this according to how dataSourceUrl is stored
+      fetchImages(nextPageUrl, container);
+    }
+  }); 
+}
+
+function fetchImages(url: string, container: Element): void {
+  fetch(url)
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      data.forEach((image: { url: string;srcset:string|null;sizes:string|null }) => {
+        let newimg = new Image();
+        let addImage=false;
+        if(image.url) {
+          newimg.src = image.url;
+          addImage=true;
+        }
+        
+        if(image.srcset) {
+          newimg.srcset = image.srcset;
+          addImage=true;
+        }
+        if(image.sizes) {
+          newimg.sizes = image.sizes;
+          addImage=true;
+        }
+        if(!addImage) {
+          return;
+        }
+        newimg.addEventListener("click", animate);
+        container.appendChild(newimg);
+      });
+    })
+    .catch(error => console.error('Error fetching images:', error));
+}
 function findWall(elem: Element): HTMLElement | null {
   // traverse dom to find gallery root node
   let parent: Element | null = elem;
