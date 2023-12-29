@@ -71,3 +71,33 @@ window.onload = function () {
 ```
 
 Enable support for paging through photos with the left and right arrow keys by setting the second argument to `true`, like this: `zoomwall.create(<element>, true)`.
+
+### Lazy loading and backend url
+By adding a `data-src` attribute to the gallery container its possible to fetch a json with urls to more images when the user has scrolled to the bottom of the page.
+
+```javascript
+<div id="zoomwall" class="zoomwall" data-src="/demo/data.json">
+<!-- you can still add images here that will be displayed when page loads -->
+  <img src="01_lowres.jpg" data-highres="01_highres.jpg" />
+  <img src="02_lowres.jpg" data-highres="02_highres.jpg" />
+</div>
+```
+
+Every time the user scrolls to the bottom again, a parameter "?page=<pagenumber>" is appended to the url. 
+This enables for unlimited scrolling if you have many images. But it does require you to implement or modify the backend api to work with this format.
+
+#### With srcsets and sizes
+The srcset and the sizes are optional and must be correct html since their values are copied directly and will fail unless correct html syntax. Here is an example of how a working json response with an initial image and two srcset images and their respective sizes looks like:
+```json
+[
+    {
+        "url":"https://ericleong.me/zoomwall.js/images/01_250.jpg",
+        "srcset":"https://ericleong.me/zoomwall.js/images/01_250.jpg 250w, https://ericleong.me/zoomwall.js/images/01_1280.jpg 1280w",
+        "sizes":"(max-width: 1280px) 250px, 1280px"
+    },{
+        "url":"https://ericleong.me/zoomwall.js/images/01_250.jpg",
+        "srcset":"https://ericleong.me/zoomwall.js/images/01_250.jpg 250w, https://ericleong.me/zoomwall.js/images/01_1280.jpg 1280w",
+        "sizes":"(max-width: 1280px) 250px, 1280px"
+    },
+]
+```
